@@ -8,7 +8,7 @@ const tweetSchema = new Schema({
       default: new Date()
     },
     id: {
-        type: int64,
+        type: Number,
         required: true
     },
     text: {
@@ -20,10 +20,10 @@ const tweetSchema = new Schema({
         type: String
     },
     truncated: {
-        type: boolean
+        type: Boolean
     },
     in_reply_to_status_id:{
-        type: int64
+        type: Number
     },
     in_reply_to_screen_name:{
         type: String
@@ -32,15 +32,15 @@ const tweetSchema = new Schema({
         type: Schema.Types.ObjectId, 
         ref: 'User' 
     },
-    quoted_status_id: boolean,
+    quoted_status_id: Boolean,
     quoted_status: { 
         type: Schema.Types.ObjectId, 
         ref: "Tweet" 
     },
-    quote_count : integer,
-    reply_count : int,
-    retweet_count: int,
-    favorite_count: int,
+    quote_count : Number,
+    reply_count : Number,
+    retweet_count: Number,
+    favorite_count: Number,
     entities: { 
         type: Schema.Types.ObjectId, 
         ref: 'Entity' 
@@ -49,8 +49,8 @@ const tweetSchema = new Schema({
         type: Schema.Types.ObjectId, 
         ref: 'Extended-Entity' 
     },
-    favorited: boolean,
-    retweeted: boolean,
+    favorited: Boolean,
+    retweeted: Boolean,
 });
 
 module.exports = mongoose.model("Tweet", tweetSchema);
