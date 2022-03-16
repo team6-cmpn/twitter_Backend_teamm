@@ -22,18 +22,18 @@ const tweetSchema = new Schema({
     truncated: {
         type: Boolean
     },
-    in_reply_to_status_id:{
+    in_reply_to_tweet_id:{
         type: Number
     },
-    in_reply_to_screen_name:{
+    in_reply_to_username:{
         type: String
     },
     user: { 
         type: Schema.Types.ObjectId, 
         ref: 'User' 
     },
-    quoted_status_id: Boolean,
-    quoted_status: { 
+    quoted_tweet_id: Boolean,
+    quoted_tweet: { 
         type: Schema.Types.ObjectId, 
         ref: "Tweet" 
     },
@@ -43,11 +43,11 @@ const tweetSchema = new Schema({
     favorite_count: Number,
     entities: { 
         type: Schema.Types.ObjectId, 
-        ref: 'Entity' 
+        ref: 'Entities' 
     },
     extended_entities: { 
         type: Schema.Types.ObjectId, 
-        ref: 'Extended-Entity' 
+        ref: 'Extended_Entities' 
     },
     favorited: Boolean,
     retweeted: Boolean,
