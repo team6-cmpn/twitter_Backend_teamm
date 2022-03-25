@@ -1,0 +1,34 @@
+GET http://localhost:8080/
+
+###
+
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+    "username" :"ola ayman",
+    "email": "olaayman@ola.com",
+    "password": "123456"
+}
+
+###
+
+POST http://localhost:8080/auth/signin
+Content-Type: application/json
+
+{
+    "username" :"olaayman",
+    "password": "1234"
+}
+
+###
+
+# POST http://localhost:8080/test
+# Content-Type: application/json
+
+# {
+#     "id": 4,
+#     "username" :"ola Ayman elmaghraby",
+#     "email": "ola@loco55.com",
+#     "password": "123456"
+# }

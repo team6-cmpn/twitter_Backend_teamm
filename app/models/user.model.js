@@ -8,8 +8,9 @@ const userSchema = new Schema({
   },  
   name: {
     type: String,
-    required: true,
-    unique: true
+    required: false,
+    unique: true,
+    sparse: true
   },
   username: {
     type: String,
@@ -18,7 +19,8 @@ const userSchema = new Schema({
   },
   phoneNumber: {
     type: String,
-    unique: true
+    unique: true,
+    sparse: true
   },
   email: {
     type: String,
@@ -27,7 +29,6 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    required: true,
     required: true
   },
   followers: [
@@ -46,6 +47,7 @@ const userSchema = new Schema({
     type: Date,
     default: new Date()
   },
+  isAdmin: Boolean,
   description: String,
   verified:Boolean,
   protected: Boolean,
