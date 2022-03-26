@@ -1,4 +1,7 @@
+require("dotenv").config();
 const config = require("../config/auth.config");
+const emailConfig = require("../config/email.config");
+const sendEmail = require("../utils/email");
 const db = require("../models");
 const User = db.user;
 var jwt = require("jsonwebtoken");
@@ -17,9 +20,62 @@ exports.signup = (req, res) => {
       res.status(500).send({ message: err });
       return;
     }
-    res.send({ message: "User was registered successfully!" });
   });
+  
+  //generate email token
+  console.log(user);
+  jwt.sign(
+    {
+      "username" :user.username,
+    },
+    process.env.EMAIL_SECRET,
+    {
+      expiresIn: '1d',
+    },
+    (err, emailToken) => {
+      // send confirmation email
+      //document.write("<h2>Hello World!</h2><p>Have a nice day!</p>");
+      const message = `<p>You have a new email comfirmation request</p>
+      <p>Please click this email to confirm your email:</p>
+      <a href="${process.env.BASE_URL}/auth/confirmation/${emailToken}">click here to confirm your email</a>
+      <p>Thank you very much</p>`;
+      sendEmail(user.email, "Confirm Email", message);
+    
+      res.send("An Email sent to your account please verify");
+    },
+  );
 };
+
+// app.get('auth/confirmation/:token', async (req, res) => {
+//   try {
+//     const { user: { id } } = jwt.verify(req.params.token, EMAIL_SECRET);
+//     await models.User.update({ confirmed: true }, { where: { id } });
+//   } catch (e) {
+//     res.send('error');
+//   }
+
+//   return res.redirect('http://localhost:3001/login');
+// });
+
+exports.confirmEmail = (req, res) => {
+  try {
+    jwt.verify(req.params.emailtoken, process.env.EMAIL_SECRET,(err, decoded) => {
+      if (err) {
+        if (err instanceof TokenExpiredError) {
+          return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
+        }
+        return res.sendStatus(401).send({ message: "Unauthorized!" });
+      }
+      User.findOneAndUpdate({ username: decoded.username },{$set: {confirmed: true }},{new: true}, (err, doc) => {
+        //console.log(doc);
+      });
+ 
+    });
+  } catch (err) {
+    res.send("error");
+  }
+  return res.status(200).send({message: "user email is successfully confirmed"});
+}
 
 exports.signin = (req, res) => {
     // Q) will we user only username or will use email and phone too??? ask front
@@ -34,6 +90,9 @@ exports.signin = (req, res) => {
       if (!user) {
         return res.status(404).send({ message: "User Not found." });
       }
+      if (!user.confirmed){
+        return res.status(400).send({message:"please confirm your email before login"});
+      }
       var passwordIsValid = bcrypt.compareSync(
         req.body.password,
         user.password
@@ -45,7 +104,7 @@ exports.signin = (req, res) => {
         });
       }
       var token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 86400 // 24 hours will be modified later
+        expiresIn: config.jwtExpiration // 24 hours will be modified later
       });
       // Q) should we return all of the user object ?
       // Q) the token is saved in the user schema or we will send it alone ?

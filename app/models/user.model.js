@@ -47,6 +47,10 @@ const userSchema = new Schema({
     type: Date,
     default: new Date()
   },
+  confirmed:{
+    type: Boolean,
+    default: false
+  },
   isAdmin: Boolean,
   description: String,
   verified:Boolean,

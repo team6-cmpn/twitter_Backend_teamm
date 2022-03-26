@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require('body-parser');
 const cors = require("cors");
@@ -37,25 +38,8 @@ app.get("/", (req, res) => {
 });
 
 require('./app/routes/auth.routes')(app);
-// just for testing
-// app.post("/test", (req, res) => {
-//   const user = new User({
-//     id: req.body.id,
-//     //name: req.body.name,
-//     username: req.body.username,
-//     email: req.body.email,
-//     password: bcrypt.hashSync(req.body.password, 8)
-//   });
-//   // user.save();
-//   // res.send(user);
-//   user.save((err, user) => {
-//     if (err) {
-//       res.status(500).send({ message: err });
-//       return;
-//     }
-//     res.send({ message: "User was registered successfully!" });
-//   });
-// });
+require('./app/routes/user.routes')(app);
+
 
 // server listening on port 8080 
 const PORT = process.env.PORT || 8080;
