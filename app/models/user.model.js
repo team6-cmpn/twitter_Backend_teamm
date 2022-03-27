@@ -29,7 +29,7 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    required: true
+    //required: true
   },
   followers: [
     {
@@ -47,10 +47,14 @@ const userSchema = new Schema({
     type: Date,
     default: new Date()
   },
+  dateOfBirth:{
+    type: Date
+  },
   confirmed:{
     type: Boolean,
     default: false
   },
+  googleId: String,
   isAdmin: Boolean,
   description: String,
   verified:Boolean,

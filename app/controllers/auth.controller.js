@@ -1,6 +1,6 @@
 require("dotenv").config();
 const config = require("../config/auth.config");
-const emailConfig = require("../config/email.config");
+//const emailConfig = require("../config/email.config");
 const sendEmail = require("../utils/email");
 const db = require("../models");
 const User = db.user;
@@ -11,8 +11,10 @@ exports.signup = (req, res) => {
     // name , email or phone, date of birth
   //res.send({ message:"signup",user_Name: req.body.username});
   const user = new User({
+    name: req.body.name,
     username: req.body.username,
     email: req.body.email,
+    dateOfBirth: req.body.dateOfBirth,
     password: bcrypt.hashSync(req.body.password, 8)
   });
   user.save((err, user) => {
@@ -21,9 +23,8 @@ exports.signup = (req, res) => {
       return;
     }
   });
-  
   //generate email token
-  console.log(user);
+  //console.log(user);
   jwt.sign(
     {
       "username" :user.username,
@@ -34,28 +35,17 @@ exports.signup = (req, res) => {
     },
     (err, emailToken) => {
       // send confirmation email
-      //document.write("<h2>Hello World!</h2><p>Have a nice day!</p>");
+      // document.write("<h2>Hello World!</h2><p>Have a nice day!</p>");
       const message = `<p>You have a new email comfirmation request</p>
       <p>Please click this email to confirm your email:</p>
       <a href="${process.env.BASE_URL}/auth/confirmation/${emailToken}">click here to confirm your email</a>
       <p>Thank you very much</p>`;
       sendEmail(user.email, "Confirm Email", message);
     
-      res.send("An Email sent to your account please verify");
+      res.status(200).send("An Email sent to your account please verify");
     },
   );
 };
-
-// app.get('auth/confirmation/:token', async (req, res) => {
-//   try {
-//     const { user: { id } } = jwt.verify(req.params.token, EMAIL_SECRET);
-//     await models.User.update({ confirmed: true }, { where: { id } });
-//   } catch (e) {
-//     res.send('error');
-//   }
-
-//   return res.redirect('http://localhost:3001/login');
-// });
 
 exports.confirmEmail = (req, res) => {
   try {
@@ -74,6 +64,7 @@ exports.confirmEmail = (req, res) => {
   } catch (err) {
     res.send("error");
   }
+  res.redirect("/auth/signin");
   return res.status(200).send({message: "user email is successfully confirmed"});
 }
 

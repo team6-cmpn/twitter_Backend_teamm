@@ -13,6 +13,6 @@ module.exports = function(app) {
 
   app.post("/auth/signup", verifySignUp.checkExistingUsernameOrEmail, controller.signup);
   app.post("/auth/signin", controller.signin);
-  app.get("/auth/confirmation/:emailtoken" ,controller.confirmEmail); 
-  
+  app.get("/auth/confirmation/:emailtoken" ,controller.confirmEmail);
+  //app.post("/auth/signup-google", controller.singupGoogle) 
 };

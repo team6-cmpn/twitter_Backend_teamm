@@ -5,9 +5,6 @@ const cors = require("cors");
 const app = express();
 const db = require("./app/models");
 const dbConfig = require("./app/config/db.config");
-// from auth.controller
-// const User = db.user;
-// var bcrypt = require("bcryptjs");
 
 
 var corsOptions = {
@@ -39,6 +36,9 @@ app.get("/", (req, res) => {
 
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
+require('./app/routes/OAuth.routes')(app);
+//require('./app/routes/OAuth.routesTest')(app);
+
 
 
 // server listening on port 8080 
