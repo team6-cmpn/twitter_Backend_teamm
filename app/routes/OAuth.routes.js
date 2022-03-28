@@ -11,7 +11,7 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/OAuth/google/signup", verifySignUp.checkExistingUsernameOrEmail, controller.signupGoogle);
+  app.post("/OAuth/google/signup", verifySignUp.checkExistingGoogleId, controller.signupGoogle);
   app.post("/OAuth/google/signin", controller.signinGoogle);
   //app.get("/OAuth/google/signin", controller.signinGoogle);
 

@@ -1,7 +1,7 @@
 const db = require("../models");
 const User = db.user;
 
-checkExistingUsernameOrEmail = (req, res, next) => {
+checkExistingUsernameOrEmailOrGoogleId = (req, res, next) => {
   // check Username
   //res.send({message:"verifySignUp", user_name: req.body});
   User.findOne({
@@ -31,8 +31,26 @@ checkExistingUsernameOrEmail = (req, res, next) => {
     });
   });
 };
+checkExistingGoogleId = (req, res, next) => {
+  // check Username
+  //res.send({message:"verifySignUp", user_name: req.body});
+  User.findOne({
+    googleId: req.body.googleId
+  }).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    if (user) {
+      res.status(400).send({ message: "Failed! There is an existing account with this google id" });
+      return;
+    }
+  });
+  
+};
 
 const verifySignUp = {
-    checkExistingUsernameOrEmail
+  checkExistingUsernameOrEmailOrGoogleId,
+  checkExistingGoogleId
 };
 module.exports = verifySignUp;

@@ -23,16 +23,17 @@ exports.signupGoogle = (req, res) => {
       res.status(500).send({ message: err });
       return;
     }
-    res.status(200).send({message: "user registered successfully with google account"})
+    //for signup only
+    //res.status(200).send({message: "user registered successfully with google account"})
+    // for sign up and automatic signin
+    this.signinGoogle(req,res);
   });
-  //generate email token
-  //console.log(user);
-  //res.redirect("/OAuth/google/signin");
+  
 };
 
 
 exports.signinGoogle = (req, res) => {
-    // Q) will we user only username or will use email and phone too??? ask front
+   
   User.findOne({
     googleId: req.body.googleId
   })

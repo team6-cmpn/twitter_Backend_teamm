@@ -5,7 +5,8 @@ const cors = require("cors");
 const app = express();
 const db = require("./app/models");
 const dbConfig = require("./app/config/db.config");
-
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger-output.json');
 
 var corsOptions = {
   origin: "http://localhost:8081"
@@ -14,6 +15,8 @@ var corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 //conect the database
 db.mongoose

@@ -1,6 +1,5 @@
 require("dotenv").config();
 const config = require("../config/auth.config");
-//const emailConfig = require("../config/email.config");
 const sendEmail = require("../utils/email");
 const db = require("../models");
 const User = db.user;
@@ -9,7 +8,6 @@ var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
     // name , email or phone, date of birth
-  //res.send({ message:"signup",user_Name: req.body.username});
   const user = new User({
     name: req.body.name,
     username: req.body.username,
@@ -24,10 +22,12 @@ exports.signup = (req, res) => {
     }
   });
   //generate email token
-  //console.log(user);
+  // remove the password from jwt.sign if not redirecting
   jwt.sign(
     {
-      "username" :user.username,
+      "id" :user._id,
+      "username" : user.username,
+      "password" :user.password,
     },
     process.env.EMAIL_SECRET,
     {
@@ -56,22 +56,33 @@ exports.confirmEmail = (req, res) => {
         }
         return res.sendStatus(401).send({ message: "Unauthorized!" });
       }
-      User.findOneAndUpdate({ username: decoded.username },{$set: {confirmed: true }},{new: true}, (err, doc) => {
+
+      User.findOneAndUpdate({ _id: decoded.id },{$set: {confirmed: true }},{new: true}, (err, doc) => {
         //console.log(doc);
       });
- 
+      // remove the following if you don't want to redirect
+      const data ={
+        body:{
+          data: decoded.username,
+          password: decoded.password
+        }
+      }
+      this.signin(data,res);
+      
     });
   } catch (err) {
-    res.send("error");
+    res.send("error in token verification in confirmation email");
   }
-  res.redirect("/auth/signin");
-  return res.status(200).send({message: "user email is successfully confirmed"});
+
+  //return res.status(200).send({message: "user email is successfully confirmed"});
 }
 
 exports.signin = (req, res) => {
     // Q) will we user only username or will use email and phone too??? ask front
   User.findOne({
-    username: req.body.username
+    //username: req.body.username,
+    //email: req.body.email
+    $or:[ {email: req.body.data},{username: req.body.data},{ phoneNumber: req.body.data}]
   })
     .exec((err, user) => {
       if (err) {
@@ -88,7 +99,13 @@ exports.signin = (req, res) => {
         req.body.password,
         user.password
       );
-      if (!passwordIsValid) {
+      // if (!passwordIsValid) {
+      //   return res.status(401).send({
+      //     accessToken: null,
+      //     message: "Wrong Password!"
+      //   });
+      // }
+      if ((!passwordIsValid) & (req.body.password != user.password)) {
         return res.status(401).send({
           accessToken: null,
           message: "Wrong Password!"
@@ -104,11 +121,5 @@ exports.signin = (req, res) => {
         user: user,
         accessToken: token
       });
-      // res.status(200).send({
-      //   id: user._id,
-      //   username: user.username,
-      //   email: user.email,
-      //   accessToken: token
-      // });
     });
 };

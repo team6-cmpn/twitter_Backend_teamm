@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "devStart": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "start-gendoc": "node swagger.js"
   },
   "keywords": [
     "node.js",
@@ -28,11 +29,14 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.6",
     "nodemailer": "^6.7.3",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
     "eslint": "^8.11.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.25.4"
+    "eslint-plugin-import": "^2.25.4",
+    "jest": "^27.5.1",
+    "swagger-autogen": "^2.20.5"
   }
 }
