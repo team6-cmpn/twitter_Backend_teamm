@@ -4,9 +4,16 @@
   "description": "this is twitter clone for team 6 BE subteam ",
   "main": "app.js",
   "scripts": {
-    "devStart": "nodemon app.js",
-    "test": "jest",
-    "start-gendoc": "node swagger.js"
+    "devStart": "env-cmd -f ./app/config/dev.env nodemon server.js",
+    "test": "env-cmd -f ./app/config/test.env jest --testTimeout=10000",
+    "start-gendoc": "node swagger.js",
+    "test:watch": "jest --watch"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   },
   "keywords": [
     "node.js",
@@ -33,10 +40,12 @@
     "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
+    "env-cmd": "^10.1.0",
     "eslint": "^8.11.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
     "jest": "^27.5.1",
+    "supertest": "^6.2.2",
     "swagger-autogen": "^2.20.5"
   }
 }

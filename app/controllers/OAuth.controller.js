@@ -7,9 +7,14 @@ const User = db.user;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
+// exports.test =  (req, res) => {
+//   res.json({ message: "pass!" });
+// };
+
 exports.signupGoogle = (req, res) => {
     // name , email or phone, date of birth
   //res.send({ message:"signup",user_Name: req.body.username});
+  //console.log("in signup google");
   const user = new User({
     googleId: req.body.googleId,
     imageUrl: req.body.imageUrl,
@@ -18,6 +23,7 @@ exports.signupGoogle = (req, res) => {
     email: req.body.email,
     confirmed: true
   });
+  //console.log("user info read");
   user.save((err, user) => {
     if (err) {
       res.status(500).send({ message: err });

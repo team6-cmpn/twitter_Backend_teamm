@@ -18,34 +18,41 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-//conect the database
-db.mongoose
-.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => {
-  console.log("Successfully connect to MongoDB.");
-})
-.catch(err => {
-  console.error("Connection error", err);
-  process.exit();
-});
+if (process.env.DB_NAME == "Twitter_db"){
+//console.log(process.env.DB_NAME)
+  //conect the database
+  db.mongoose
+  .connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, {
+    useNewUrlParser: true,
+    //useCreateIndex: true,
+    //useFindAndModify: false,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Successfully connect to MongoDB.");
+  })
+  .catch(err => {
+    console.error("Connection error", err);
+    process.exit();
+  });
+}
   
   
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to test Auth application." });
 });
 
+
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/OAuth.routes')(app);
 //require('./app/routes/OAuth.routesTest')(app);
 
+//export the app
+module.exports = app;
 
-
-// server listening on port 8080 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
-});
+// // server listening on port 8080 
+// const PORT = process.env.PORT || 8080;
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}.`);
+// });

@@ -15,13 +15,13 @@ const sendEmail = async (email, subject, text) => {
     
     //verify transporter
     transporter.verify((err,success)=>{
-      if(err){
-        console.log("transporter error");
-        console.log(err);
-      }else{
-        console.log("ready for message");
-        console.log(success);
-      }
+      // if(err){
+      //   console.log("transporter error");
+      //   console.log(err);
+      // }else{
+      //   console.log("ready for message");
+      //   console.log(success);
+      // }
     })
     // send mail
     await transporter.sendMail({

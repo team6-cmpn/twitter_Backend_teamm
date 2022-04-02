@@ -7,7 +7,7 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
-    // name , email or phone, date of birth
+  // name , email or phone, date of birth
   const user = new User({
     name: req.body.name,
     username: req.body.username,
@@ -17,6 +17,7 @@ exports.signup = (req, res) => {
   });
   user.save((err, user) => {
     if (err) {
+      //console.log(err);
       res.status(500).send({ message: err });
       return;
     }
@@ -44,7 +45,7 @@ exports.signup = (req, res) => {
     
       res.status(200).send("An Email sent to your account please verify");
     },
-  );
+);
 };
 
 exports.confirmEmail = (req, res) => {

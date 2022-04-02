@@ -18,3 +18,9 @@ https://youtu.be/Y2ec4KQ7mP8
 https://dev.to/uddeshjain/authentication-with-google-in-nodejs-1op5
 https://eu7.proxysite.com/process.php?d=pKjC0rBh6S6l7PcmoPFUsBI%2FMWfdWQi6jPew2sSdQrBYpopR3UgWablTZf61kZnIx4s5YEj2GWNvlnw5QNy%2B9da2izh%2FKNtJy6lf03A75uV%2F3HUN&b=1&f=norefer
 
+Unit Testing
+https://www.freecodecamp.org/news/end-point-testing/
+https://youtu.be/X4uS1qsNIAo
+https://www.softwaretestinghelp.com/jest-testing-tutorial/
+https://dev.to/nedsoft/testing-nodejs-express-api-with-jest-and-supertest-1km6
+https://www.digitalocean.com/community/tutorials/test-a-node-restful-api-with-mocha-and-chai
