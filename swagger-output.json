@@ -41,9 +41,6 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -129,7 +126,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "username": {
+                "data": {
                   "example": "any"
                 },
                 "password": {

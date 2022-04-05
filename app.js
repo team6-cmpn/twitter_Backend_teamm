@@ -4,7 +4,8 @@ const bodyParser = require('body-parser');
 const cors = require("cors");
 const app = express();
 const db = require("./app/models");
-const dbConfig = require("./app/config/db.config");
+//const dbConfig = require("./app/config/db.config");
+//for the API documentation
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger-output.json');
 
@@ -42,10 +43,12 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to test Auth application." });
 });
 
-
+//PLEASE INCLUDE YOUR ROUTES
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/OAuth.routes')(app);
+
+
 //require('./app/routes/OAuth.routesTest')(app);
 
 //export the app

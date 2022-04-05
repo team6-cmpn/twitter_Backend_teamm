@@ -7,10 +7,10 @@ const tweetSchema = new Schema({
       type: String,
       default: new Date()
     },
-    id: {
-        type: Number,
-        required: true
-    },
+    // id: {
+    //     type: Number,
+    //     required: true
+    // },
     text: {
         type: String,
         required: true,

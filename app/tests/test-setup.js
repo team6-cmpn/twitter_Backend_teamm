@@ -26,7 +26,7 @@ async function removeAllCollections () {
       });
 }
 
-async function insertData() {
+async function insertUsers() {
     const data = [{
         username: 'Zell',
         email: 'testing@gmail.com',
@@ -78,7 +78,8 @@ module.exports = {
       //await mongoose.connection.close()
       const url = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
       await mongoose.connect(url, { useNewUrlParser: true })
-      await insertData();
+      await insertUsers();
+      
     })
     
     // Seeds database before each test
