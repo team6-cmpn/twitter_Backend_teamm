@@ -8,5 +8,6 @@ module.exports = function(app) {
     );
     next();
   });
-  app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
+  //app.use(authJwt.verifyToken);
+  app.get("/api/test/user", authJwt.verifyToken, controller.userBoard);
 }

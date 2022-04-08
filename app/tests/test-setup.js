@@ -43,6 +43,12 @@ async function insertUsers() {
         confirmed: true
     },
     {
+        username: 'Zellconfirm',
+        email: 'testingconfirm@gmail.com',
+        password: '12345678',
+        confirmed: false
+    },
+    {
       googleId :"111",
       username: "coco",
       email: "req.coco.ejknj5maill"
@@ -79,7 +85,7 @@ module.exports = {
       const url = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
       await mongoose.connect(url, { useNewUrlParser: true })
       await insertUsers();
-      
+
     })
     
     // Seeds database before each test

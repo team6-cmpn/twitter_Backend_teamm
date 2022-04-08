@@ -27,6 +27,7 @@ describe('signup with google Test', () => {
         });
 
     });
+    // valid email
     it('Should give 400 googleId already exists' , async () => {
         const res = await request.post('/OAuth/google/signup')
             .send({
@@ -90,6 +91,7 @@ describe('signin with google Test', () => {
         await User.findOne({ googleId: signinUser.googleId })
         .exec((err, user) => {
             expect(res.status).toBe(404);
+            expect(res.body.message).toBe("User Not found.");
         });
     });
 });

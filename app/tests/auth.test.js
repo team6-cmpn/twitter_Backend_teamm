@@ -1,7 +1,8 @@
+require("dotenv").config();
 const app = require("../../app");
 const supertest = require('supertest');
 const request = supertest(app);
-
+var jwt  = require("jsonwebtoken");
 const User = require('../models/user.model');
 const { setupDB } = require('./test-setup');
 
@@ -23,6 +24,7 @@ describe('signup with email Test', () => {
         await User.findOneAndDelete({ email: 'testingZell@gmail.com' })
             .exec((err, user) => {
             expect(res.status).toBe(200);
+            expect(res.body.message).toBe("An Email sent to your account please verify");
             expect(user.username).toBe('ZellTest');
             expect(user.email).toBe('testingZell@gmail.com');
         });
@@ -52,6 +54,40 @@ describe('signup with email Test', () => {
     });
 });
 
+// describe('confirm email Test', () => {
+//     it('Should confirm the user who clicked on the link', async () => {
+//         const signinUser = {
+//             username: 'Zellconfirm',
+//             password: "12345678"
+//         }
+//         jwt.sign(
+//             {
+//               "username" : "Zellconfirm",
+//               "password" :"12345678",
+//             },
+//             process.env.EMAIL_SECRET,
+//             {
+//               expiresIn: '1d',
+//             },
+//             (err, emailToken) => {
+                
+//                 const res = request.get(`/auth/confirmation/${emailToken}`);
+//                 console.log(res);
+//                     //.send(emailToken);
+//                 User.findOne({username: "Zellconfirm"})
+//                 .exec((err, user) => {
+//                     console.log(user);
+//                     //expect(res.status).toBe(200);
+//                     //expect(res.body.accessToken).toBeTruthy();
+//                     expect(user.username).toBe('Zellconfirm');
+//                     expect(user.confirmed).toBe(true);
+                   
+//                 });
+//             },
+//         );
+//     });
+// });
+
 describe('signin with email Test', () => {
     it('Should retrive user and token from database', async () => {
         const signinUser = {
@@ -64,14 +100,9 @@ describe('signin with email Test', () => {
         // Searches the user in the database
         await User.findOne({ $or:[ {email: signinUser.data},{username: signinUser.data},{ phoneNumber: signinUser.data}] })
         .exec((err, user) => {
-            if (!user) {
-                expect(res.status).toBe(404);
-            }
-            if (!user.confirmed){
-                expect(res.status).toBe(400);
-            }
             expect(res.status).toBe(200);
             expect(res.body.accessToken).toBeTruthy();
+            console.log(res.body.accessToken);
             expect(user.username).toBe('Zell');
             expect(user.email).toBe('testing@gmail.com');
         });
@@ -88,6 +119,7 @@ describe('signin with email Test', () => {
         await User.findOne({ $or:[ {email: signinUser.data},{username: signinUser.data},{ phoneNumber: signinUser.data}] })
         .exec((err, user) => {
             expect(res.status).toBe(404);
+            expect(res.body.message).toBe("User Not found.");
         });
     });
     it('Should give 400 as user not confirmed', async () => {
@@ -96,12 +128,13 @@ describe('signin with email Test', () => {
             password: "12345678"
         }
         const res = await request.post('/auth/signin')
-            .send(signinUser);
-
+        .send(signinUser);
+        
         // Searches the user in the database
         await User.findOne({ $or:[ {email: signinUser.data},{username: signinUser.data},{ phoneNumber: signinUser.data}] })
         .exec((err, user) => {
             expect(res.status).toBe(400);
+            expect(res.body.message).toBe("please confirm your email before login");
         });
     });
     it('Should give 401 as password is wrong', async () => {
@@ -110,12 +143,13 @@ describe('signin with email Test', () => {
             password: "12345678"
         }
         const res = await request.post('/auth/signin')
-            .send(signinUser);
-
+        .send(signinUser);
+        
         // Searches the user in the database
         await User.findOne({ $or:[ {email: signinUser.data},{username: signinUser.data},{ phoneNumber: signinUser.data}] })
         .exec((err, user) => {
             expect(res.status).toBe(401);
+            expect(res.body.message).toBe("Wrong Password!");
         });
     });
 });

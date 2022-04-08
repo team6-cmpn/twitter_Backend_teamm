@@ -35,6 +35,7 @@ const express = require("express");
  */
 exports.signup = (req, res) => {
   // name , email or phone, date of birth
+  //validation
   const user = new User({
     name: req.body.name,
     username: req.body.username,
