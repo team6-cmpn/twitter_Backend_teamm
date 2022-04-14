@@ -14,7 +14,7 @@ describe('signup with email Test', () => {
             .send({
             username: 'ZellTest',
             email: 'testingZell@gmail.com',
-            password: '12345678'
+            password: 'Ola123ola#'
             });
             // Ensures response contains name and email
             // expect(res.body.name).toBeTruthy();
@@ -23,6 +23,7 @@ describe('signup with email Test', () => {
             // Searches the user in the database
         await User.findOneAndDelete({ email: 'testingZell@gmail.com' })
             .exec((err, user) => {
+                console.log(res.body);
             expect(res.status).toBe(200);
             expect(res.body.message).toBe("An Email sent to your account please verify");
             expect(user.username).toBe('ZellTest');
@@ -35,7 +36,7 @@ describe('signup with email Test', () => {
             .send({
             username: 'Zell',
             email: 'testingZell@gmail.com',
-            password: '12345678'
+            password: 'Ola123ola#'
             });
             expect(res.status).toBe(400);
             expect(res.body.message).toBe("Failed! There is an existing account with this Username");
@@ -46,7 +47,7 @@ describe('signup with email Test', () => {
             .send({
             username: 'Zelllol',
             email: 'testing@gmail.com',
-            password: '12345678'
+            password: 'Ola123ola#'
             });
             expect(res.status).toBe(400);
             expect(res.body.message).toBe("Failed! There is an existing account with this Email");
@@ -58,12 +59,12 @@ describe('signup with email Test', () => {
 //     it('Should confirm the user who clicked on the link', async () => {
 //         const signinUser = {
 //             username: 'Zellconfirm',
-//             password: "12345678"
+//             password: "Ola123ola#"
 //         }
 //         jwt.sign(
 //             {
 //               "username" : "Zellconfirm",
-//               "password" :"12345678",
+//               "password" :"Ola123ola#",
 //             },
 //             process.env.EMAIL_SECRET,
 //             {
@@ -92,7 +93,7 @@ describe('signin with email Test', () => {
     it('Should retrive user and token from database', async () => {
         const signinUser = {
             data :"Zell",
-            password: "12345678"
+            password: "Ola123ola#"
         }
         const res = await request.post('/auth/signin')
             .send(signinUser);
@@ -110,7 +111,7 @@ describe('signin with email Test', () => {
     it('Should give 404 as user not found', async () => {
         const signinUser = {
             data :"Zell1",
-            password: "12345678"
+            password: "Ola123ola#"
         }
         const res = await request.post('/auth/signin')
             .send(signinUser);
@@ -125,7 +126,7 @@ describe('signin with email Test', () => {
     it('Should give 400 as user not confirmed', async () => {
         const signinUser = {
             data :"Zell2",
-            password: "12345678"
+            password: "Ola123ola#"
         }
         const res = await request.post('/auth/signin')
         .send(signinUser);

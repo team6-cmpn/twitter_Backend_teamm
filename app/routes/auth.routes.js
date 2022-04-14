@@ -11,7 +11,7 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/auth/signup", verifySignUp.checkExistingUsernameOrEmail, controller.signup);
+  app.post("/auth/signup", [verifySignUp.checkExistingUsernameOrEmail,verifySignUp.checkValidEmail, verifySignUp.checkStrenghtOfPassword], controller.signup);
   app.post("/auth/signin", controller.signin);
   app.get("/auth/confirmation/:emailtoken" ,controller.confirmEmail);
   //app.post("/auth/signup-google", controller.singupGoogle) 

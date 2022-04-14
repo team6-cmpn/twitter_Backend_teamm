@@ -33,7 +33,7 @@ describe('signup with google Test', () => {
             .send({
                 googleId :"111",
                 username: "lolo",
-                email: "req.lolo.ejknj5maill"
+                email: "req@lolo.com"
             });
            
         expect(res.status).toBe(400);
@@ -44,7 +44,7 @@ describe('signup with google Test', () => {
             .send({
                 googleId :"333",
                 username: "coco",
-                email: "req.coco3.ejknj5maill"
+                email: "req@coco3.com"
             });
            
         expect(res.status).toBe(400);
@@ -55,7 +55,7 @@ describe('signup with google Test', () => {
             .send({
                 googleId :"444",
                 username: "coco4",
-                email: "req.coco.ejknj5maill"
+                email: "req@coco.com"
             });
            
         expect(res.status).toBe(400);

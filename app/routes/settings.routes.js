@@ -1,5 +1,5 @@
 const controller = require("../controllers/settings.controller");
-const { authJwt } = require("../middleware");
+const { authJwt , verifySignUp} = require("../middleware");
 
 module.exports = function(app) {
     
@@ -11,9 +11,9 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/settings/changePassword",authJwt.verifyToken,controller.changePassword);
+  app.post("/settings/changePassword",[authJwt.verifyToken, verifySignUp.checkStrenghtOfPassword],controller.changePassword);
   app.post("/settings/forgetPassword",controller.sendForgetPasswordEmail);
   app.get("/settings/forgetPassword/:emailtoken" ,controller.receiveForgetPasswordEmail);
-  app.post("/settings/resetForgetPassword",authJwt.verifyToken,controller.resetForgetPassword);
+  app.post("/settings/resetForgetPassword",[authJwt.verifyToken,verifySignUp.checkStrenghtOfPassword],controller.resetForgetPassword);
   
 };

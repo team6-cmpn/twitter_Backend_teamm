@@ -39,7 +39,8 @@ exports.signupGoogle = (req, res) => {
     name: req.body.name,
     username: req.body.username,
     email: req.body.email,
-    confirmed: true
+    confirmed: true,
+    created_at : new Date()
   });
   //console.log("user info read");
   user.save((err, user) => {

@@ -6,7 +6,7 @@ const User = db.user;
 var jwt  = require("jsonwebtoken");
 var {TokenExpiredError}  = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
-const express = require("express");
+
 /**
  * 
  * @module auth
@@ -33,7 +33,7 @@ const express = require("express");
  * @param {responseBodySignupEmail} res the response which is sent back to the front
  * 
  */
-exports.signup = (req, res) => {
+exports.signup = function signup(req, res) {
   // name , email or phone, date of birth
   //validation
   const user = new User({
@@ -41,7 +41,8 @@ exports.signup = (req, res) => {
     username: req.body.username,
     email: req.body.email,
     dateOfBirth: req.body.dateOfBirth,
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: bcrypt.hashSync(req.body.password, 8),
+    created_at : new Date()
   });
   user.save((err, user) => {
     if (err) {

@@ -31,6 +31,27 @@ checkExistingUsernameOrEmail = (req, res, next) => {
     });
   });
 };
+
+checkStrenghtOfPassword = (req, res, next) => {
+  const strongPassword = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+  const isStrong = strongPassword.test(req.body.password);
+  if (!isStrong){
+    res.status(400).send({ message: "Failed! password must be 8 or more characters which contain at least one numeric digit, one uppercase and one lowercase letter" });
+    return;
+  }
+  next();
+};
+
+checkValidEmail = (req, res, next) => {
+  const checkEmail = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+  const isValid = checkEmail.test(String(req.body.email).toLowerCase());
+  if (!isValid){
+    res.status(400).send({ message: "Failed! Email not valied!" });
+    return;
+  }
+  next();
+};
+
 checkExistingGoogleId = (req, res, next) => {
   // check Username
   //res.send({message:"verifySignUp", user_name: req.body});
@@ -52,6 +73,8 @@ checkExistingGoogleId = (req, res, next) => {
 
 const verifySignUp = {
   checkExistingUsernameOrEmail,
-  checkExistingGoogleId
+  checkExistingGoogleId,
+  checkValidEmail,
+  checkStrenghtOfPassword
 };
 module.exports = verifySignUp;

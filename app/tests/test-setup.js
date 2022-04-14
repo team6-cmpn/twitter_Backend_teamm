@@ -30,28 +30,28 @@ async function insertUsers() {
     const data = [{
         username: 'Zell',
         email: 'testing@gmail.com',
-        password: '12345678',
+        password: 'Ola123ola#',
         confirmed: true
     }, {
         username: 'Zell2',
         email: 'testing2@gmail.com',
-        password: '12345678'
+        password: 'Ola123ola#'
     }, {
         username: 'Zell3',
         email: 'testing3@gmail.com',
-        password: '1234567',
+        password: 'Ola123ola#',
         confirmed: true
     },
     {
         username: 'Zellconfirm',
         email: 'testingconfirm@gmail.com',
-        password: '12345678',
+        password: 'Ola123ola#',
         confirmed: false
     },
     {
       googleId :"111",
       username: "coco",
-      email: "req.coco.ejknj5maill"
+      email: "req@coco.com"
     }
   ];
     //await User(data).save();

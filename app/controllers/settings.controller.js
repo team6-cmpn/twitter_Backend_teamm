@@ -7,12 +7,35 @@ var jwt  = require("jsonwebtoken");
 var {TokenExpiredError}  = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
+/**
+ * 
+ * @module  Settings
+ */
+/**
+ * @global
+ * @typedef {object} reqBodyChangePassword
+ * @property {string} currentPassword 
+ * @property {string} password 
+ * @property {string} confirmNewPassword 
+ */
+/** 
+ * @global
+ * @typedef {object} resBodyChangePassword
+ * @property {string} message password was changed successfully
+ */
+/**
+ * This function changes the password of the user
+ * 
+ * @param {reqBodyChangePassword} req the request sent from the front
+ * @param {resBodyChangePassword} res the response which is sent back to the front
+ * 
+ */
 
 exports.changePassword = (req, res) => {
     // Q) will we user only username or will use email and phone too??? ask front
     const data = {
         currentPassword: req.body.currentPassword,
-        newPassword: req.body.newPassword,
+        newPassword: req.body.password,
         confirmNewPassword: req.body.confirmNewPassword
     }
 
@@ -44,6 +67,26 @@ exports.changePassword = (req, res) => {
        
     });
 };
+
+/**
+ * @global
+ * @typedef {object} reqBodysendForgetPasswordEmail
+ * @property {string} username 
+ * @property {string} email 
+ * 
+ */
+/** 
+ * @global
+ * @typedef {object} resBodysendForgetPasswordEmail
+ * @property {string} message An Email sent to your account please click on it to reset your password
+ */
+/**
+ * This function sends an email to user to confirm his identity to be able later to reset his password
+ * 
+ * @param {reqBodysendForgetPasswordEmail} req the request sent from the front
+ * @param {resBodysendForgetPasswordEmail} res the response which is sent back to the front
+ * 
+ */
 
 exports.sendForgetPasswordEmail = (req, res) => {
     // name , email or phone, date of birth
@@ -86,7 +129,26 @@ exports.sendForgetPasswordEmail = (req, res) => {
       );
     });
 };
-    
+
+/**
+ * @global
+ * @typedef {object} reqParamsreceiveForgetPasswordEmail
+ * @property {string} emailtoken  
+ * 
+ */
+/** 
+ * @global
+ * @typedef {object} resBodyreceiveForgetPasswordEmail
+ * @property {string} accessToken 
+ */
+/**
+ * This function confirm the user identity to be able to reset the password
+ * 
+ * @param {reqParamsreceiveForgetPasswordEmail} req the request sent from the front
+ * @param {resBodyreceiveForgetPasswordEmail} res the response which is sent back to the front
+ * 
+ */
+
 exports.receiveForgetPasswordEmail = (req, res) => {
     try {
       jwt.verify(req.params.emailtoken, process.env.EMAIL_SECRET,(err, decoded) => {
@@ -111,10 +173,29 @@ exports.receiveForgetPasswordEmail = (req, res) => {
     }
 }
 
+/**
+ * @global
+ * @typedef {object} reqBodyChangePassword
+ * @property {string} password 
+ * @property {string} confirmNewPassword 
+ */
+/** 
+ * @global
+ * @typedef {object} resBodyChangePassword
+ * @property {string} message password was reset successfully
+ */
+/**
+ * This function resets the password of the user if he forgot it
+ * 
+ * @param {reqBodyChangePassword} req the request sent from the front
+ * @param {resBodyChangePassword} res the response which is sent back to the front
+ * 
+ */
+
 exports.resetForgetPassword = (req, res) => {
     // Q) will we user only username or will use email and phone too??? ask front
     const data = {
-        newPassword: req.body.newPassword,
+        newPassword: req.body.password,
         confirmNewPassword: req.body.confirmNewPassword
     }
 
