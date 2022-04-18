@@ -24,6 +24,7 @@ var bcrypt = require("bcryptjs");
  * @global
  * @typedef {object} responseBodySignupEmail
  * @property {string} message An Email sent to your account please verify
+ * @property {string} emailtoken email token to help in resending confirmation email if failed
  */
 /**
  * This function signs up users using email and send them a verification email
@@ -58,6 +59,7 @@ exports.signup = function signup(req, res) {
       "id" :user._id,
       "username" : user.username,
       "password" :user.password,
+      "email" : user.email
     },
     process.env.EMAIL_SECRET,
     {
@@ -72,10 +74,58 @@ exports.signup = function signup(req, res) {
       <p>Thank you very much</p>`;
       sendEmail(user.email, "Confirm Email", message);
     
-      res.status(200).send({ message: "An Email sent to your account please verify" });
+      res.status(200).send({ message: "An Email sent to your account please verify", emailtoken: emailToken });
     },
 );
 };
+/** 
+ * @global
+ * @typedef {object} resBodyResendEmail
+ * @property {string} message An Email is resent to your account please verify
+ * @property {string} emailtoken email token to help in resending confirmation email if failed
+ */
+/**
+ * This function resends confirmation email if there was a problem with user mail box 
+ * 
+ * @param {*} req the request sent from the front
+ * @param {resBodyResendEmail} res the response which is sent back to the front
+ * 
+ */
+
+exports.resendEmail = (req, res) => {
+  try {
+    jwt.verify( req.headers["x-access-token"], process.env.EMAIL_SECRET,(err, decoded) => {
+      if (err) {
+        if (err instanceof TokenExpiredError) {
+          return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
+        }
+        return res.sendStatus(401).send({ message: "Unauthorized!" });
+      }
+
+      const newEmailtoken = jwt.sign(
+        { 
+          "id" :decoded.id,
+          "username" : decoded.username,
+          "password" :decoded.password,
+          "email" : decoded.email 
+        }, 
+        process.env.EMAIL_SECRET, {
+        expiresIn: '1d' 
+      });
+
+      const message = `<p>You have a new email comfirmation request</p>
+      <p>Please click this email to confirm your email:</p>
+      <a href="${process.env.BASE_URL}/auth/confirmation/${newEmailtoken}">click here to confirm your email</a>
+      <p>Thank you very much</p>`;
+      sendEmail(decoded.email, "Confirm Email", message);
+      res.status(200).send({ message: "An Email is resent to your account please verify", emailtoken: newEmailtoken });
+
+    });
+  } catch (err) {
+    res.status(500).send("error in token verification in resend email");
+  }
+
+}
 /**
  * @global
  * @typedef reqParamsConfirm
@@ -158,28 +208,35 @@ exports.signin = (req, res) => {
       var passwordIsValid = bcrypt.compareSync(
         req.body.password,
         user.password
-      );
-      // if (!passwordIsValid) {
-      //   return res.status(401).send({
-      //     accessToken: null,
-      //     message: "Wrong Password!"
-      //   });
-      // }
+        );
+        // if (!passwordIsValid) {
+          //   return res.status(401).send({
+            //     accessToken: null,
+            //     message: "Wrong Password!"
+            //   });
+            // }
       if ((!passwordIsValid) & (req.body.password != user.password)) {
         return res.status(401).send({
           accessToken: null,
           message: "Wrong Password!"
         });
       }
-      var token = jwt.sign({ id: user.id }, config.secret, {
+      var token = jwt.sign({ id: user._id , isDeactivated: user.isDeactivated}, config.secret, {
         expiresIn: config.jwtExpiration // 24 hours will be modified later
       });
       // Q) should we return all of the user object ?
       // Q) the token is saved in the user schema or we will send it alone ?
       // Q) will it be like this ->
-      res.status(200).send({
-        user: user,
-        accessToken: token
-      });
+      if (user.isDeactivated){
+        return res.status(400).send({
+          message:"This account is deactivated!",
+          accessToken: token
+        });
+      }else{
+        res.status(200).send({
+          user: user,
+          accessToken: token
+        });
+      }
     });
 };

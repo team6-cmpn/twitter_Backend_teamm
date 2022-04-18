@@ -54,6 +54,11 @@ const userSchema = new Schema({
     type: Boolean,
     default: false
   },
+  isDeactivated:{
+    type: Boolean,
+    default: false
+  },
+  deactivationDate: Date,
   googleId: String,
   isAdmin: Boolean,
   description: String,

@@ -51,7 +51,6 @@ checkValidEmail = (req, res, next) => {
   }
   next();
 };
-
 checkExistingGoogleId = (req, res, next) => {
   // check Username
   //res.send({message:"verifySignUp", user_name: req.body});

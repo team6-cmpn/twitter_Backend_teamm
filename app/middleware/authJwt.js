@@ -15,8 +15,14 @@ verifyToken = (req, res, next) => {
       if (err instanceof TokenExpiredError) {
         return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
       }
-      return res.sendStatus(401).send({ message: "Unauthorized!" });
+      console.log(err);
+      return res.sendStatus(401).send({ message: "Unauthorized! token"});
     }
+  
+    // if (decoded.isDeactivated){
+    //   return res.sendStatus(401).send({ message: "This account is deactivated!" });
+    // }
+    
     req.userId = decoded.id;
     next();
   });

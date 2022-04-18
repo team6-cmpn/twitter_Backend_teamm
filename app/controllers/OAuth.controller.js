@@ -90,7 +90,7 @@ exports.signinGoogle = (req, res) => {
         return res.status(404).send({ message: "User Not found." });
       }
       
-      var token = jwt.sign({ id: user.id }, config.secret, {
+      var token = jwt.sign({ id: user.id, isDeleted: user.isDeleted }, config.secret, {
         expiresIn: config.jwtExpiration // 24 hours will be modified later
       });
       // Q) should we return all of the user object ?

@@ -4,7 +4,9 @@ const bodyParser = require('body-parser');
 const cors = require("cors");
 const app = express();
 const db = require("./app/models");
-
+// console.log(db.user);
+// console.log(db.tweet);
+//console.log(db.role);
 //const dbConfig = require("./app/config/db.config");
 //for the API documentation
 const swaggerUi = require('swagger-ui-express');
@@ -49,6 +51,7 @@ require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/OAuth.routes')(app);
 require('./app/routes/settings.routes')(app);
+require('./app/routes/search.routes')(app);
 
 
 //require('./app/routes/OAuth.routesTest')(app);

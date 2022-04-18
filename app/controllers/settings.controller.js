@@ -1,6 +1,7 @@
 require("dotenv").config();
 const config = require("../config/auth.config");
 const sendEmail = require("../utils/email");
+const {signin} = require("./auth.controller");
 const db = require("../models");
 const User = db.user;
 var jwt  = require("jsonwebtoken");
@@ -112,6 +113,7 @@ exports.sendForgetPasswordEmail = (req, res) => {
         jwt.sign(
           {
             "id" :foundUser._id,
+            "isDeactivated" :foundUser.isDeactivated
             //"username": user.username
           },
           process.env.EMAIL_SECRET,
@@ -159,7 +161,7 @@ exports.receiveForgetPasswordEmail = (req, res) => {
           return res.sendStatus(401).send({ message: "Unauthorized!" });
         }
   
-        var token = jwt.sign({ id: decoded.id }, config.secret, {
+        var token = jwt.sign({ id: decoded.id , isDeactivated: decoded.isDeactivated}, config.secret, {
         expiresIn: config.jwtExpiration // 24 hours will be modified later
         });
 
@@ -218,3 +220,57 @@ exports.resetForgetPassword = (req, res) => {
        
     });
 };
+
+
+/** 
+ * @global
+ * @typedef {object} resBodydeactivateAccount
+ * @property {string} message your account has been decactivated successfully
+ */
+/**
+ * This function deactivates the user account
+ * 
+ * @param {*} req the request sent from the front
+ * @param {resBodydeactivateAccount} res the response which is sent back to the front
+ * 
+ */
+exports.deactivateAccount = (req, res) => {
+
+  User.findOneAndUpdate({ _id: req.userId },{$set: {isDeactivated: true , deactivationDate: new Date()} },{new: true}, (err, doc) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    res.status(200).send({message: "your account has been decactivated successfully"})
+  })
+}
+
+/** 
+ * @global
+ * @typedef {object} reqHearderreactivateAccount
+ * @property {string} token verify this token to get the user id
+ */
+/**
+ * This function reactivates the user account after he deactivates it
+ * 
+ * @param {reqHearderreactivateAccount} req the request sent from the front
+ * @param {*} res the response which is sent back to the front
+ * 
+ */
+exports.reactivateAccount = (req, res) => {
+  
+  User.findOneAndUpdate({ _id: req.userId },{$set: {isDeactivated: false }},{new: true}, (err, doc) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    const data ={
+      body:{
+        data: doc.username,
+        password: doc.password
+      }
+    }
+    signin(data,res);
+    //res.status(200).send({message: "your account has been recactivated successfully"})
+  })
+}

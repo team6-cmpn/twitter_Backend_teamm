@@ -15,5 +15,6 @@ module.exports = function(app) {
   app.post("/settings/forgetPassword",controller.sendForgetPasswordEmail);
   app.get("/settings/forgetPassword/:emailtoken" ,controller.receiveForgetPasswordEmail);
   app.post("/settings/resetForgetPassword",[authJwt.verifyToken,verifySignUp.checkStrenghtOfPassword],controller.resetForgetPassword);
-  
+  app.put("/settings/deactivateAccount", authJwt.verifyToken, controller.deactivateAccount);
+  app.put("/settings/reactivateAccount", authJwt.verifyToken, controller.reactivateAccount);
 };
