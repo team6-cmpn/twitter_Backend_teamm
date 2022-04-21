@@ -1,6 +1,6 @@
 const controller = require("../controllers/admin.controller");
-const { authJwt } = require("../middleware");
 
+const { authJwt } = require("../middleware");
 module.exports = function(app) {
 
   app.use(function(req, res, next) {
@@ -12,6 +12,6 @@ module.exports = function(app) {
   });
 
 
-  app.get("/admin/showUsers",authJwt.verifyToken,controller.showUsers);
-  app.get("/admin/dashBoard",authJwt.verifyToken,controller.getStatistics);
+  app.get("/admin/showUsers",[authJwt.verifyToken,authJwt.checkIsAdmin],controller.showUsers);
+ app.get("/admin/dashBoard",[authJwt.verifyToken,authJwt.checkIsAdmin],controller.getStatistics);
 };

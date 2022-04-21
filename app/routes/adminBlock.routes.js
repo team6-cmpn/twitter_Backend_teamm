@@ -1,4 +1,4 @@
-const controller = require("../controllers/adminBlock.controller");
+const controller = require("../controllers/admin.controller");
 const { authJwt } = require("../middleware");
 
 module.exports = function(app) {
@@ -11,5 +11,5 @@ module.exports = function(app) {
     next();
   });
 
-app.post("/adminBlock/create",authJwt.verifyToken,controller.create);
+app.post("/adminBlock/create",[authJwt.verifyToken,authJwt.checkIsAdmin,authJwt.checkAdminBlockCreate],controller.createBlock);
   };

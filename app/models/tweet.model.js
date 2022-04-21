@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const tweetSchema = new Schema({
     created_at: {
-      type: String,
+      type: Date,
       default: new Date()
     },
     // id: {

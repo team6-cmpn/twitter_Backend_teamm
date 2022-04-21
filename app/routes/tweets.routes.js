@@ -12,7 +12,7 @@ module.exports = function(app) {
   });
 
 
-app.post("/tweets/update",authJwt.verifyToken,controller.update);
+app.post("/tweets/update",[authJwt.verifyToken,authJwt.checkAdminBlockTweet],controller.update);
 //app.post("tweets/destroy/:id",authJwt.verifyToken,controller.destroyTweet);
 app.get("/tweets/show/:id",controller.show);
 app.get("/tweets/lookup",controller.lookup);

@@ -13,43 +13,15 @@ const { findOneAndDelete } = require("../models/user.model");
 
 
 exports.update=  async(req,res)=>{
-  User.findOne({_id: req.userId}).exec(async (err,user)=>{
-   if (err) {
-     res.status(500).send({ message: err });
-     return;
-   }
-   if(!user){
-     res.send("user not found")
-   }
 
-    if ( user.admin_block.blocked_by_admin){
-      current=  new Date().getTime()
-      blockCreationDate= user.admin_block.block_createdAt
-      var Difference_In_Time = current - blockCreationDate;  // diffrience in milliseconds
-      var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);  // number of milliseconds per day
-      console.log(Difference_In_Days)
-
-        if (  Difference_In_Days<= user.admin_block.block_duration )
-        {
-            res.send({message:"this user cant tweet he is blocked by admin"})
-        }
-  }
-
-    if(user.admin_block.blocked_by_admin==false || Difference_In_Days> user.admin_block.block_duration){
-      await User.findByIdAndUpdate( req.userId,{ admin_block:{ blocked_by_admin:false  }},{ returnDocument: 'after' }).exec((err,user)=>{
-        if (err){
-          res.status(500).send({ message: err });
-          return;
-        }
-        //res.send("you can post tweet here")
 
         const tweet = new Tweet({
         created_at: req.body.created_at,
         text: req.body.text,
         user: req.userId,
         source: req.body.source,
-        //favorites:req.body.favorites,
-      }) ;
+
+      });
       Tweet.findOne({text:req.body.text}).exec(async (err,tweetText)=>{
         if(err){
           res.status(403).send({ message: err });
@@ -66,12 +38,9 @@ exports.update=  async(req,res)=>{
           .catch(err =>{
             //console.log
             res.status(403).send({message: err});
-          }); 
+          });
         }
-      });         
-       });
-    }
-  });
+      });
 };
 
 exports.show=  (req,res)=>{
@@ -102,7 +71,7 @@ exports.favorite= async(req,res) =>{
     if(!userData.favorites.includes(tweetId)){
       await User.findByIdAndUpdate(userId,{$push:{favorites: tweetId}},{new: true}).exec(async (err,userfavorites)=>{
         if(userfavorites){
-          //res.status(200).send("success! liked"); 
+          //res.status(200).send("success! liked");
           tweet.findById(tweetId).exec(async (err,tweetdata)=>{
             if(err){
               res.status(400).send({message: err});
@@ -113,7 +82,7 @@ exports.favorite= async(req,res) =>{
             }
           })
         }
-      })      
+      })
     }
     else{
       console.log('tweet already liked')
@@ -168,8 +137,8 @@ exports.unfavorite= (req,res) =>{
 //     res.send({message:err})
 //   })
 //   //////////////
-// //   .exec(async (err,deletedTweet)=>{ 
-// //     console.log(deletedTweet) 
+// //   .exec(async (err,deletedTweet)=>{
+// //     console.log(deletedTweet)
 // //   if(err){
 // //     res.status(400).send({message:err});
 // //   }
