@@ -158,7 +158,8 @@ exports.confirmEmail = (req, res) => {
           password: decoded.password
         }
       }
-      this.signin(data,res);
+      //this.signin(data,res);
+      res.status(200).send({message :"user has been confirmed successfully"});
       
     });
   } catch (err) {

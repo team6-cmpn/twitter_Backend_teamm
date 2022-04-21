@@ -29,8 +29,7 @@ const mongoose = require('mongoose');
     {
         username: 'Zellconfirm',
         email: 'testingconfirm@gmail.com',
-        password: 'Ola123ola#',
-        confirmed: false
+        password: 'Ola123ola#'
     },
     {
       googleId :"111",
@@ -106,41 +105,94 @@ describe('signup with email Test', () => {
             expect(res.body.message).toBe("Failed! There is an existing account with this Email");
 
     });
+    it('Should give 400 email not valid', async () => {
+        const res = await request.post('/auth/signup')
+            .send({
+            username: 'Zelllol1',
+            email: 'testing.gmail.com',
+            password: 'Ola123ola#'
+            });
+            expect(res.status).toBe(400);
+            expect(res.body.message).toBe("Failed! Email not valied!");
+
+    });
+    it('Should give 400 weak password', async () => {
+        const res = await request.post('/auth/signup')
+            .send({
+            username: 'Zelllol2',
+            email: 'testing11@gmail.com',
+            password: 'Ola'
+            });
+            expect(res.status).toBe(400);
+            expect(res.body.message).toBe("Failed! password must be 8 or more characters which contain at least one numeric digit, one uppercase and one lowercase letter");
+
+    });
 });
 
-// describe('confirm email Test', () => {
-//     it('Should confirm the user who clicked on the link', async () => {
-//         const signinUser = {
-//             username: 'Zellconfirm',
-//             password: "Ola123ola#"
-//         }
-//         jwt.sign(
-//             {
-//               "username" : "Zellconfirm",
-//               "password" :"Ola123ola#",
-//             },
-//             process.env.EMAIL_SECRET,
-//             {
-//               expiresIn: '1d',
-//             },
-//             (err, emailToken) => {
+describe('resend email test', () => {
+    it('Should resend email to user to confirm the email', async () => {
+        const newEmailtoken = jwt.sign(
+            { 
+              //"id" : "6260161a7c620af6ccc13149",
+              "username" : "resendTest",
+              "password" :"Ola123ola#",
+              "email" : "lolosoftwaretest@gmail.com" 
+            }, 
+            process.env.EMAIL_SECRET, {
+            expiresIn: '1d' 
+          });
+          //the token is prepared on jwt.io with my email and co expiration date
+        const res = await request
+            .post('/auth/resendEmail')
+            .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZW1haWwiOiJsb2xvc29mdHdhcmV0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTUxNjIzOTAyMn0.V-5crmzqYb3ZqZfcA-94oIZfprOKtje5rX02GoDfUwI') 
+        //console.log(res)
+            // Ensures response contains name and email
+            // expect(res.body.name).toBeTruthy();
+            // expect(res.body.email).toBeTruthy();
 
-//                 const res = request.get(`/auth/confirmation/${emailToken}`);
-//                 console.log(res);
-//                     //.send(emailToken);
-//                 User.findOne({username: "Zellconfirm"})
-//                 .exec((err, user) => {
-//                     console.log(user);
-//                     //expect(res.status).toBe(200);
-//                     //expect(res.body.accessToken).toBeTruthy();
-//                     expect(user.username).toBe('Zellconfirm');
-//                     expect(user.confirmed).toBe(true);
+            // Searches the user in the database
+        expect(res.status).toBe(200);
+        expect(res.body.message).toBe("An Email is resent to your account please verify");
+        expect(res.body.emailtoken).toBeTruthy();
+    });
 
-//                 });
-//             },
-//         );
-//     });
-// });
+});
+
+describe('confirm email Test', () => {
+    it('Should confirm the user who clicked on the link', async () => {
+        const user = await User.findOne({ "username" : "Zellconfirm" })
+        console.log(user);
+        const signinUser = {
+            data :"Zellconfirm",
+            password: "Ola123ola#"
+        }
+        const response = await request.post('/auth/signin')
+        .send(signinUser);
+
+        // Searches the user in the database
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("please confirm your email before login");
+        
+        
+        const token  = await jwt.sign({
+                //username: user.username,
+                    "id" :user._id,
+                    "username" : user.username,
+                    "password" :user.password,
+                    "email" : user.email
+                }, 
+                process.env.EMAIL_SECRET, {
+                expiresIn: '1d' 
+        });
+        const res = await request.get('/auth/confirmation/' + token);
+        console.log(res);
+        expect(res.status).toBe(200);
+        expect(res.body.message).toBe("user has been confirmed successfully");
+        //expect(res.body.accessToken).toBeTruthy();
+        
+    });
+});
+
 
 describe('signin with email Test', () => {
     it('Should retrive user and token from database', async () => {
