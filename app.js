@@ -52,7 +52,9 @@ require('./app/routes/user.routes')(app);
 require('./app/routes/OAuth.routes')(app);
 require('./app/routes/settings.routes')(app);
 require('./app/routes/search.routes')(app);
-
+require('./app/routes/admin.routes')(app);
+require('./app/routes/adminBlock.routes')(app);
+require('./app/routes/tweets.routes')(app);
 
 //require('./app/routes/OAuth.routesTest')(app);
 

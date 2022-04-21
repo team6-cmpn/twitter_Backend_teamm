@@ -28,29 +28,39 @@ const tweetSchema = new Schema({
     in_reply_to_username:{
         type: String
     },
-    user: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'User' 
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     },
     quoted_tweet_id: Boolean,
-    quoted_tweet: { 
-        type: Schema.Types.ObjectId, 
-        ref: "Tweet" 
+    quoted_tweet: {
+        type: Schema.Types.ObjectId,
+        ref: "Tweet"
     },
     quote_count : Number,
     reply_count : Number,
     retweet_count: Number,
     favorite_count: Number,
-    entities: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'Entities' 
+    entities: {
+        type: Schema.Types.ObjectId,
+        ref: 'Entities'
     },
-    extended_entities: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'Extended_Entities' 
+    extended_entities: {
+        type: Schema.Types.ObjectId,
+        ref: 'Extended_Entities'
     },
     favorited: Boolean,
     retweeted: Boolean,
+    favorites:[
+        {
+          type: Schema.Types.ObjectId,
+          ref:"Tweet"
+        }
+      ],
 });
 
+ tweetSchema.methods.toJSON = function() {
+  var tweet = this.toObject();
+  return tweet;
+};
 module.exports = mongoose.model("Tweet", tweetSchema);
