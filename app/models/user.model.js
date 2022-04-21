@@ -69,7 +69,11 @@ favorites:[
     ref:"Tweet"
   }
 ],
-
+isDeactivated:{
+  type: Boolean,
+  default: false
+},
+deactivationDate: Date,
 
   googleId: String,
   description: String,
