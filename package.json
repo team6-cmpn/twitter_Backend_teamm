@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "devStart": "env-cmd -f ./app/config/dev.env nodemon server.js",
-    "test": "env-cmd -f ./app/config/test.env jest --testTimeout=10000",
+    "test": "env-cmd -f ./app/config/test.env jest --verbose --coverage --runInBand --testTimeout=15000",
     "start-gendoc": "node swagger.js",
     "test:watch": "jest --watch",
     "jsdoc": "jsdoc -c jsdoc.json"
@@ -35,7 +35,7 @@
     "googleapis": "^99.0.0",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.2.6",
+    "mongoose": "^6.2.10",
     "nodemailer": "^6.7.3",
     "nodemon": "^2.0.15",
     "swagger-ui-express": "^4.3.0"
@@ -46,8 +46,9 @@
     "eslint": "^8.11.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
-    "jest": "^27.5.1",
+    "jest": "^26.0.1",
     "jsdoc": "^3.6.10",
+    "node-mocks-http": "^1.11.0",
     "supertest": "^6.2.2",
     "swagger-autogen": "^2.20.5"
   }
