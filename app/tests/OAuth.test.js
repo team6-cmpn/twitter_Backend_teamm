@@ -1,11 +1,60 @@
 const app = require("../../app");
 const supertest = require('supertest');
 const request = supertest(app);
-
+const mongoose = require('mongoose');
 const User = require('../models/user.model');
-const { setupDB } = require('./test-setup');
 
-setupDB('auth-testing', true);
+//const { setupDB } = require('./test-setup');
+//setupDB('auth-testing', true);
+
+const userdata = [
+    {
+      username: 'Zell',
+      email: 'testing@gmail.com',
+      password: 'Ola123ola#',
+      confirmed: true
+  }, {
+      username: 'Zell2',
+      email: 'testing2@gmail.com',
+      password: 'Ola123ola#'
+  }, {
+      username: 'Zell3',
+      email: 'testing3@gmail.com',
+      password: 'Ola123ola#',
+      confirmed: true
+  },
+  {
+      username: 'Zellconfirm',
+      email: 'testingconfirm@gmail.com',
+      password: 'Ola123ola#',
+      confirmed: false
+  },
+  {
+    googleId :"111",
+    username: "coco",
+    email: "req@coco.com"
+  },
+
+];
+
+
+beforeAll(async () => {
+  //await dropAllCollections()
+  //await mongoose.connection.close()
+  const url = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+  await mongoose.connect(url,
+      {
+          useNewUrlParser: true,
+          //useUnifiedTopology: true
+      });
+     await   User.insertMany(userdata)
+})
+
+afterAll(async () => {
+     await mongoose.connection.db.dropDatabase();
+  await mongoose.connection.close();
+})
+
 
 describe('signup with google Test', () => {
     it('Should save user to database by doodle id' , async () => {

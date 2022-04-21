@@ -47,7 +47,7 @@ else{
 
 
 exports.getStatistics= async (req,res)=>{
-  static=[]
+  staatic=[]
   let allusers_count = new Object()
   let top_followers = new Object()
   let  alltweets_count= new Object()
@@ -58,15 +58,15 @@ exports.getStatistics= async (req,res)=>{
         return;
       }
        allusers_count.ALL_Users_Count=usercount
-      static.push(allusers_count)
+      staatic.push(allusers_count)
         User.find({}).sort({followers_count:-1}).limit(2).select("username followers_count -_id ").exec(async (err,top)=>{
         if (err){
           res.status(500).send({ message: err})
           return;
         }
         top_followers.top_users_with_followers=top
-        static.push(top_followers)
-          res.send(static)
+        staatic.push(top_followers)
+          res.send(staatic)
 /*
         await Tweet.countDocuments().exec((err,tweetcount)=>{
         if (err){
@@ -74,9 +74,9 @@ exports.getStatistics= async (req,res)=>{
           return;
         }
           alltweets_count.ALL_Tweets_Count=tweetcount
-        static.push(alltweets_count)
+        staatic.push(alltweets_count)
 
-        res.send(static)
+        res.send(staatic)
       });
       */
       });
