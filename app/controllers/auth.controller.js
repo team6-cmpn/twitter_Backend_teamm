@@ -155,8 +155,14 @@ exports.confirmEmail = (req, res) => {
   try {
     User.findOneAndUpdate({ verificationCode: req.body.verificationCode },{$set: {confirmed: true , verificationCode: null}},{new: true}, (err, doc) => {
       //console.log(doc);
+      if(doc){
+        res.status(200).send({message :"user has been confirmed successfully"});
+        return;
+      } else {
+        res.status(401).send({message :"wrong verification code"});
+        return;
+      }
     });
-    res.status(200).send({message :"user has been confirmed successfully"});
     
   } catch (err) {
     res.status(500).send("error in token verification in confirmation email");

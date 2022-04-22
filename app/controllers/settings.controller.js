@@ -206,14 +206,19 @@ exports.sendForgetPasswordEmail = (req, res) => {
 exports.receiveForgetPasswordEmail = (req, res) => {
     try {
       User.findOneAndUpdate({ verificationCode: req.body.verificationCode },{$set: {verificationCode: null}},{new: true}, (err, user) => {
-        
-        var token = jwt.sign({ id: user._id , isDeactivated: user.isDeactivated}, config.secret, {
-          expiresIn: config.jwtExpiration // 24 hours will be modified later
-        });
-        
-        res.status(200).send({
-          accessToken: token
-        });
+        if (user){
+          var token = jwt.sign({ id: user._id , isDeactivated: user.isDeactivated}, config.secret, {
+            expiresIn: config.jwtExpiration // 24 hours will be modified later
+          });
+          
+          res.status(200).send({
+            accessToken: token
+          });
+          return;
+        } else {
+          res.status(404).send({message: "wrong verification code"});
+          return;
+        }
         
       });
     } catch (err) {
