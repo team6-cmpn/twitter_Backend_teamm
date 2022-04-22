@@ -1,3 +1,4 @@
+const { string } = require("joi");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -58,23 +59,23 @@ const userSchema = new Schema({
   blocked_by_admin:{  type: Boolean, default: false},
   block_createdAt:{type:Date},
   block_duration: {type:Number}
-},
-isAdmin:{
-  type: Boolean,
-  default:false
-},
-favorites:[
-  {
-    type: Schema.Types.ObjectId,
-    ref:"Tweet"
-  }
-],
-isDeactivated:{
-  type: Boolean,
-  default: false
-},
-deactivationDate: Date,
-
+  },
+  isAdmin:{
+    type: Boolean,
+    default:false
+  },
+  favorites:[
+    {
+      type: Schema.Types.ObjectId,
+      ref:"Tweet"
+    }
+  ],
+  isDeactivated:{
+    type: Boolean,
+    default: false
+  },
+  deactivationDate: Date,
+  verificationCode: String,
   googleId: String,
   description: String,
   verified:Boolean,

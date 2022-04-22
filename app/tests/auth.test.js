@@ -29,7 +29,8 @@ const mongoose = require('mongoose');
     {
         username: 'Zellconfirm',
         email: 'testingconfirm@gmail.com',
-        password: 'Ola123ola#'
+        password: 'Ola123ola#',
+        verificationCode: "321880"
     },
     {
       googleId :"111",
@@ -160,8 +161,8 @@ describe('resend email test', () => {
 
 describe('confirm email Test', () => {
     it('Should confirm the user who clicked on the link', async () => {
-        const user = await User.findOne({ "username" : "Zellconfirm" })
-        console.log(user);
+        //const user = await User.findOne({ "username" : "Zellconfirm" })
+        //console.log(user);
         const signinUser = {
             data :"Zellconfirm",
             password: "Ola123ola#"
@@ -173,25 +174,50 @@ describe('confirm email Test', () => {
         expect(response.status).toBe(400);
         expect(response.body.message).toBe("please confirm your email before login");
         
-        
-        const token  = await jwt.sign({
-                //username: user.username,
-                    "id" :user._id,
-                    "username" : user.username,
-                    "password" :user.password,
-                    "email" : user.email
-                }, 
-                process.env.EMAIL_SECRET, {
-                expiresIn: '1d' 
-        });
-        const res = await request.get('/auth/confirmation/' + token);
-        console.log(res);
+        const res = await request
+            .post('/auth/confirmation')
+            .send({verificationCode: "321880"})
+        //console.log(res);
         expect(res.status).toBe(200);
         expect(res.body.message).toBe("user has been confirmed successfully");
         //expect(res.body.accessToken).toBeTruthy();
         
     });
 });
+// describe('confirm email Test', () => {
+//     it('Should confirm the user who clicked on the link', async () => {
+//         const user = await User.findOne({ "username" : "Zellconfirm" })
+//         //console.log(user);
+//         const signinUser = {
+//             data :"Zellconfirm",
+//             password: "Ola123ola#"
+//         }
+//         const response = await request.post('/auth/signin')
+//         .send(signinUser);
+
+//         // Searches the user in the database
+//         expect(response.status).toBe(400);
+//         expect(response.body.message).toBe("please confirm your email before login");
+        
+        
+//         const token  = await jwt.sign({
+//                 //username: user.username,
+//                     "id" :user._id,
+//                     "username" : user.username,
+//                     "password" :user.password,
+//                     "email" : user.email
+//                 }, 
+//                 process.env.EMAIL_SECRET, {
+//                 expiresIn: '1d' 
+//         });
+//         const res = await request.get('/auth/confirmation/' + token);
+//         //console.log(res);
+//         expect(res.status).toBe(200);
+//         expect(res.body.message).toBe("user has been confirmed successfully");
+//         //expect(res.body.accessToken).toBeTruthy();
+        
+//     });
+// });
 
 
 describe('signin with email Test', () => {
@@ -208,7 +234,7 @@ describe('signin with email Test', () => {
         .exec((err, user) => {
             expect(res.status).toBe(200);
             expect(res.body.accessToken).toBeTruthy();
-            console.log(res.body.accessToken);
+            //console.log(res.body.accessToken);
             expect(user.username).toBe('Zell');
             expect(user.email).toBe('testing@gmail.com');
         });

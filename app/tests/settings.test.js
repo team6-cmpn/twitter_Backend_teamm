@@ -15,7 +15,8 @@ const mongoose = require('mongoose');
         username: 'Zell',
         email: 'testing@gmail.com',
         password: 'Ola123ola#',
-        confirmed: true
+        confirmed: true,
+        verificationCode : "452438"
     }, {
         username: 'Zell2',
         email: 'testing2@gmail.com',
@@ -208,34 +209,48 @@ describe('Forget password send email', () => {
 describe('forget password recieve email Test', () => {
     it('Should confirm the user who clicked on the link', async () => {
         const user = await User.findOne({ "username" : "Zell" })
-        const token  = await jwt.sign({
-                //username: user.username,
-                    "id" :user._id,
-                    "username" : user.username,
-                    "password" :user.password,
-                    "email" : user.email
-                }, 
-                process.env.EMAIL_SECRET, {
-                expiresIn: '1d' 
-        });
-        const res = await request.get('/settings/forgetPassword/' + token);
+        const res = await request
+            .post('/settings/receiveforgetPassword')
+            .send({ verificationCode: '452438' });
 
         expect(res.status).toBe(200);
         expect(res.body.accessToken).toBeTruthy();
         
     });
 });
+// describe('forget password recieve email Test', () => {
+//     it('Should confirm the user who clicked on the link', async () => {
+//         const user = await User.findOne({ "username" : "Zell" })
+//         const token  = await jwt.sign({
+//                 //username: user.username,
+//                     "id" :user._id,
+//                     "username" : user.username,
+//                     "password" :user.password,
+//                     "email" : user.email
+//                 }, 
+//                 process.env.EMAIL_SECRET, {
+//                 expiresIn: '1d' 
+//         });
+//         const res = await request.get('/settings/forgetPassword/' + token);
+
+//         expect(res.status).toBe(200);
+//         expect(res.body.accessToken).toBeTruthy();
+        
+//     });
+// });
 
 describe('Forget password reset password', () => {
     it('Should send an email to the user if he forgot the password and want to reset it', async () => {
         const user = await User.findOne({ "username" : "Zell3" })
         const token = await getToken(user);
         const res = await request.post('/settings/resetForgetPassword')
+            //.set({Authorization: token})
             .set("x-access-token", token)
             .send({
                 "password": "Ola123ola#1",
                 "confirmNewPassword": "Ola123ola#1"
             }); 
+        //console.log(res);
         expect(res.status).toBe(200);
         expect(res.body.message).toBe("password was reset successfully");
         const signinUser = {
@@ -267,7 +282,7 @@ describe('Forget password reset password', () => {
 describe('Deactivate an account', () => {
     it('Should deactivate the user account', async () => {
         const user = await User.findOne({ "username" : "Zelldeactivate" })
-        console.log(user)
+        //console.log(user)
         const token = await getToken(user);
         const res = await request.put('/settings/deactivateAccount')
         .set("x-access-token", token)
@@ -298,7 +313,7 @@ describe('Reactivate an account', () => {
         expect(response.body.message).toBe("This account is deactivated!");
             
         const user = await User.findOne({ "username" : "Zellreactivate" })
-        console.log(user)
+        //console.log(user)
         const token = await getToken(user);
         const res = await request.put('/settings/reactivateAccount')
         .set("x-access-token", token)

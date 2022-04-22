@@ -98,9 +98,12 @@ exports.sendForgetPasswordEmail = (req, res) => {
       email: req.body.email,
     });
 
-    User.findOne({
+    const newVerificationCode = Math.floor(100000 + Math.random() * 900000);
+    User.findOneAndUpdate({
         email: user.email
-      }).exec((err, foundUser) => {
+      },
+      {$set: {verificationCode:newVerificationCode }},{new: true})
+      .exec((err, foundUser) => {
         if (err) {
           res.status(500).send({ message: err });
           return;
@@ -110,32 +113,81 @@ exports.sendForgetPasswordEmail = (req, res) => {
           return;
         }
         
-        jwt.sign(
-          {
-            "id" :foundUser._id,
-            "isDeactivated" :foundUser.isDeactivated
-            //"username": user.username
-          },
-          process.env.EMAIL_SECRET,
-          {
-            expiresIn: '1d',
-          },
-          (err, emailToken) => {
-            // send confirmation email
-            // document.write("<h2>Hello World!</h2><p>Have a nice day!</p>");
-            const message = `${process.env.BASE_URL}/settings/forgetPassword/${emailToken}`;
-            sendEmail(user.email, "Forget Password Email", message);
+        const message = `${newVerificationCode}`;
+        sendEmail(user.email, "Forget Password Email", message);
+      
+        res.status(200).send({ message: "An Email sent to your account please click on it to reset your password" });
+      //   jwt.sign(
+      //     {
+      //       "id" :foundUser._id,
+      //       "isDeactivated" :foundUser.isDeactivated
+      //       //"username": user.username
+      //     },
+      //     process.env.EMAIL_SECRET,
+      //     {
+      //       expiresIn: '1d',
+      //     },
+      //     (err, emailToken) => {
+      //       // send confirmation email
+      //       // document.write("<h2>Hello World!</h2><p>Have a nice day!</p>");
+      //       //const message = `${process.env.BASE_URL}/settings/forgetPassword/${emailToken}`;
+      //       const message = `${newVerificationCode}`;
+      //       sendEmail(user.email, "Forget Password Email", message);
           
-            res.status(200).send({ message: "An Email sent to your account please click on it to reset your password" });
-          },
-      );
+      //       res.status(200).send({ message: "An Email sent to your account please click on it to reset your password" });
+      //     },
+      // );
     });
 };
+
+// /**
+//  * @global
+//  * @typedef {object} reqParamsreceiveForgetPasswordEmail
+//  * @property {string} emailtoken  
+//  * 
+//  */
+// /** 
+//  * @global
+//  * @typedef {object} resBodyreceiveForgetPasswordEmail
+//  * @property {string} accessToken 
+//  */
+// /**
+//  * This function confirm the user identity to be able to reset the password
+//  * 
+//  * @param {reqParamsreceiveForgetPasswordEmail} req the request sent from the front
+//  * @param {resBodyreceiveForgetPasswordEmail} res the response which is sent back to the front
+//  * 
+//  */
+
+// exports.receiveForgetPasswordEmail = (req, res) => {
+//     try {
+//       jwt.verify(req.params.emailtoken, process.env.EMAIL_SECRET,(err, decoded) => {
+//         if (err) {
+//           if (err instanceof TokenExpiredError) {
+//             return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
+//           }
+//           return res.sendStatus(401).send({ message: "Unauthorized!" });
+//         }
+  
+//         var token = jwt.sign({ id: decoded.id , isDeactivated: decoded.isDeactivated}, config.secret, {
+//         expiresIn: config.jwtExpiration // 24 hours will be modified later
+//         });
+
+//         res.status(200).send({
+//         accessToken: token
+//         });
+           
+//       });
+//     } catch (err) {
+//       res.status(500).send("error in token verification in forget password email");
+//     }
+// }
+
 
 /**
  * @global
  * @typedef {object} reqParamsreceiveForgetPasswordEmail
- * @property {string} emailtoken  
+ * @property {string} verificationCode  
  * 
  */
 /** 
@@ -153,27 +205,23 @@ exports.sendForgetPasswordEmail = (req, res) => {
 
 exports.receiveForgetPasswordEmail = (req, res) => {
     try {
-      jwt.verify(req.params.emailtoken, process.env.EMAIL_SECRET,(err, decoded) => {
-        if (err) {
-          if (err instanceof TokenExpiredError) {
-            return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
-          }
-          return res.sendStatus(401).send({ message: "Unauthorized!" });
-        }
-  
-        var token = jwt.sign({ id: decoded.id , isDeactivated: decoded.isDeactivated}, config.secret, {
-        expiresIn: config.jwtExpiration // 24 hours will be modified later
+      User.findOneAndUpdate({ verificationCode: req.body.verificationCode },{$set: {verificationCode: null}},{new: true}, (err, user) => {
+        
+        var token = jwt.sign({ id: user._id , isDeactivated: user.isDeactivated}, config.secret, {
+          expiresIn: config.jwtExpiration // 24 hours will be modified later
         });
-
+        
         res.status(200).send({
-        accessToken: token
+          accessToken: token
         });
-           
+        
       });
     } catch (err) {
       res.status(500).send("error in token verification in forget password email");
     }
 }
+
+
 
 /**
  * @global

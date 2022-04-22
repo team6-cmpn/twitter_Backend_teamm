@@ -14,6 +14,7 @@ module.exports = function(app) {
   app.post("/auth/signup", [verifySignUp.checkExistingUsernameOrEmail,verifySignUp.checkValidEmail, verifySignUp.checkStrenghtOfPassword], controller.signup);
   app.post("/auth/signin", controller.signin);
   app.post("/auth/resendEmail" ,controller.resendEmail);
-  app.get("/auth/confirmation/:emailtoken" ,controller.confirmEmail);
+  app.post("/auth/confirmation" ,controller.confirmEmail);
+  //app.get("/auth/confirmation/:emailtoken" ,controller.confirmEmail);
   //app.post("/auth/signup-google", controller.singupGoogle) 
 };

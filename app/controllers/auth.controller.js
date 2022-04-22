@@ -43,7 +43,8 @@ exports.signup = function signup(req, res) {
     email: req.body.email,
     dateOfBirth: req.body.dateOfBirth,
     password: bcrypt.hashSync(req.body.password, 8),
-    created_at : new Date()
+    created_at : new Date(),
+    verificationCode: Math.floor(100000 + Math.random() * 900000)
   });
   user.save((err, user) => {
     if (err) {
@@ -54,6 +55,9 @@ exports.signup = function signup(req, res) {
   });
   //generate email token
   // remove the password from jwt.sign if not redirecting
+  // sendEmail(user.email, "Confirm Email", message);
+  // res.status(200).send({ message: "An Email sent to your account please verify", emailtoken: emailToken });
+  
   jwt.sign(
     {
       "id" :user._id,
@@ -68,57 +72,65 @@ exports.signup = function signup(req, res) {
     (err, emailToken) => {
       // send confirmation email
       // document.write("<h2>Hello World!</h2><p>Have a nice day!</p>");
+      // const message = `<p>You have a new email comfirmation request</p>
+      // <p>Please click this email to confirm your email:</p>
+      // <a href="${process.env.BASE_URL}/auth/confirmation/${emailToken}">click here to confirm your email</a>
+      // <p>Thank you very much</p>`;
       const message = `<p>You have a new email comfirmation request</p>
-      <p>Please click this email to confirm your email:</p>
-      <a href="${process.env.BASE_URL}/auth/confirmation/${emailToken}">click here to confirm your email</a>
+      <p>Please copy this verification code to confirm your email: ${user.verificationCode}</p>
       <p>Thank you very much</p>`;
       sendEmail(user.email, "Confirm Email", message);
-    
       res.status(200).send({ message: "An Email sent to your account please verify", emailtoken: emailToken });
     },
-);
-};
-/** 
- * @global
- * @typedef {object} resBodyResendEmail
- * @property {string} message An Email is resent to your account please verify
- * @property {string} emailtoken email token to help in resending confirmation email if failed
- */
-/**
- * This function resends confirmation email if there was a problem with user mail box 
- * 
- * @param {*} req the request sent from the front
- * @param {resBodyResendEmail} res the response which is sent back to the front
- * 
- */
-
-exports.resendEmail = (req, res) => {
-  try {
-    jwt.verify( req.headers["x-access-token"], process.env.EMAIL_SECRET,(err, decoded) => {
-      if (err) {
-        if (err instanceof TokenExpiredError) {
-          return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
+    );
+  };
+  /** 
+   * @global
+   * @typedef {object} resBodyResendEmail
+   * @property {string} message An Email is resent to your account please verify
+   * @property {string} emailtoken email token to help in resending confirmation email if failed
+   */
+  /**
+   * This function resends confirmation email if there was a problem with user mail box 
+   * 
+   * @param {*} req the request sent from the front
+   * @param {resBodyResendEmail} res the response which is sent back to the front
+   * 
+   */
+  
+  exports.resendEmail = (req, res) => {
+    try {
+      jwt.verify( req.headers["x-access-token"], process.env.EMAIL_SECRET,(err, decoded) => {
+        if (err) {
+          if (err instanceof TokenExpiredError) {
+            return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
+          }
+          return res.sendStatus(401).send({ message: "Unauthorized!" });
         }
-        return res.sendStatus(401).send({ message: "Unauthorized!" });
-      }
-
-      const newEmailtoken = jwt.sign(
-        { 
-          "id" :decoded.id,
-          "username" : decoded.username,
-          "password" :decoded.password,
-          "email" : decoded.email 
-        }, 
-        process.env.EMAIL_SECRET, {
-        expiresIn: '1d' 
-      });
-
-      const message = `<p>You have a new email comfirmation request</p>
-      <p>Please click this email to confirm your email:</p>
-      <a href="${process.env.BASE_URL}/auth/confirmation/${newEmailtoken}">click here to confirm your email</a>
-      <p>Thank you very much</p>`;
-      sendEmail(decoded.email, "Confirm Email", message);
-      res.status(200).send({ message: "An Email is resent to your account please verify", emailtoken: newEmailtoken });
+        
+        const newEmailtoken = jwt.sign(
+          { 
+            "id" :decoded.id,
+            "username" : decoded.username,
+            "password" :decoded.password,
+            "email" : decoded.email 
+          }, 
+          process.env.EMAIL_SECRET, {
+            expiresIn: '1d' 
+          });
+          const newVerificationCode = Math.floor(100000 + Math.random() * 900000);
+          User.findOneAndUpdate({ _id: decoded.id },{$set: {verificationCode:newVerificationCode }},{new: true}, (err, user) => {
+            console.log(user);
+            const message = `<p>You have a new email comfirmation request</p>
+            <p>Please copy this verification code to confirm your email: ${newVerificationCode}</p>
+            <p>Thank you very much</p>`;
+            sendEmail(decoded.email, "Confirm Email", message);
+            res.status(200).send({ message: "An Email is resent to your account please verify", emailtoken: newEmailtoken });
+          });
+          // const message = `<p>You have a new email comfirmation request</p>
+          // <p>Please click this email to confirm your email:</p>
+          // <a href="${process.env.BASE_URL}/auth/confirmation/${newEmailtoken}">click here to confirm your email</a>
+          // <p>Thank you very much</p>`;
 
     });
   } catch (err) {
@@ -126,48 +138,73 @@ exports.resendEmail = (req, res) => {
   }
 
 }
+
 /**
  * @global
- * @typedef reqParamsConfirm
- * @property {string} emailtoken
+ * @typedef reqBodyConfirm
+ * @property {string} verificationCode
  *
  */
 
 /**
  * This function confirm the email and set hte user confirmed = true
- * @param {reqParamsConfirm} req 
+ * @param {reqBodyConfirm} req 
  * @param {*} res 
  */
 exports.confirmEmail = (req, res) => {
   try {
-    jwt.verify(req.params.emailtoken, process.env.EMAIL_SECRET,(err, decoded) => {
-      if (err) {
-        if (err instanceof TokenExpiredError) {
-          return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
-        }
-        return res.sendStatus(401).send({ message: "Unauthorized!" });
-      }
-
-      User.findOneAndUpdate({ _id: decoded.id },{$set: {confirmed: true }},{new: true}, (err, doc) => {
-        //console.log(doc);
-      });
-      // remove the following if you don't want to redirect
-      const data ={
-        body:{
-          data: decoded.username,
-          password: decoded.password
-        }
-      }
-      //this.signin(data,res);
-      res.status(200).send({message :"user has been confirmed successfully"});
-      
+    User.findOneAndUpdate({ verificationCode: req.body.verificationCode },{$set: {confirmed: true , verificationCode: null}},{new: true}, (err, doc) => {
+      //console.log(doc);
     });
+    res.status(200).send({message :"user has been confirmed successfully"});
+    
   } catch (err) {
     res.status(500).send("error in token verification in confirmation email");
   }
-
-  //return res.status(200).send({message: "user email is successfully confirmed"});
 }
+
+// /**
+//  * @global
+//  * @typedef reqParamsConfirm
+//  * @property {string} emailtoken
+//  *
+//  */
+
+// /**
+//  * This function confirm the email and set hte user confirmed = true
+//  * @param {reqParamsConfirm} req 
+//  * @param {*} res 
+//  */
+// exports.confirmEmail = (req, res) => {
+//   try {
+//     jwt.verify(req.params.emailtoken, process.env.EMAIL_SECRET,(err, decoded) => {
+//       if (err) {
+//         if (err instanceof TokenExpiredError) {
+//           return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
+//         }
+//         return res.sendStatus(401).send({ message: "Unauthorized!" });
+//       }
+
+//       User.findOneAndUpdate({ _id: decoded.id },{$set: {confirmed: true }},{new: true}, (err, doc) => {
+//         //console.log(doc);
+//       });
+//       // remove the following if you don't want to redirect
+//       const data ={
+//         body:{
+//           data: decoded.username,
+//           password: decoded.password
+//         }
+//       }
+//       //this.signin(data,res);
+//       res.status(200).send({message :"user has been confirmed successfully"});
+      
+//     });
+//   } catch (err) {
+//     res.status(500).send("error in token verification in confirmation email");
+//   }
+
+//   //return res.status(200).send({message: "user email is successfully confirmed"});
+// }
 
 /** 
  * @global
