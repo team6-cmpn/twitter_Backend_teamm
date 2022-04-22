@@ -216,7 +216,7 @@ exports.receiveForgetPasswordEmail = (req, res) => {
           });
           return;
         } else {
-          res.status(404).send({message: "wrong verification code"});
+          res.status(401).send({message: "wrong verification code"});
           return;
         }
         
