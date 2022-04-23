@@ -34,7 +34,7 @@ if(req.body.text)
     if(!tweetText){
       tweet.save()
       .then(newtweet => {
-        res.status(201).send("newtweet");
+        res.status(201).send(newtweet);
       })
       .catch(err =>{
         //console.log
@@ -122,7 +122,7 @@ exports.favorite= async(req,res) =>{
 
 };
 
-exports.unfavorite= (req,res) =>{
+exports.unfavorite= async(req,res) =>{
   var tweetId = req.params.id;
   var userId = req.userId;
 
@@ -139,19 +139,19 @@ exports.unfavorite= (req,res) =>{
               res.status(400).send({message: err});
             }
             if(tweetdata.favorites.includes(userId)){
-              console.log(tweetdata.favorites.length)
+              //console.log(tweetdata.favorites.length)
               await Tweet.findByIdAndUpdate(tweetId,{$pull:{favorites: userId}},{new: true})
               res.status(200).send({message:tweetdata.favorites.length-1});
-              console.log(tweetdata.favorites)
+              //console.log(tweetdata.favorites)
             }
           })
 
         }
       })
     }
-    // else{
-    //   console.log('tweet already unliked')
-    // }
+    else{
+      res.send({message:"tweet already unliked"})
+    }
   })
 
 };

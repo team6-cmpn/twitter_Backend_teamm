@@ -7,6 +7,7 @@ const request = supertest(app);
 var jwt  = require("jsonwebtoken");
 const controller = require("../controllers/admin.controller");
 const { findById } = require('../models/user.model');
+const { tweet } = require('../models');
 
 // to create users database
 const user1=new User(
@@ -44,7 +45,7 @@ const user1=new User(
         admin_block : {
             "blocked_by_admin" : false
         },
-        isAdmin : true,
+        isAdmin : false,
         created_at : ("2022-04-15T02:59:23.228Z"),
         confirmed : true,
         favorites: []
@@ -158,6 +159,11 @@ const tweetdata =[
             '62503267a848908b0b2102f3',
             //'62503267a848908b0b2102e3'
         ]        
+    },{
+        created_at:'2022-04-22T10:52:45.087Z',
+        text:'welcome to 10 tweet',
+        source:'mobile',
+        mention:'@ali'
     }
 
 ]
@@ -187,19 +193,19 @@ afterAll(async () => {
 
 
 
-describe('creating a tweet',() =>{
-    it('should check blocked by admin',async()=>{
-        const signinUser = {
-            data :"mosalah",
-            password: "$2a$08$dhhefCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
-        }
-        const response = await request.post('/auth/signin')
-        .send(signinUser);
-        token=response.body.accessToken
-        const res = await request.post('/tweets/update').set("x-access-token",token)
-        console.log(res.body.message)
-        //expect()
-    });
+describe('update & creating a tweet',() =>{
+    // it('should check blocked by admin',async()=>{
+    //     const signinUser = {
+    //         data :"mosalah",
+    //         password: "$2a$08$dhhefCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+    //     }
+    //     const response = await request.post('/auth/signin')
+    //     .send(signinUser);
+    //     token=response.body.accessToken
+    //     const res = await request.post('/tweets/update').set("x-access-token",token)
+    //     console.log(res.body.message)
+    //     //expect()
+    // });
 
     it('should save tweet in database', async()=>{
         const signinUser = {
@@ -302,11 +308,10 @@ describe('like a tweet test',()=>{
         //console.log(res.body.message)
     });
 
-
-    it('should return tweet already liked',async()=>{
+    it('should 200 that tweet successfuly liked',async()=>{
         const signinUser = {
             data :"admin2",
-            password: "$2afbg$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -314,42 +319,37 @@ describe('like a tweet test',()=>{
         const tweetId = '625d594a9b671cf4db621969';
         const userId = '62503267a848908b0b2102f3';
         const res = await request.post('/tweets/favorites/create/'+ tweetId).set("x-access-token",token)
-        //expect(res.body.message).toBe('tweet already liked')
-        //await tweetdata.findByIdAndUpdate()
-        //console.log(res.body)
-        console.log(res.body.message)
+        expect(res.status).toBe(200)
+    });
+});
+
+describe('unlike tweet test',()=>{
+    it('should msh 3arfa',async()=>{
+        const signinUser = {
+            data :"admin2",
+            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+        }
+        const response = await request.post('/auth/signin')
+        .send(signinUser);
+        token=response.body.accessToken
+        const tweetId = '625d918e67dc9b72474001bc';
+        const userId = '62503267a848908b0b2102f3';
+        const res = await request.post('/tweets/favorites/destroy/'+ tweetId).set("x-access-token",token)
+        expect(res.status).toBe(200)
+    });
+    it('should return 0 if tweet already unliked',async()=>{
+        const signinUser = {
+            data :"admin2",
+            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+        }
+        const response = await request.post('/auth/signin')
+        .send(signinUser);
+        token=response.body.accessToken
+        const tweetId = '625d594a9b671cf4db621900';
+        const userId = '62503267a848908b0b2102f3';
+        const res = await request.post('/tweets/favorites/destroy/'+ tweetId).set("x-access-token",token)
+        expect(res.body.message).toBe(0)
     });
 });
 
 
-// describe('un-like a tweet test',()=>{
-//     it('should return 0 if not liked',async()=>{
-//         const signinUser = {
-//             data :"admin2",
-//             password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
-//         }
-//         const response = await request.post('/auth/signin')
-//         .send(signinUser);
-//         token=response.body.accessToken
-//         const tweetId = '625d918e67dc9b72474001bc';
-//         const userId = '62503267a848908b0b2102f3';
-//         const res = await request.post('/tweets/favorites/destroy/'+ tweetId).set("x-access-token",token)
-//         //expect(res.body.message).toBe(0)
-//         console.log(res.body)
-//     });
-// });
-
-    // it('should return tweet already liked',async()=>{
-    //     const signinUser = {
-    //         data :"essam ahmed",
-    //         password: "$2afbg$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
-    //     }
-    //     const response = await request.post('/auth/signin')
-    //     .send(signinUser);
-    //     token=response.body.accessToken
-    //     const tweetId = '625d918e67dc9b72474001bc';
-    //     const userId = '62503267a848908b0b2102f3';
-    //     const res = await request.post('/tweets/favorites/create/'+ tweetId).set("x-access-token",token)
-    //     expect(res.body.message).toBe('tweet already liked')
-    //     //console.log(res.body.message)
-    // });
