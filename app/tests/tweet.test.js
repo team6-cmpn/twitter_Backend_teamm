@@ -194,18 +194,19 @@ afterAll(async () => {
 
 
 describe('update & creating a tweet',() =>{
-    // it('should check blocked by admin',async()=>{
-    //     const signinUser = {
-    //         data :"mosalah",
-    //         password: "$2a$08$dhhefCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
-    //     }
-    //     const response = await request.post('/auth/signin')
-    //     .send(signinUser);
-    //     token=response.body.accessToken
-    //     const res = await request.post('/tweets/update').set("x-access-token",token)
-    //     console.log(res.body.message)
-    //     //expect()
-    // });
+    it('should check blocked by admin',async()=>{
+        const signinUser = {
+            data :"samy",
+            password: "$2a$08$ffdhhefCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+        }
+        const response = await request.post('/auth/signin')
+        .send(signinUser);
+        token=response.body.accessToken
+        const res = await request.post('/tweets/update').set("x-access-token",token)
+        //console.log(res.body.message)
+        expect(res.body.message).toBeTruthy()
+        expect(res.status).toBe(400)
+    });
 
     it('should save tweet in database', async()=>{
         const signinUser = {

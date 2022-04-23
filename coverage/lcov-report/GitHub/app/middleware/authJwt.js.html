@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.15% </span>
+                <span class="strong">46.75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>34/77</span>
+                <span class='fraction'>36/77</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">34.09% </span>
+                <span class="strong">31.81% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>15/44</span>
+                <span class='fraction'>14/44</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.15% </span>
+                <span class="strong">46.75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>34/77</span>
+                <span class='fraction'>36/77</span>
             </div>
         
             
@@ -221,19 +221,19 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -285,20 +285,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -376,11 +376,11 @@ verifyToken = (req, res, next) =&gt; {
     return res.status(403).send({ message: "No token provided!" });
   }
   jwt.verify(token, config.secret, (err, decoded) =&gt; {
-    if (err) {
-      <span class="missing-if-branch" title="if path not taken" >I</span>if (err instanceof TokenExpiredError) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (err) {
+<span class="cstat-no" title="statement not covered" >      if (err instanceof TokenExpiredError) {</span>
 <span class="cstat-no" title="statement not covered" >        return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });</span>
       }
-      return res.sendStatus(401).send({ message: "Unauthorized!" });
+<span class="cstat-no" title="statement not covered" >      return res.sendStatus(401).send({ message: "Unauthorized!" });</span>
     }
     req.userId = decoded.id;
     next();
@@ -433,16 +433,16 @@ checkAdminBlockTweet = (req, res, next) =&gt; {
        var Difference_In_Time = current - blockCreationDate;  // diffrience in milliseconds
        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);  // number of milliseconds per day
 &nbsp;
-         <span class="missing-if-branch" title="if path not taken" >I</span>if (  Difference_In_Days&lt;= user.admin_block.block_duration )
+         <span class="missing-if-branch" title="else path not taken" >E</span>if (  Difference_In_Days&lt;= user.admin_block.block_duration )
          {
-<span class="cstat-no" title="statement not covered" >           duration=user.admin_block.block_duration</span>
-<span class="cstat-no" title="statement not covered" >           startFromDate= user.admin_block.block_createdAt</span>
-<span class="cstat-no" title="statement not covered" >           startFromDate= startFromDate.toDateString()</span>
-<span class="cstat-no" title="statement not covered" >           res.status(400).send({message: "this user is already blocked for "+String(duration)+" days "+ "starting from "+String(startFromDate)})</span>
+           duration=user.admin_block.block_duration
+           startFromDate= user.admin_block.block_createdAt
+           startFromDate= startFromDate.toDateString()
+           res.status(400).send({message: "this user is already blocked for "+String(duration)+" days "+ "starting from "+String(startFromDate)})
          }
     }
 &nbsp;
-     <span class="missing-if-branch" title="else path not taken" >E</span>if(user.admin_block.blocked_by_admin==false || Difference_In_Days&gt; user.admin_block.block_duration){
+     if(user.admin_block.blocked_by_admin==false || Difference_In_Days&gt; user.admin_block.block_duration){
         await User.findByIdAndUpdate( req.userId,{ admin_block:{ blocked_by_admin:false  }},{ returnDocument: 'after' }).exec((err,user)=&gt;{
          <span class="missing-if-branch" title="if path not taken" >I</span>if (err){
 <span class="cstat-no" title="statement not covered" >           res.status(500).send({ message: err });</span>
@@ -520,7 +520,7 @@ module.exports = authJwt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Sat Apr 23 2022 04:23:30 GMT+0200 (Eastern European Standard Time)
+                at Sat Apr 23 2022 23:29:29 GMT+0200 (Eastern European Standard Time)
             </div>
         <script src="../../../prettify.js"></script>
         <script>

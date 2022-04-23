@@ -12,6 +12,43 @@ const { findOneAndDelete, findByIdAndUpdate } = require("../models/user.model");
 
 
 
+
+
+/**
+ * 
+ * @module tweets
+ */
+
+/**
+ * 
+ * @global
+ * @typedef {object} requestTweetBody 
+ * @property {Date} created_at date generated
+ * @property {string} text text in request body
+ * @property {string} source source in request body
+ * @property {string} mention mention in request body
+ * @property {string|number} user user got 
+ * 
+ */
+
+/**
+ * 
+ * @global
+ * @typedef {object} responsetweetbody 
+ * @property {Date} created_at date generated
+ * @property {string} text text in request body
+ * @property {string} source source in request body
+ * @property {string} mention mention in request body
+ * @property {string|number} user user got 
+ * @property {string|number} _id
+ */
+
+/**
+ * 
+ * @param {requestTweetBody} req 
+ * @param {responsetweetbody} res 
+ */
+
 exports.update=  async(req,res)=>{
   // to create tweet
   const tweet = new Tweet({
@@ -47,6 +84,22 @@ if(req.body.text)
 }
 
 };
+
+/**
+ * 
+ * @global
+ * @typedef {object} responsereturntweet 
+ * @property {Date} created_at date generated
+ * @property {string} text text in request body
+ * @property {string} source source in request body
+ * @property {string} mention mention in request body
+ * @property {string|number} user user got 
+ * @property {string|number} _id
+ */
+/**
+ * 
+ * @param {responsereturntweet} res  
+ */
 
 exports.show=  (req,res)=>{
   var userId = req.userId;
@@ -87,7 +140,11 @@ exports.show=  (req,res)=>{
 exports.lookup= (req,res)=>{
 };
 
-
+// /**
+//  * 
+//  * @param {path param} req 
+//  * @param {*} res 
+//  */
 exports.favorite= async(req,res) =>{
   var tweetId = req.params.id;
   var userId = req.userId;

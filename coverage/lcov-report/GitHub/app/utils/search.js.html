@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">54.54% </span>
+                <span class="strong">42.1% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/11</span>
+                <span class='fraction'>8/19</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">54.54% </span>
+                <span class="strong">42.1% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/11</span>
+                <span class='fraction'>8/19</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -91,68 +91,62 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">//const { searchUserByName } = require("../controllers/search.controller");
 const db = require("../models");
 const User = db.user;
+const tweet = db.tweet;
 require("dotenv").config();
 &nbsp;
 exports.searchUserByName = <span class="fstat-no" title="function not covered" >as</span>ync (name) =&gt; {
-    //var userFound;
-    // db.user.find({ name: { $regex:name } })
-    // .exec((err, users) =&gt; {
-    //     console.log(users);
-    //     userFound =users;
-    // });
-    const userFound = <span class="cstat-no" title="statement not covered" >await db.user.find({ name: { $regex:name } });</span>
-    // db.user.find({ name: { $regex:name } }, function (err, docs) {
-    //     console.log(docs);
-    //     userFound = docs;
-    //     return "true";
-    // });
+    const userFound = <span class="cstat-no" title="statement not covered" >await db.user.find({ name: { $regex: `${name}` , $options : 'i' } });</span>
 <span class="cstat-no" title="statement not covered" >    console.log(userFound);</span>
-    //return "out of find";
 <span class="cstat-no" title="statement not covered" >    return userFound;</span>
-    //return db.user.find({ name: { $regex:name } });
+    
 }
 &nbsp;
-exports.searchByUserName = <span class="fstat-no" title="function not covered" >(u</span>serName) =&gt; {
-<span class="cstat-no" title="statement not covered" >    db.products.find ( { username: { $regex: userName /i } } )</span>
+exports.searchUserByUserName = <span class="fstat-no" title="function not covered" >as</span>ync (username) =&gt; {
+    const userFound = <span class="cstat-no" title="statement not covered" >await db.user.find({ username: { $regex: `${username}` , $options : 'i' } });</span>
+<span class="cstat-no" title="statement not covered" >    console.log(userFound);</span>
+<span class="cstat-no" title="statement not covered" >    return userFound;</span>
 }
 &nbsp;
-exports.searchTweetText = <span class="fstat-no" title="function not covered" >(t</span>weetText) =&gt; {
-<span class="cstat-no" title="statement not covered" >    db.products.find ( { tweetText: { $regex: tweetText /i } } )</span>
+exports.searchTweetText = <span class="fstat-no" title="function not covered" >as</span>ync (text) =&gt; {
+    const tweetFound = <span class="cstat-no" title="statement not covered" >await tweet.find({ text: { $regex: `${text}` , $options : 'i' } }).sort( {created_at : 1} );</span>
+<span class="cstat-no" title="statement not covered" >    console.log(tweetFound);</span>
+<span class="cstat-no" title="statement not covered" >    return tweetFound; </span>
+}
+&nbsp;
+exports.searchMentions = <span class="fstat-no" title="function not covered" >as</span>ync (text)=&gt;{
+    const Mentioned = <span class="cstat-no" title="statement not covered" >await tweet.find({text : {$regex: `${text}` , $options : 'i' } });</span>
+<span class="cstat-no" title="statement not covered" >    return Mentioned; </span>
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -160,7 +154,7 @@ exports.searchTweetText = <span class="fstat-no" title="function not covered" >(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Sat Apr 23 2022 04:23:30 GMT+0200 (Eastern European Standard Time)
+                at Sat Apr 23 2022 23:29:29 GMT+0200 (Eastern European Standard Time)
             </div>
         <script src="../../../prettify.js"></script>
         <script>
