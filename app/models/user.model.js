@@ -1,12 +1,11 @@
-const { string } = require("joi");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   // id: {
-  //   type: Number,
+  //   type: Number, 
   //   unique: true
-  // },
+  // },  
   name: {
     type: String,
     required: false,
@@ -38,11 +37,21 @@ const userSchema = new Schema({
       ref: "User"
     }
   ],
+  relations: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "relations"
+    }
+  ],
   following: [
     {
       type: Schema.Types.ObjectId,
       ref: "User"
     }
+  ],
+  likes : [
+    {type: Schema.Types.ObjectId,
+    ref: "Tweet"}
   ],
   created_at: {
     type: Date,
@@ -55,40 +64,19 @@ const userSchema = new Schema({
     type: Boolean,
     default: false
   },
-  admin_block:{
-  blocked_by_admin:{  type: Boolean, default: false},
-  block_createdAt:{type:Date},
-  block_duration: {type:Number}
-  },
-  isAdmin:{
-    type: Boolean,
-    default:false
-  },
-  favorites:[
-    {
-      type: Schema.Types.ObjectId,
-      ref:"Tweet"
-    }
-  ],
-  isDeactivated:{
-    type: Boolean,
-    default: false
-  },
-  deactivationDate: Date,
-  verificationCode: String,
   googleId: String,
+  isAdmin: Boolean,
   description: String,
   verified:Boolean,
   protected: Boolean,
   followers_count: Number,
   followings_count: Number,
-  favourites_count: Number ,
+  favourites_count: Number , 
   tweets_count: Number,
   profile_banner_url:String,
   profile_image_url: String,
   default_profile: String,
   default_profile_image:  Boolean,
-
 });
 
 userSchema.methods.toJSON = function() {
