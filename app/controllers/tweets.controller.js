@@ -7,49 +7,78 @@ const User = db.user;
 var {TokenExpiredError}  = require("jsonwebtoken");
 var jwt  = require("jsonwebtoken");
 const { tweet, user } = require("../models");
-const { findOneAndDelete } = require("../models/user.model");
+const { findOneAndDelete, findByIdAndUpdate } = require("../models/user.model");
 //const { post } = require("../../app");
 
 
 
 exports.update=  async(req,res)=>{
+  // to create tweet
+  const tweet = new Tweet({
+  created_at: new Date(),
+  text: req.body.text,
+  user: req.userId,
+  source: req.body.source,
+  mention: req.body.mention
+});
 
-
-        const tweet = new Tweet({
-        created_at: req.body.created_at,
-        text: req.body.text,
-        user: req.userId,
-        source: req.body.source,
-
+if(req.body.text)
+{
+  Tweet.findOne({text:req.body.text}).exec(async (err,tweetText)=>{
+    if(err){
+      res.status(403).send({ message: err });
+    }
+    if(tweetText){
+      res.status(403).send({ message:"tweet duplication"});
+    }
+    if(!tweetText){
+      tweet.save()
+      .then(newtweet => {
+        res.status(201).send("newtweet");
+      })
+      .catch(err =>{
+        //console.log
+        res.status(403).send({message: err});
       });
-      Tweet.findOne({text:req.body.text}).exec(async (err,tweetText)=>{
-        if(err){
-          res.status(403).send({ message: err });
-        }
-        if(tweetText){
-          res.status(403).send({ message:"tweet duplication"});
-        }
-        if(!tweetText){
-          tweet.save()
+    }
+  });
+}else{
+  res.status(403).send({message: "forbidden! no text entered in the tweet"})
+}
 
-          .then(newtweet => {
-            res.status(201).send("newtweet");
-          })
-          .catch(err =>{
-            //console.log
-            res.status(403).send({message: err});
-          });
-        }
-      });
 };
 
 exports.show=  (req,res)=>{
-  tweet.findOne({_id: req.params.id})
-  .then(requiredTweet => {
-    res.send(requiredTweet);
-  })
-  .catch(err => {
-    res.status(404).send({message:err});
+  var userId = req.userId;
+  console.log(userId)
+  tweet.findOne({_id: req.params.id}).exec(async (err,requiredTweet)=>{
+    if(requiredTweet){
+      
+      User.findById(userId).exec(async (err,userData)=>{
+        if(err){
+          res.status(400).send({message: err});
+        }
+        else{
+          console.log(userData)
+          var userName = userData.username;
+          console.log(userName)
+          tweet.findByIdAndUpdate(req.params.id,{username: userName},{new: true})
+          res.status(200).send(requiredTweet)
+        }
+      });
+    }else{
+      res.status(404).send({message:"tweet doesn't exist"});
+    }
+
+
+    // tweet.findOne({_id: req.params.id}).exec(async (err,requiredTweet)=>{
+    //   if(requiredTweet){
+    //     res.status(200).send(requiredTweet)
+    //     //res.send(requiredTweet);
+    //   }else{
+    //     res.status(404).send({message:"tweet doesn't exist"});
+    //   }
+
   })
    ////https://stackoverflow.com/questions/67680295/node-js-mongoose-findone-id-req-params-id-doesnt-work
   //// https://stackoverflow.com/questions/20044743/twitter-api-get-tweet-id
@@ -85,7 +114,8 @@ exports.favorite= async(req,res) =>{
       })
     }
     else{
-      console.log('tweet already liked')
+      res.send({message:"tweet already liked"})
+      //console.log('tweet already liked')
     }
   })
 

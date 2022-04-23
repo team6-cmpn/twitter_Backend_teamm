@@ -1,3 +1,4 @@
+const { string } = require("joi");
 const mongoose = require("mongoose");
 const User = require("./user.model")
 const Schema = mongoose.Schema;
@@ -57,6 +58,14 @@ const tweetSchema = new Schema({
           ref:"Tweet"
         }
       ],
+    mention: {
+    type: String
+    },
+    username:{
+        type: String
+        // type: Schema.Types.ObjectId,
+        // ref: 'User'
+    },  
 });
 
  tweetSchema.methods.toJSON = function() {

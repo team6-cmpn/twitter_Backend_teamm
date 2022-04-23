@@ -199,6 +199,9 @@
           "200": {
             "description": "OK"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -305,6 +308,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "500": {
             "description": "Internal Server Error"
@@ -472,13 +478,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "created_at": {
-                  "example": "any"
-                },
                 "text": {
                   "example": "any"
                 },
                 "source": {
+                  "example": "any"
+                },
+                "mention": {
                   "example": "any"
                 }
               }
@@ -521,6 +527,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "404": {
             "description": "Not Found"
