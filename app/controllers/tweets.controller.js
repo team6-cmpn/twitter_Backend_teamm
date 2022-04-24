@@ -164,7 +164,10 @@ exports.favorite= async(req,res) =>{
             }
             if(!tweetdata.favorites.includes(userId)){
               await Tweet.findByIdAndUpdate(tweetId,{$push:{favorites: userId}},{new: true})
-              res.status(200).send({message:tweetdata.favorites.length+1});
+              tweetdata.favorite_count = tweetdata.favorites.length+1;
+              console.log(tweetdata.favorite_count)
+              //var count = tweetdata.favorite_count;
+              res.status(200).send({"favorite_count":tweetdata.favorite_count});
             }
           })
         }
@@ -198,7 +201,8 @@ exports.unfavorite= async(req,res) =>{
             if(tweetdata.favorites.includes(userId)){
               //console.log(tweetdata.favorites.length)
               await Tweet.findByIdAndUpdate(tweetId,{$pull:{favorites: userId}},{new: true})
-              res.status(200).send({message:tweetdata.favorites.length-1});
+              tweetdata.favorite_count = tweetdata.favorites.length-1
+              res.status(200).send({"favorite_count":tweetdata.favorite_count});
               //console.log(tweetdata.favorites)
             }
           })
