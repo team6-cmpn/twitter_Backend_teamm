@@ -291,7 +291,7 @@ describe('like a tweet test',()=>{
         const tweetId = '625d594a9b671cf4db621900';
         const userId = '62503267a848908b0b2102f3';
         const res = await request.post('/tweets/favorites/create/'+ tweetId).set("x-access-token",token)
-        expect(res.body.message).toBe(1)
+        expect(res.body).toBeTruthy()
     });
 
     it('should return tweet already liked',async()=>{
@@ -325,7 +325,7 @@ describe('like a tweet test',()=>{
 });
 
 describe('unlike tweet test',()=>{
-    it('should msh 3arfa',async()=>{
+    it('should return status 200 if succeefuly unliked',async()=>{
         const signinUser = {
             data :"admin2",
             password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
@@ -349,7 +349,7 @@ describe('unlike tweet test',()=>{
         const tweetId = '625d594a9b671cf4db621900';
         const userId = '62503267a848908b0b2102f3';
         const res = await request.post('/tweets/favorites/destroy/'+ tweetId).set("x-access-token",token)
-        expect(res.body.message).toBe(0)
+        expect(res.body).toBeTruthy()
     });
 });
 

@@ -10,7 +10,10 @@ module.exports = function(app) {
     );
     next();
   });
-    app.get("/search/user", controller.searchName);
+    app.get("/search/top", controller.searchTop);
+    app.get("/search/people", controller.searchPeople);
+    app.get("/search/latest", controller.seachLatest);
+    //app.get("/search/latest", controller.searchLatest);
 //   app.post("/settings/changePassword",[authJwt.verifyToken, verifySignUp.checkStrenghtOfPassword],controller.changePassword);
 //   app.post("/settings/forgetPassword",controller.sendForgetPasswordEmail);
 //   app.get("/settings/forgetPassword/:emailtoken" ,controller.receiveForgetPasswordEmail);
