@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1650995657457" clover="3.2.0">
-  <project timestamp="1650995657457" name="All files">
+<coverage generated="1650998512169" clover="3.2.0">
+  <project timestamp="1650998512169" name="All files">
     <metrics statements="858" coveredstatements="570" conditionals="246" coveredconditionals="121" methods="115" coveredmethods="87" elements="1219" coveredelements="778" complexity="0" loc="858" ncloc="858" packages="7" files="26" classes="26"/>
     <package name="twitter">
       <metrics statements="29" coveredstatements="24" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="0"/>
@@ -802,9 +802,9 @@
         <line num="3" count="6" type="stmt"/>
         <line num="5" count="6" type="stmt"/>
         <line num="94" count="6" type="stmt"/>
-        <line num="95" count="39" type="stmt"/>
-        <line num="96" count="39" type="stmt"/>
-        <line num="97" count="39" type="stmt"/>
+        <line num="95" count="45" type="stmt"/>
+        <line num="96" count="45" type="stmt"/>
+        <line num="97" count="45" type="stmt"/>
         <line num="100" count="6" type="stmt"/>
       </file>
     </package>
