@@ -9,7 +9,7 @@ module.exports = function(app) {
     next();
   });
   //app.use(authJwt.verifyToken);
-  app.get("/user/show" , controller.userShow);
+  app.get("/user/show/:id" , controller.userShow);
   app.get("/user/lookup/:username" , controller.usersLookup);
   app.get("/user/followingIDs/:id" , controller.userFollowingIDs);
   app.get("/user/followingList/:id" , controller.userFollowingList);
