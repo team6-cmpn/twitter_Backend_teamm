@@ -1,0 +1,65 @@
+name: CI/CD Backend
+
+on:
+  push:
+    branches: [ main ]
+env:
+    DOCKER_USER: pierrebassily
+    DOCKER_PASSWORD: gradepero100
+    REPO_NAME: code 
+jobs:
+# First we will see the application build or not , then we will deploy in EC2
+  build:
+    
+    runs-on: ubuntu-latest  # runner name : (ubuntu latest version) 
+    steps:
+     
+    - uses: actions/checkout@v2 # first action : checkout source code
+    - name: docker login
+      run: | # log into docker hub account
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD  
+    - name: Get current date # get the date of the build
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
+    - name: Build the Docker image # push The image to the docker hub
+      run: docker build . --file Dockerfile --tag pierrebassily/code:backendlatest
+    - name: Docker Pushsed
+      run: docker push pierrebassily/code:backendlatest
+
+
+
+  Deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2 
+
+      - name: Creat SSh Config file
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/staging.key
+          chmod 600 ~/.ssh/staging.key
+          cat >>~/.ssh/config <<END
+          UserKnownHostsFile ~/.ssh/known_hosts
+          Host staging
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          SSH_HOST: ${{ secrets.EC2_PUBLIC_IP }}
+          SSH_USER: ${{ secrets.EC2_USERNAME }}
+
+      - name: Deploy in EC2
+        run: |
+              cat >>~/Fetch.sh<<EOF
+              cd /home/ubuntu/twitter
+              sudo docker pull pierrebassily/code:backendlatest
+              EOF
+      - name: Deploy in EC2
+        run: cat ~/Fetch.sh | ssh staging
+
+ 
