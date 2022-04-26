@@ -7,9 +7,7 @@
 // const mongoose = require('mongoose');
 
 
-// const user1=new User(
-//     {
-  
+// const user1=new User({
 //         username : "essam ahmed",
 //         email : "bcq34@frjidffooq.com",
 //         password : "$2afbg$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C",
