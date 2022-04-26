@@ -11,13 +11,59 @@ var jwt  = require("jsonwebtoken");
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+  /**
+   *
+   * @module admin
+   */
+
+  /**
+   *
+   * @global
+   * @typedef {object}  requestBodyAdminCreateBlock
+   * @property {Number} duration the duration in days the admin identify to block a user
+   * @property {string} userid the id of the user need to be blocked
+   *
+   */
+
+  /**
+   *
+   * @global
+   * @typedef {object}  responseBodyAdminCreateBlock
+   * @property {object}  blockedUserConfirmed  user object represent the users who was blocked by admin
+   */
+
+   /**
+    * This function that admin use to block users for a certain amount of time defined in a duration of number of days if the user isnt already blocked and not an admin
+    *
+    * @param {requestBodyAdminCreateBlock} req the request sent from the front
+    * @param {responseBodyAdminCreateBlock} res the response which is sent back to the front
+    *
+    */
+
+
+
+
+
+
+
 exports.createBlock= async(req,res)=>{
 
 
-  let obj_id= req.query.userid
+  let objId= req.query.userid
   let duration=req.body.duration
 
-   await User.findById(obj_id).exec( async (err, blockedUser) => {
+   await User.findById(objId).exec( async (err, blockedUser) => {
      if (err) {
        res.status(500).send({ message: err });
        return;
@@ -32,7 +78,7 @@ if(blockedUser){
 }
 
 if (blockedUser.isAdmin==false && blockedUser.admin_block.blocked_by_admin== false){
-await User.findByIdAndUpdate(obj_id,{ admin_block:{ blocked_by_admin: true,block_createdAt:new Date().getTime(),block_duration: duration }},{ returnDocument: 'after' }).exec(async(err,blockedUserConfirmed)=>{
+await User.findByIdAndUpdate(objId,{ admin_block:{ blocked_by_admin: true,block_createdAt:new Date().getTime(),block_duration: duration }},{ returnDocument: 'after' }).exec(async(err,blockedUserConfirmed)=>{
 
 if (err) {
   res.status(500).send({ message: err });
@@ -50,27 +96,67 @@ res.status(200).send(blockedUserConfirmed)
 
 
 
+  /**
+   *
+   * @global
+   * @typedef {object} requestBodyShowUsers
+   *
+   */
 
-
-
+ /**
+  *
+  * @global
+  * @typedef {object} responseBodyShowUsers
+  * @property {Array.<Object>} foundUsers array of objects representing the users who are not admins
+  */
+ /**
+  * This function show all the users who are not admins to the admins
+  *
+  * @param {requestBodyShowUsers} req the request sent from the front
+  * @param {responseBodyShowUsers} res the response which is sent back to the front
+  *
+  */
 
 
 
 
 exports.showUsers = async (req, res) => {
 
-  await User.find({isAdmin: false}).exec((err,found_users)=>{
+  await User.find({isAdmin: false}).exec((err,foundUsers)=>{
     if (err){
       res.status(500).send({ message: err})
       return;
     }
     else{
-        res.status(200).send(found_users)
+        res.status(200).send(foundUsers)
     }
   });
 };
 
 
+
+
+
+
+
+
+  /**
+   * @global
+   * @typedef {object} requestBodyGetStatistics
+   */
+
+ /**
+  * @global
+  * @typedef {object} responseBodyGetStatistics
+  * @property {Array.<Object>} staatic array of objects represent the statistics calculated
+  */
+ /**
+  * This function calculate various type of statistics and return an array of objects of the calculated statistics
+  *
+  * @param {requestBodyGetStatistics} req the request sent from the front
+  * @param {responseBodyGetStatistics} res the response which is sent back to the front
+  *
+  */
 
 
 exports.getStatistics=  (req,res)=>{
