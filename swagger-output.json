@@ -5,7 +5,7 @@
     "description": "this is Twitter API documentation for team 6",
     "version": "1.0.0"
   },
-  "host": "localhost:8080",
+  "host": "twi-jay.xyz:8080",
   "basePath": "/",
   "schemes": [
     "http"
