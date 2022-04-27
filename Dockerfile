@@ -16,4 +16,4 @@ RUN npm install pm2 -g
 COPY . .
 
 EXPOSE 8080
-CMD ["pm2-runtime", "server.js"]
+CMD ["pm2-runtime",  "env-cmd", "-f", "./app/config/dev.env" , "nodemon" ,"server.js"]
