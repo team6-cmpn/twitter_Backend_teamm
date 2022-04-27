@@ -77,7 +77,12 @@ if(blockedUser){
 
 }
 
-if (blockedUser.isAdmin==false && blockedUser.admin_block.blocked_by_admin== false){
+if(!duration){
+    res.status(422).send({message: " You must enter a block duration in days  "})
+  }
+
+
+if (blockedUser.isAdmin==false && blockedUser.admin_block.blocked_by_admin== false && duration ){
 await User.findByIdAndUpdate(objId,{ admin_block:{ blocked_by_admin: true,block_createdAt:new Date().getTime(),block_duration: duration }},{ returnDocument: 'after' }).exec(async(err,blockedUserConfirmed)=>{
 
 if (err) {
