@@ -1,4 +1,4 @@
-FROM keymetrics/pm2:latest-alpine
+FROM node:16.14-alpine 
 # Create app directory
 WORKDIR /server
 
@@ -6,16 +6,14 @@ WORKDIR /server
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
 COPY package*.json ./
-COPY ecosystem.config.js .
 
-# Install app dependencies
-ENV NPM_CONFIG_LOGLEVEL warn
-RUN npm install --production
-COPY  . .
-# Expose the listening port of your app
-EXPOSE 8000
+# RUN npm install
+# RUN npm install pm2 -g
+# If you are building your code for production
+RUN npm ci --only=production
 
-# Show current folder structure in logs
-RUN ls -al -R
+# Bundle app source
+COPY . .
 
-CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]
+EXPOSE 8080
+CMD ["node" , "server.js"]
