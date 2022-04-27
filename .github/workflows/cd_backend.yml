@@ -59,7 +59,7 @@ jobs:
               cd /home/ubuntu/twitter/test
               sudo docker-compose down -d
               sudo docker pull pierrebassily/code:backendlatest
-              sudo docker-compose up --build -d
+              sudo docker-compose up --build -d --env-file ./server/.env.production
               EOF
       - name: Deploy in EC2
         run: cat ~/Fetch.sh | ssh staging
