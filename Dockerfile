@@ -1,20 +1,18 @@
 FROM node:16.14-alpine 
 # Create app directory
-WORKDIR /server
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY package*.json ./
+ENV NODE_ENV=production
 
-# RUN npm install
-# RUN npm install pm2 -g
-# If you are building your code for production
-RUN npm ci --only=production
+WORKDIR /server
 
-# Bundle app source
+
+COPY ["package.json", "package-lock.json*", "./"]
+
+RUN npm install --production
+
 COPY . .
 
-EXPOSE 8080
-
-CMD ["npm", "run" , "devStart"]
+CMD [ "node", "server.js" ]
