@@ -6,7 +6,7 @@ on:
 env:
     DOCKER_USER: pierrebassily
     DOCKER_PASSWORD: gradepero100
-    REPO_NAME: code 
+    REPO_NAME: code
 jobs:
 # First we will see the application build or not , then we will deploy in EC2
   build:
