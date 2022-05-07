@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1651021775448" clover="3.2.0">
-  <project timestamp="1651021775448" name="All files">
-    <metrics statements="860" coveredstatements="572" conditionals="249" coveredconditionals="124" methods="115" coveredmethods="87" elements="1224" coveredelements="783" complexity="0" loc="860" ncloc="860" packages="7" files="26" classes="26"/>
+<coverage generated="1651040506583" clover="3.2.0">
+  <project timestamp="1651040506584" name="All files">
+    <metrics statements="860" coveredstatements="574" conditionals="249" coveredconditionals="124" methods="115" coveredmethods="88" elements="1224" coveredelements="786" complexity="0" loc="860" ncloc="860" packages="7" files="26" classes="26"/>
     <package name="twitter">
       <metrics statements="29" coveredstatements="24" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="0"/>
       <file name="app.js" path="F:\backend learning\twitter\app.js">
@@ -923,9 +923,9 @@
       </file>
     </package>
     <package name="twitter.app.utils">
-      <metrics statements="30" coveredstatements="28" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="5"/>
+      <metrics statements="30" coveredstatements="30" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="6"/>
       <file name="email.js" path="F:\backend learning\twitter\app\utils\email.js">
-        <metrics statements="11" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+        <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
         <line num="3" count="6" type="stmt"/>
@@ -934,8 +934,8 @@
         <line num="8" count="3" type="stmt"/>
         <line num="17" count="3" type="stmt"/>
         <line num="27" count="3" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
+        <line num="35" count="3" type="stmt"/>
+        <line num="36" count="3" type="stmt"/>
         <line num="40" count="6" type="stmt"/>
       </file>
       <file name="search.js" path="F:\backend learning\twitter\app\utils\search.js">
