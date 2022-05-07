@@ -81,9 +81,37 @@ if(req.body.text)
       res.status(403).send({ message:"tweet duplication"});
     }
     if(!tweetText){
+
       tweet.save()
       .then(newtweet => {
+        User.findById(req.userId, async function (err, activeUser) {
+
+
+console.log(activeUser.followers[0])
+console.log(activeUser._id)
+
+          notification= new Notification({
+            notificationType: 'tweet',
+            notificationHeader: " In case you missed "+ String(activeUser.name) +"  has tweeted" ,
+            notificationContent: newtweet,
+            user: activeUser.followers
+          })
+          notification.save()
+
+//var channel= activeUser.followers.map(function(ids){return String(ids)})
+ /*
+channels=[]
+  for (let id of activeUser.followers){
+    channels.push(String(id))
+  }
+  console.log(channels)
+  */
+        await pusher.trigger(String(activeUser.followers), 'tweet-event',{header:notification.notificationHeader, content: notification.notificationContent});
+
+
+        })
         res.status(201).send(newtweet);
+
       })
       .catch(err =>{
         //console.log
@@ -185,19 +213,19 @@ exports.favorite= async(req,res) =>{
             //  userRecivingNotification = User.findById(tweetdata.user)
             //  console.log(userRecivingNotification)
             User.findById(tweetdata.user, async function (err, userRecivingNotification) {
+              console.log(tweetdata)
               console.log(userRecivingNotification.username)
               console.log(userData.name)
 
               notification= new Notification({
                 notificationType: 'favourite',
-                notificationHeader:  String(userData.name) +" and " + String(tweetdata.favorite_count-1)+ " others liked your tweet",
+                notificationHeader:  String(userData.name) +" liked your tweet",
                 notificationContent: tweetdata,
                 user: userRecivingNotification
-
               })
               notification.save()
 
-        await pusher.trigger(String(userRecivingNotification._id), 'my-event',{header:notification.notificationHeader, content: notification.notificationContent});
+        await pusher.trigger(String(userRecivingNotification._id), 'favourite-event',{header:notification.notificationHeader, content: notification.notificationContent});
 
             })
 

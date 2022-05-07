@@ -4,7 +4,8 @@ const sendEmail = require("../utils/email");
 const db = require("../models");
 const Tweet= db.tweet;
 const User = db.user;
-
+const Notification = db.notification;
+  const Pusher = require('pusher');
 var {TokenExpiredError}  = require("jsonwebtoken");
 var jwt  = require("jsonwebtoken");
 
@@ -63,6 +64,17 @@ exports.createBlock= async(req,res)=>{
   let objId= req.query.userid
   let duration=req.body.duration
 
+const pusher = new Pusher({
+appId : "1406245",
+key : "a02c7f30c561968a632d",
+secret : "5908937248eea3363b9e",
+cluster : "eu",
+useTLS: true,
+    });
+
+
+
+
    await User.findById(objId).exec( async (err, blockedUser) => {
      if (err) {
        res.status(500).send({ message: err });
@@ -89,15 +101,24 @@ if (err) {
   res.status(500).send({ message: err });
   return;
 }
+////
+
+notification= new Notification({
+  notificationType: 'block',
+  notificationHeader: "You are blocked by admin for "+String(duration)+" days",
+  user: blockedUserConfirmed
+})
+notification.save()
+ await pusher.trigger(String(blockedUserConfirmed._id), 'block-event',{header:notification.notificationHeader, content: notification.notificationContent,Blocked_username: notification.user.username});
+
+////////////
 res.status(200).send(blockedUserConfirmed)
+
 });
 }
 
 }});
 }
-
-
-
 
 
 

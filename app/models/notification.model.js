@@ -19,13 +19,16 @@ notificationHeader:{
 },
 
 notificationContent:{
-  type: String,
+  type: Schema.Types.ObjectId,
+  ref:"Tweet"
 },
 
-user: {
+user: [
+  {
     type: Schema.Types.ObjectId,
-    ref: 'User'
-},
+    ref: "User"
+  }
+],
 
 tweet: {
     type: Schema.Types.ObjectId,
