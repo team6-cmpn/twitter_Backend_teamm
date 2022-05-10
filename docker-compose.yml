@@ -5,7 +5,7 @@ services:
     image: pierrebassily/code:backendlatest
     restart: always
     env_file:
-      - /app/config/dev.env
+      - ./app/config/dev.env
     volumes:
       - /server/node_modules
     ports:
