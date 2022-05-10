@@ -13,7 +13,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger-output.json');
 
 var corsOptions = {
-  origin: ["http://www.twi-jay.xyz" , "http://localhost:3000" ]
+  origin: ["http://www.twi-jay.xyz" , "http://localhost:3000" , "http://www.twi-jay.me" ]
 };
 
 app.use(cors(corsOptions));
