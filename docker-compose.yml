@@ -1,0 +1,30 @@
+version: "3"
+services:
+  api-server:
+    container_name: server-complexx
+    image: pierrebassily/code:backendlatest
+    restart: always
+    env_file:
+      - dev.env
+    volumes:
+      - /server/node_modules
+    ports:
+      - "8080:8080"
+    networks:
+      - mern-app
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:focal
+    ports:
+      - "27017:27017"
+    networks:
+      - mern-app
+    volumes:
+      - mongo-data:/data/db
+networks:
+  mern-app:
+    driver: bridge
+volumes:
+  mongo-data:
+    driver: local

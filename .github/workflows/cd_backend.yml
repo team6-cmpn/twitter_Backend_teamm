@@ -56,7 +56,8 @@ jobs:
       - name: Deploy in EC2
         run: |
               cat >>~/Fetch.sh<<EOF
-              cd /home/ubuntu/twitter/test
+              cd /home/ubuntu/twitter_Backend_teamm
+              git pull git@github.com:team6-cmpn/twitter_Backend_teamm.git
               sudo docker-compose down -d
               sudo docker pull pierrebassily/code:backendlatest
               sudo docker-compose up --build -d 
