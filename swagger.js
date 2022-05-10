@@ -5,7 +5,7 @@ const doc = {
     title: "Twitter API documentation",
     description: "this is Twitter API documentation for team 6",
   },
-  host: "twi-jay.xyz:8080",
+  host: "twi-jay.me:8080",
   schemes: ["http"],
 };
 
