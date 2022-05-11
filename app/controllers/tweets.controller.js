@@ -4,8 +4,6 @@ const config = require("../config/auth.config");
 const db = require("../models");
 const Tweet = db.tweet;
 const User = db.user;
-const Notification = db.notification;
-const Pusher = require('pusher');
 var {TokenExpiredError}  = require("jsonwebtoken");
 var jwt  = require("jsonwebtoken");
 const { tweet, user } = require("../models");
@@ -14,51 +12,41 @@ const { findOneAndDelete, findByIdAndUpdate } = require("../models/user.model");
 
 
 
-const pusher = new Pusher({
-appId : "1406245",
-key : "a02c7f30c561968a632d",
-secret : "5908937248eea3363b9e",
-cluster : "eu",
-useTLS: true,
-    });
-
-
-
 
 
 /**
- *
+ * 
  * @module tweets
  */
 
 /**
- *
+ * 
  * @global
- * @typedef {object} requestTweetBody
+ * @typedef {object} requestTweetBody 
  * @property {Date} created_at date generated
  * @property {string} text text in request body
  * @property {string} source source in request body
  * @property {string} mention mention in request body
- * @property {string|number} user user got
- *
+ * @property {string|number} user user got 
+ * 
  */
 
 /**
- *
+ * 
  * @global
- * @typedef {object} responsetweetbody
+ * @typedef {object} responsetweetbody 
  * @property {Date} created_at date generated
  * @property {string} text text in request body
  * @property {string} source source in request body
  * @property {string} mention mention in request body
- * @property {string|number} user user got
+ * @property {string|number} user user got 
  * @property {string|number} _id
  */
 
 /**
- *
- * @param {requestTweetBody} req
- * @param {responsetweetbody} res
+ * 
+ * @param {requestTweetBody} req 
+ * @param {responsetweetbody} res 
  */
 
 exports.update=  async(req,res)=>{
@@ -81,12 +69,9 @@ if(req.body.text)
       res.status(403).send({ message:"tweet duplication"});
     }
     if(!tweetText){
-
       tweet.save()
       .then(newtweet => {
-
         res.status(201).send(newtweet);
-
       })
       .catch(err =>{
         //console.log
@@ -101,19 +86,19 @@ if(req.body.text)
 };
 
 /**
- *
+ * 
  * @global
- * @typedef {object} responsereturntweet
+ * @typedef {object} responsereturntweet 
  * @property {Date} created_at date generated
  * @property {string} text text in request body
  * @property {string} source source in request body
  * @property {string} mention mention in request body
- * @property {string|number} user user got
+ * @property {string|number} user user got 
  * @property {string|number} _id
  */
 /**
- *
- * @param {responsereturntweet} res
+ * 
+ * @param {responsereturntweet} res  
  */
 
 exports.show=  (req,res)=>{
@@ -121,7 +106,7 @@ exports.show=  (req,res)=>{
   console.log(userId)
   tweet.findOne({_id: req.params.id}).exec(async (err,requiredTweet)=>{
     if(requiredTweet){
-
+      
       User.findById(userId).exec(async (err,userData)=>{
         if(err){
           res.status(400).send({message: err});
@@ -156,16 +141,13 @@ exports.lookup= (req,res)=>{
 };
 
 // /**
-//  *
-//  * @param {path param} req
-//  * @param {*} res
+//  * 
+//  * @param {path param} req 
+//  * @param {*} res 
 //  */
 exports.favorite= async(req,res) =>{
   var tweetId = req.params.id;
   var userId = req.userId;
-
-
-
   //var isLiked = req.User.favorites && req.User.favorites.includes(tweetId);
   //User.findById(userId,{"favorites":{"$exists":true}})
   user.findById(userId).exec(async (err,userData)=>{
@@ -181,10 +163,10 @@ exports.favorite= async(req,res) =>{
               res.status(400).send({message: err});
             }
             if(!tweetdata.favorites.includes(userId)){
-
               await Tweet.findByIdAndUpdate(tweetId,{$push:{favorites: userId}},{new: true})
               tweetdata.favorite_count = tweetdata.favorites.length+1;
-
+              console.log(tweetdata.favorite_count)
+              //var count = tweetdata.favorite_count;
               res.status(200).send({"favorite_count":tweetdata.favorite_count});
             }
           })
