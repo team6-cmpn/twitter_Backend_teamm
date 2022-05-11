@@ -5,7 +5,7 @@ const db = require("../models");
 const Tweet= db.tweet;
 const User = db.user;
 const Notification = db.notification;
-const Pusher = require('Pusher');
+const Pusher = require("pusher");
 var {TokenExpiredError}  = require("jsonwebtoken");
 var jwt  = require("jsonwebtoken");
 
