@@ -103,15 +103,6 @@ if (err) {
 }
 ////
 
-notification= new Notification({
-  notificationType: 'block',
-  notificationHeader: "You are blocked by admin for "+String(duration)+" days",
-  user: blockedUserConfirmed
-})
-notification.save()
- await pusher.trigger(String(blockedUserConfirmed._id), 'block-event',{header:notification.notificationHeader, content: notification.notificationContent,Blocked_username: notification.user.username});
-
-////////////
 res.status(200).send(blockedUserConfirmed)
 
 });

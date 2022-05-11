@@ -84,32 +84,7 @@ if(req.body.text)
 
       tweet.save()
       .then(newtweet => {
-        User.findById(req.userId, async function (err, activeUser) {
 
-
-console.log(activeUser.followers[0])
-console.log(activeUser._id)
-
-          notification= new Notification({
-            notificationType: 'tweet',
-            notificationHeader: " In case you missed "+ String(activeUser.name) +"  has tweeted" ,
-            notificationContent: newtweet,
-            user: activeUser.followers
-          })
-          notification.save()
-
-//var channel= activeUser.followers.map(function(ids){return String(ids)})
- /*
-channels=[]
-  for (let id of activeUser.followers){
-    channels.push(String(id))
-  }
-  console.log(channels)
-  */
-        await pusher.trigger(String(activeUser.followers), 'tweet-event',{header:notification.notificationHeader, content: notification.notificationContent});
-
-
-        })
         res.status(201).send(newtweet);
 
       })
@@ -209,31 +184,7 @@ exports.favorite= async(req,res) =>{
 
               await Tweet.findByIdAndUpdate(tweetId,{$push:{favorites: userId}},{new: true})
               tweetdata.favorite_count = tweetdata.favorites.length+1;
-              /////////////////////////////////////////////////
-            //  userRecivingNotification = User.findById(tweetdata.user)
-            //  console.log(userRecivingNotification)
-            User.findById(tweetdata.user, async function (err, userRecivingNotification) {
-              console.log(tweetdata)
-              console.log(userRecivingNotification.username)
-              console.log(userData.name)
 
-              notification= new Notification({
-                notificationType: 'favourite',
-                notificationHeader:  String(userData.name) +" liked your tweet",
-                notificationContent: tweetdata,
-                user: userRecivingNotification
-              })
-              notification.save()
-
-        await pusher.trigger(String(userRecivingNotification._id), 'favourite-event',{header:notification.notificationHeader, content: notification.notificationContent});
-
-            })
-
-
-              ///////////////////////////////////////////////////
-
-              console.log(tweetdata.favorites)
-              //var count = tweetdata.favorite_count;
               res.status(200).send({"favorite_count":tweetdata.favorite_count});
             }
           })
