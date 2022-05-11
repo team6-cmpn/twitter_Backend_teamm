@@ -20,7 +20,7 @@ const user1=new User(
         followers_count : 150,
         dateOfBirth :"1975-05-02 00:20:19.197Z",
         following : [],
-        admin_block : {
+        admin_block : {  
             "blocked_by_admin" : false
         },
         isAdmin : false,
@@ -31,9 +31,9 @@ const user1=new User(
             '625d918e67dc9b72474001bc'
         ]
     })
-
+  
     const user2=new User({
-
+  
         username : "admin2",
         id:"62503267a848908b0b2102f3",
         email : "bcq34@jidffooq.com",
@@ -51,11 +51,11 @@ const user1=new User(
         favorites: []
              //'625d594a9b671cf4db621969',
             // '625d594a9b671cf4db621900'
-
+        
     })
-
+  
     const user3=new User({
-
+  
         username : "admin3",
         email : "brcq34@jidffooq.com",
         password : "$2pv$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C",
@@ -70,10 +70,10 @@ const user1=new User(
         created_at : ("2022-04-15T02:59:23.228Z"),
         confirmed : true,
     })
-
-
+  
+  
     const user4=new User({
-
+  
         username : "mosalah",
         email : "bcq34@rrjidffooq.com",
         password : "$2a$08$dhhefCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C",
@@ -90,9 +90,9 @@ const user1=new User(
         created_at : ("2022-04-15T02:59:23.228Z"),
         confirmed : true,
     })
-
+  
     const user5=new User({
-
+  
         username : "mostafa",
         email : "bcq34@rrjidffaaooq.com",
         password : "$aa2a$08$dhhefCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C",
@@ -107,9 +107,9 @@ const user1=new User(
         created_at : ("2022-04-15T02:59:23.228Z"),
         confirmed : true,
     })
-
+  
     const user6=new User({
-
+  
         username : "samy",
         email : "bcq34@rrjidfqqfooq.com",
         password : "$2a$08$ffdhhefCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C",
@@ -119,7 +119,7 @@ const user1=new User(
         following : [],
         admin_block : {
             blocked_by_admin : true,
-            block_duration: 1120,
+            block_duration: 20,
           block_createdAt: ("2022-04-17T02:59:23.228Z")
         },
         isAdmin : false,
@@ -147,7 +147,7 @@ const tweetdata =[
         mention: '@mosal',
         user: '62503267a848908b0b2102f3',
         favorites: []
-            //'62503267a848908b0b2102f3']
+            //'62503267a848908b0b2102f3']        
     },{
         _id: '625d918e67dc9b72474001bc',
         text: 'welcome to my 3 tweet',
@@ -158,7 +158,7 @@ const tweetdata =[
         favorites: [
             '62503267a848908b0b2102f3',
             //'62503267a848908b0b2102e3'
-        ]
+        ]        
     },{
         created_at:'2022-04-22T10:52:45.087Z',
         text:'welcome to 10 tweet',
@@ -352,3 +352,5 @@ describe('unlike tweet test',()=>{
         expect(res.body).toBeTruthy()
     });
 });
+
+

@@ -97,9 +97,6 @@ const user1=new User(
       confirmed : true,
   })
 
-
-
-
   const user6=new User({
 
       username : "samy",
@@ -111,26 +108,8 @@ const user1=new User(
       following : [],
       admin_block : {
           blocked_by_admin : true,
-          block_duration: 2220,
+          block_duration: 20,
         block_createdAt: ("2022-04-17T02:59:23.228Z")
-      },
-      isAdmin : false,
-      created_at : ("2022-04-15T02:59:23.228Z"),
-      confirmed : true,
-  })
-
-
-  const user7=new User({
-
-      username : "sada",
-      email : "bcq34@rrjidffaaoaaoq.com",
-      password : "$aa2a$08$dhhaaefCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C",
-      followers : [],
-      followers_count : 150,
-      dateOfBirth :("2022-04-15T05:21:20.200Z"),
-      following : [],
-      admin_block : {
-          blocked_by_admin : false
       },
       isAdmin : false,
       created_at : ("2022-04-15T02:59:23.228Z"),
@@ -177,7 +156,6 @@ beforeAll(async () => {
           await user4.save()
           await user5.save()
             await user6.save()
-              await user7.save()
           await  Tweet.insertMany(tweetData)
         //await mongoose.connection.dropDatabase();
      });
@@ -203,7 +181,6 @@ beforeAll(async () => {
 
            expect(res.status).toBe(200);
            expect(res.body).toBeTruthy();
-
 
   });
 
@@ -402,46 +379,3 @@ it(" Admin try to block a user who is already blocked", async () => {
 
 });
           });
-
-
-
-
-          describe("Test admin block duration",() => {
-        it(" block the user because duration entered and all requirments satisfied", async () => {
-          const signinUser = {
-              data :"admin2",
-              password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
-          }
-
-          const response = await request.post('/auth/signin')
-              .send(signinUser);
-              token=response.body.accessToken
-              id=user5._id.toString().replace(/ObjectId\("(.*)"\)/, "$1")
-              const res= await request.post("/adminBlock/create").set("x-access-token",token).query({ userid: id }).send({duration: 2})
-
-              expect(res.status).toBe(200);
-              expect(res.body).toBeTruthy();
-
-
-     });
-
-     it("send a message to admin to warn him to enter the duration in days", async () => {
-      const signinUser = {
-          data :"admin2",
-          password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
-      }
-
-      const response = await request.post('/auth/signin')
-          .send(signinUser);
-          token=response.body.accessToken
-           id=user7._id.toString().replace(/ObjectId\("(.*)"\)/, "$1")
-          const res= await request.post("/adminBlock/create").set("x-access-token",token).query({ userid: id }).send({duration: undefined})
-
-          expect(res.status).toBe(422);
-          expect(res.body.message).toBe(" You must enter a block duration in days  ")
-
-
- });
-
-
-      });

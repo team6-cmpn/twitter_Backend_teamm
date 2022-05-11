@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "devStart": "env-cmd -f ./app/config/dev.env nodemon server.js",
-    "test": "env-cmd -f ./app/config/test.env jest --verbose --coverage --runInBand --force-exit --testTimeout=15000",
+    "test": "env-cmd -f ./app/config/test.env jest --verbose --coverage --runInBand --testTimeout=15000",
     "start-gendoc": "node swagger.js",
     "test:watch": "jest --watch",
     "jsdoc": "jsdoc -c jsdoc.json"
@@ -38,8 +38,6 @@
     "mongoose": "^6.2.10",
     "nodemailer": "^6.7.3",
     "nodemon": "^2.0.15",
-    "onesignal-node": "^3.3.0",
-    "pusher": "^5.0.1",
     "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
