@@ -21,10 +21,10 @@ jobs:
     - name: Get current date # get the date of the build
       id: date
       run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
-    - name: Build the Docker image # push The image to the docker hub
-      run: docker build . --file Dockerfile --tag pierrebassily/code:backendlatest
-    - name: Docker Pushsed
-      run: docker push pierrebassily/code:backendlatest
+    # - name: Build the Docker image # push The image to the docker hub
+    #   run: docker build . --file Dockerfile --env-file ./app/config/dev.env --tag pierrebassily/code:backendlatest
+    # - name: Docker Pushsed
+    #   run: docker push pierrebassily/code:backendlatest
 
 
 
@@ -59,10 +59,10 @@ jobs:
               cd /home/ubuntu/twitter_Backend_teamm
               git pull git@github.com:team6-cmpn/twitter_Backend_teamm.git
               sudo docker-compose down -d
-              sudo docker pull pierrebassily/code:backendlatest
               sudo docker-compose up --build -d 
               EOF
       - name: Deploy in EC2
         run: cat ~/Fetch.sh | ssh staging
 
  
+# sudo docker pull pierrebassily/code:backendlatest
