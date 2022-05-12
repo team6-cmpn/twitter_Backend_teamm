@@ -34,7 +34,7 @@ const User = db.user;
 var jwt  = require("jsonwebtoken");
 var {TokenExpiredError}  = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
-const express = require("express");
+
 /**
  * 
  * @module auth
@@ -52,6 +52,7 @@ const express = require("express");
  * @global
  * @typedef {object} responseBodySignupEmail
  * @property {string} message An Email sent to your account please verify
+ * @property {string} emailtoken email token to help in resending confirmation email if failed
  */
 /**
  * This function signs up users using email and send them a verification email
@@ -61,14 +62,17 @@ const express = require("express");
  * @param {responseBodySignupEmail} res the response which is sent back to the front
  * 
  */
-exports.signup = (req, res) => {
+exports.signup = function signup(req, res) {
   // name , email or phone, date of birth
+  //validation
   const user = new User({
     name: req.body.name,
     username: req.body.username,
     email: req.body.email,
     dateOfBirth: req.body.dateOfBirth,
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: bcrypt.hashSync(req.body.password, 8),
+    created_at : new Date(),
+    verificationCode: Math.floor(100000 + Math.random() * 900000)
   });
   user.save((err, user) => {
     if (err) {
@@ -79,11 +83,15 @@ exports.signup = (req, res) => {
   });
   //generate email token
   // remove the password from jwt.sign if not redirecting
+  // sendEmail(user.email, "Confirm Email", message);
+  // res.status(200).send({ message: "An Email sent to your account please verify", emailtoken: emailToken });
+  
   jwt.sign(
     {
       "id" :user._id,
       "username" : user.username,
       "password" :user.password,
+      "email" : user.email
     },
     process.env.EMAIL_SECRET,
     {
@@ -92,57 +100,145 @@ exports.signup = (req, res) => {
     (err, emailToken) => {
       // send confirmation email
       // document.write("&lt;h2>Hello World!&lt;/h2>&lt;p>Have a nice day!&lt;/p>");
+      // const message = `&lt;p>You have a new email comfirmation request&lt;/p>
+      // &lt;p>Please click this email to confirm your email:&lt;/p>
+      // &lt;a href="${process.env.BASE_URL}/auth/confirmation/${emailToken}">click here to confirm your email&lt;/a>
+      // &lt;p>Thank you very much&lt;/p>`;
       const message = `&lt;p>You have a new email comfirmation request&lt;/p>
-      &lt;p>Please click this email to confirm your email:&lt;/p>
-      &lt;a href="${process.env.BASE_URL}/auth/confirmation/${emailToken}">click here to confirm your email&lt;/a>
+      &lt;p>Please copy this verification code to confirm your email: ${user.verificationCode}&lt;/p>
       &lt;p>Thank you very much&lt;/p>`;
       sendEmail(user.email, "Confirm Email", message);
-    
-      res.status(200).send({ message: "An Email sent to your account please verify" });
+      res.status(200).send({ message: "An Email sent to your account please verify", emailtoken: emailToken });
     },
-);
-};
+    );
+  };
+  /** 
+   * @global
+   * @typedef {object} resBodyResendEmail
+   * @property {string} message An Email is resent to your account please verify
+   * @property {string} emailtoken email token to help in resending confirmation email if failed
+   */
+  /**
+   * This function resends confirmation email if there was a problem with user mail box 
+   * 
+   * @param {*} req the request sent from the front
+   * @param {resBodyResendEmail} res the response which is sent back to the front
+   * 
+   */
+  
+  exports.resendEmail = (req, res) => {
+    try {
+      jwt.verify( req.headers["x-access-token"], process.env.EMAIL_SECRET,(err, decoded) => {
+        if (err) {
+          if (err instanceof TokenExpiredError) {
+            return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
+          }
+          return res.sendStatus(401).send({ message: "Unauthorized!" });
+        }
+        
+        const newEmailtoken = jwt.sign(
+          { 
+            "id" :decoded.id,
+            "username" : decoded.username,
+            "password" :decoded.password,
+            "email" : decoded.email 
+          }, 
+          process.env.EMAIL_SECRET, {
+            expiresIn: '1d' 
+          });
+          const newVerificationCode = Math.floor(100000 + Math.random() * 900000);
+          User.findOneAndUpdate({ _id: decoded.id },{$set: {verificationCode:newVerificationCode }},{new: true}, (err, user) => {
+            console.log(user);
+            const message = `&lt;p>You have a new email comfirmation request&lt;/p>
+            &lt;p>Please copy this verification code to confirm your email: ${newVerificationCode}&lt;/p>
+            &lt;p>Thank you very much&lt;/p>`;
+            sendEmail(decoded.email, "Confirm Email", message);
+            res.status(200).send({ message: "An Email is resent to your account please verify", emailtoken: newEmailtoken });
+          });
+          // const message = `&lt;p>You have a new email comfirmation request&lt;/p>
+          // &lt;p>Please click this email to confirm your email:&lt;/p>
+          // &lt;a href="${process.env.BASE_URL}/auth/confirmation/${newEmailtoken}">click here to confirm your email&lt;/a>
+          // &lt;p>Thank you very much&lt;/p>`;
+
+    });
+  } catch (err) {
+    res.status(500).send("error in token verification in resend email");
+  }
+
+}
+
 /**
  * @global
- * @typedef reqParamsConfirm
- * @property {string} emailtoken
+ * @typedef reqBodyConfirm
+ * @property {string} verificationCode
  *
  */
 
 /**
  * This function confirm the email and set hte user confirmed = true
- * @param {reqParamsConfirm} req 
+ * @param {reqBodyConfirm} req 
  * @param {*} res 
  */
 exports.confirmEmail = (req, res) => {
   try {
-    jwt.verify(req.params.emailtoken, process.env.EMAIL_SECRET,(err, decoded) => {
-      if (err) {
-        if (err instanceof TokenExpiredError) {
-          return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
-        }
-        return res.sendStatus(401).send({ message: "Unauthorized!" });
+    User.findOneAndUpdate({ verificationCode: req.body.verificationCode },{$set: {confirmed: true , verificationCode: null}},{new: true}, (err, doc) => {
+      //console.log(doc);
+      if(doc){
+        res.status(200).send({message :"user has been confirmed successfully"});
+        return;
+      } else {
+        res.status(401).send({message :"wrong verification code"});
+        return;
       }
-
-      User.findOneAndUpdate({ _id: decoded.id },{$set: {confirmed: true }},{new: true}, (err, doc) => {
-        //console.log(doc);
-      });
-      // remove the following if you don't want to redirect
-      const data ={
-        body:{
-          data: decoded.username,
-          password: decoded.password
-        }
-      }
-      this.signin(data,res);
-      
     });
+    
   } catch (err) {
     res.status(500).send("error in token verification in confirmation email");
   }
-
-  //return res.status(200).send({message: "user email is successfully confirmed"});
 }
+
+// /**
+//  * @global
+//  * @typedef reqParamsConfirm
+//  * @property {string} emailtoken
+//  *
+//  */
+
+// /**
+//  * This function confirm the email and set hte user confirmed = true
+//  * @param {reqParamsConfirm} req 
+//  * @param {*} res 
+//  */
+// exports.confirmEmail = (req, res) => {
+//   try {
+//     jwt.verify(req.params.emailtoken, process.env.EMAIL_SECRET,(err, decoded) => {
+//       if (err) {
+//         if (err instanceof TokenExpiredError) {
+//           return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
+//         }
+//         return res.sendStatus(401).send({ message: "Unauthorized!" });
+//       }
+
+//       User.findOneAndUpdate({ _id: decoded.id },{$set: {confirmed: true }},{new: true}, (err, doc) => {
+//         //console.log(doc);
+//       });
+//       // remove the following if you don't want to redirect
+//       const data ={
+//         body:{
+//           data: decoded.username,
+//           password: decoded.password
+//         }
+//       }
+//       //this.signin(data,res);
+//       res.status(200).send({message :"user has been confirmed successfully"});
+      
+//     });
+//   } catch (err) {
+//     res.status(500).send("error in token verification in confirmation email");
+//   }
+
+//   //return res.status(200).send({message: "user email is successfully confirmed"});
+// }
 
 /** 
  * @global
@@ -184,29 +280,36 @@ exports.signin = (req, res) => {
       var passwordIsValid = bcrypt.compareSync(
         req.body.password,
         user.password
-      );
-      // if (!passwordIsValid) {
-      //   return res.status(401).send({
-      //     accessToken: null,
-      //     message: "Wrong Password!"
-      //   });
-      // }
+        );
+        // if (!passwordIsValid) {
+          //   return res.status(401).send({
+            //     accessToken: null,
+            //     message: "Wrong Password!"
+            //   });
+            // }
       if ((!passwordIsValid) &amp; (req.body.password != user.password)) {
         return res.status(401).send({
           accessToken: null,
           message: "Wrong Password!"
         });
       }
-      var token = jwt.sign({ id: user.id }, config.secret, {
+      var token = jwt.sign({ id: user._id , isDeactivated: user.isDeactivated}, config.secret, {
         expiresIn: config.jwtExpiration // 24 hours will be modified later
       });
       // Q) should we return all of the user object ?
       // Q) the token is saved in the user schema or we will send it alone ?
       // Q) will it be like this ->
-      res.status(200).send({
-        user: user,
-        accessToken: token
-      });
+      if (user.isDeactivated){
+        return res.status(400).send({
+          message:"This account is deactivated!",
+          accessToken: token
+        });
+      }else{
+        res.status(200).send({
+          user: user,
+          accessToken: token
+        });
+      }
     });
 };</code></pre>
         </article>
@@ -218,13 +321,13 @@ exports.signin = (req, res) => {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-auth.html">auth</a></li><li><a href="module-OAuth.html">OAuth</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-admin.html">admin</a></li><li><a href="module-auth.html">auth</a></li><li><a href="module-OAuth.html">OAuth</a></li><li><a href="module-Settings.html">Settings</a></li><li><a href="module-tweets.html">tweets</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Apr 05 2022 22:37:05 GMT+0200 (Eastern European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Apr 26 2022 19:48:44 GMT+0200 (Eastern European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
