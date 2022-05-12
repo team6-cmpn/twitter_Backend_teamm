@@ -63,9 +63,17 @@ const tweetSchema = new Schema({
     },
     username:{
         type: String
-        // type: Schema.Types.ObjectId,
-        // ref: 'User'
-    },  
+    }, 
+    retweetUsers:[
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
+    retweetData:{
+        type: Schema.Types.ObjectId,
+        ref: "Tweet"
+    },
 });
 
  tweetSchema.methods.toJSON = function() {

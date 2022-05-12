@@ -88,6 +88,12 @@ const userSchema = new Schema({
   profile_image_url: String,
   default_profile: String,
   default_profile_image:  Boolean,
+  retweets:[
+    {
+      type: Schema.Types.ObjectId,
+      ref:"Tweet"
+    }
+  ],
 
 });
 
