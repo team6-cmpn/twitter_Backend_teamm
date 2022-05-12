@@ -1,8 +1,11 @@
 version: "3"
 services:
   api-server:
-    container_name: server-complexx
-    image: pierrebassily/code:backendlatest
+    container_name: server-complexb
+    build:
+      dockerfile: Dockerfile
+      context: .
+    #image: pierrebassily/code:backendlatest
     restart: always
     env_file:
       - ./app/config/dev.env
