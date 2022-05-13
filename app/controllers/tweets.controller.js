@@ -105,7 +105,9 @@ if(req.body.text)
               images: activeUser.profile_image_url
             },
             notificationContent: newtweet,
-            userRecivedNotification: followers
+            userRecivedNotification: followers,
+            created_at: new Date()
+
           })
           notification.save()
         await pusher.trigger(String(followers), 'tweet-event',notification);
@@ -244,7 +246,8 @@ exports.favorite= async(req,res) =>{
                     text: ` ${ tweetfavorites.favorite_count==1? String(userData.name) +" liked your tweet" :   numberOfUsersHandling +" liked your tweet"}`
                   },
                   notificationContent: tweetfavorites,
-                  userRecivedNotification: userRecivingNotification
+                  userRecivedNotification: userRecivingNotification,
+                  created_at: new Date()
                 })
                 notification.save()
 await User.findByIdAndUpdate(userRecivingNotification._id, {$addToSet:{notifications: notification }},{ returnDocument: 'after' })

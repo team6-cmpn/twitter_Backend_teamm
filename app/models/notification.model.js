@@ -14,8 +14,7 @@ const notificationSchema = new Schema({
   },
 
   created_at: {
-    type: Date,
-    default: new Date()
+    type: Date
   },
 
 notificationHeader:{

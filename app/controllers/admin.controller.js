@@ -102,7 +102,8 @@ notification= new Notification({
   notificationHeader:{
     text: "You are blocked by admin for "+String(duration)+" days"
   },
-  userRecivedNotification: blockedUserConfirmed
+  userRecivedNotification: blockedUserConfirmed,
+    created_at: new Date()
 })
 notification.save()
 await User.findByIdAndUpdate(blockedUserConfirmed._id, {$addToSet:{notifications: notification }},{ returnDocument: 'after' })
