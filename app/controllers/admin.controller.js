@@ -4,15 +4,10 @@ const sendEmail = require("../utils/email");
 const db = require("../models");
 const Tweet= db.tweet;
 const User = db.user;
-
+const Notification = db.notification;
+const Pusher = require('pusher');
 var {TokenExpiredError}  = require("jsonwebtoken");
 var jwt  = require("jsonwebtoken");
-
-
-
-
-
-
 
 
 
@@ -63,6 +58,17 @@ exports.createBlock= async(req,res)=>{
   let objId= req.query.userid
   let duration=req.body.duration
 
+const pusher = new Pusher({
+appId : "1406245",
+key : "a02c7f30c561968a632d",
+secret : "5908937248eea3363b9e",
+cluster : "eu",
+useTLS: true,
+    });
+
+
+
+
    await User.findById(objId).exec( async (err, blockedUser) => {
      if (err) {
        res.status(500).send({ message: err });
@@ -83,21 +89,35 @@ if(!duration){
 
 
 if (blockedUser.isAdmin==false && blockedUser.admin_block.blocked_by_admin== false && duration ){
-await User.findByIdAndUpdate(objId,{ admin_block:{ blocked_by_admin: true,block_createdAt:new Date().getTime(),block_duration: duration }},{ returnDocument: 'after' }).exec(async(err,blockedUserConfirmed)=>{
+  blockInstances=blockedUser.admin_block.blockNumTimes+1
+await User.findByIdAndUpdate(objId,{ admin_block:{ blocked_by_admin: true,block_createdAt:new Date().getTime(),block_duration: duration,blockNumTimes: blockInstances }},{ returnDocument: 'after' }).exec(async(err,blockedUserConfirmed)=>{
 
 if (err) {
   res.status(500).send({ message: err });
   return;
 }
+
+notification= new Notification({
+  notificationType: 'block',
+  notificationHeader:{
+    text: "You are blocked by admin for "+String(duration)+" days"
+  },
+  userRecivedNotification: blockedUserConfirmed
+})
+notification.save()
+await User.findByIdAndUpdate(blockedUserConfirmed._id, {$addToSet:{notifications: notification }},{ returnDocument: 'after' })
+.exec(async(err,usernotific)=>{
+  if(err){
+    res.status(500).send({ message: err });
+    return;
+  }
+  if (usernotific){
+     await pusher.trigger(String(usernotific._id), 'block-event',notification);
+}})
 res.status(200).send(blockedUserConfirmed)
 });
+}}});
 }
-
-}});
-}
-
-
-
 
 
 
@@ -179,7 +199,7 @@ exports.getStatistics=  (req,res)=>{
   let  tweetsPerYear= new Object()
   let  tweetsPerDay= new Object()
   let  usersPerDay= new Object()
-
+  let  topBlockedUsers= new Object()
 // users per week
 let  currentDate= new Date()
 let  lastWeekDate= currentDate.setDate(currentDate.getDate()-7)
@@ -265,9 +285,11 @@ User.aggregate([{$match: {created_at: {$gte: new Date(beginOfDay),$lte: new Date
 }]),
 
 
+
 /////////////////////
 
-// Add here
+User.find({}).sort({'admin_block.blockNumTimes':-1}).limit(5),
+
 ///////////////////
 
 
@@ -314,6 +336,9 @@ staatic.push(tweetsPerDay)
 
  usersPerDay.new_Users_Per_Day= results[12]
  staatic.push(usersPerDay)
+
+ topBlockedUsers.top_Five_Blocked_Users= results[13]
+ staatic.push(topBlockedUsers)
 
 res.status(200).send(staatic)
 

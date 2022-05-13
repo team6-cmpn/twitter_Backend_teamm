@@ -44,6 +44,23 @@ const userSchema = new Schema({
       ref: "User"
     }
   ],
+
+  relations: [
+    {
+      type:Schema.Types.ObjectId,
+      ref: "relations"
+    }
+  ],
+
+
+  notifications: [
+    {
+      type:Schema.Types.ObjectId,
+      ref: "Notification"
+    }
+  ],
+
+
   created_at: {
     type: Date,
     default: new Date()
@@ -58,7 +75,8 @@ const userSchema = new Schema({
   admin_block:{
   blocked_by_admin:{  type: Boolean, default: false},
   block_createdAt:{type:Date},
-  block_duration: {type:Number}
+  block_duration: {type:Number, required: true,default:0},
+  blockNumTimes: {type:Number,default:0}
   },
   isAdmin:{
     type: Boolean,
@@ -88,6 +106,12 @@ const userSchema = new Schema({
   profile_image_url: String,
   default_profile: String,
   default_profile_image:  Boolean,
+  retweets:[
+    {
+      type: Schema.Types.ObjectId,
+      ref:"Tweet"
+    }
+  ],
 
 });
 
