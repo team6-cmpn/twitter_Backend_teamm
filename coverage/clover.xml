@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1651021775448" clover="3.2.0">
-  <project timestamp="1651021775448" name="All files">
+<coverage generated="1651041733449" clover="3.2.0">
+  <project timestamp="1651041733450" name="All files">
     <metrics statements="860" coveredstatements="572" conditionals="249" coveredconditionals="124" methods="115" coveredmethods="87" elements="1224" coveredelements="783" complexity="0" loc="860" ncloc="860" packages="7" files="26" classes="26"/>
-    <package name="twitter">
+    <package name="Twitter">
       <metrics statements="29" coveredstatements="24" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="0"/>
-      <file name="app.js" path="F:\backend learning\twitter\app.js">
+      <file name="app.js" path="D:\collage\senior1 spring\software\Twitter\app.js">
         <metrics statements="29" coveredstatements="24" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="0"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -37,13 +37,13 @@
         <line num="62" count="6" type="stmt"/>
       </file>
     </package>
-    <package name="twitter.app.config">
+    <package name="Twitter.app.config">
       <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="auth.config.js" path="F:\backend learning\twitter\app\config\auth.config.js">
+      <file name="auth.config.js" path="D:\collage\senior1 spring\software\Twitter\app\config\auth.config.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="6" type="stmt"/>
       </file>
-      <file name="email.config.js" path="F:\backend learning\twitter\app\config\email.config.js">
+      <file name="email.config.js" path="D:\collage\senior1 spring\software\Twitter\app\config\email.config.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="2" count="6" type="stmt"/>
         <line num="3" count="6" type="stmt"/>
@@ -52,9 +52,9 @@
         <line num="6" count="6" type="stmt"/>
       </file>
     </package>
-    <package name="twitter.app.controllers">
+    <package name="Twitter.app.controllers">
       <metrics statements="562" coveredstatements="299" conditionals="187" coveredconditionals="77" methods="71" coveredmethods="47"/>
-      <file name="OAuth.controller.js" path="F:\backend learning\twitter\app\controllers\OAuth.controller.js">
+      <file name="OAuth.controller.js" path="D:\collage\senior1 spring\software\Twitter\app\controllers\OAuth.controller.js">
         <metrics statements="23" coveredstatements="19" conditionals="6" coveredconditionals="4" methods="4" coveredmethods="4"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -80,7 +80,7 @@
         <line num="93" count="2" type="stmt"/>
         <line num="99" count="2" type="stmt"/>
       </file>
-      <file name="admin.controller.js" path="F:\backend learning\twitter\app\controllers\admin.controller.js">
+      <file name="admin.controller.js" path="D:\collage\senior1 spring\software\Twitter\app\controllers\admin.controller.js">
         <metrics statements="81" coveredstatements="73" conditionals="19" coveredconditionals="14" methods="8" coveredmethods="7"/>
         <line num="2" count="6" type="stmt"/>
         <line num="3" count="6" type="stmt"/>
@@ -164,7 +164,7 @@
         <line num="318" count="1" type="stmt"/>
         <line num="322" count="0" type="stmt"/>
       </file>
-      <file name="auth.controller.js" path="F:\backend learning\twitter\app\controllers\auth.controller.js">
+      <file name="auth.controller.js" path="D:\collage\senior1 spring\software\Twitter\app\controllers\auth.controller.js">
         <metrics statements="58" coveredstatements="47" conditionals="18" coveredconditionals="12" methods="10" coveredmethods="10"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -225,7 +225,7 @@
         <line num="275" count="2" type="stmt"/>
         <line num="280" count="27" type="stmt"/>
       </file>
-      <file name="search.controller.js" path="F:\backend learning\twitter\app\controllers\search.controller.js">
+      <file name="search.controller.js" path="D:\collage\senior1 spring\software\Twitter\app\controllers\search.controller.js">
         <metrics statements="27" coveredstatements="25" conditionals="14" coveredconditionals="12" methods="3" coveredmethods="3"/>
         <line num="1" count="6" type="stmt"/>
         <line num="3" count="6" type="stmt"/>
@@ -255,7 +255,7 @@
         <line num="55" count="1" type="stmt"/>
         <line num="66" count="1" type="stmt"/>
       </file>
-      <file name="settings.controller.js" path="F:\backend learning\twitter\app\controllers\settings.controller.js">
+      <file name="settings.controller.js" path="D:\collage\senior1 spring\software\Twitter\app\controllers\settings.controller.js">
         <metrics statements="74" coveredstatements="59" conditionals="24" coveredconditionals="16" methods="12" coveredmethods="12"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -332,7 +332,7 @@
         <line num="320" count="1" type="stmt"/>
         <line num="326" count="1" type="stmt"/>
       </file>
-      <file name="tweets.controller.js" path="F:\backend learning\twitter\app\controllers\tweets.controller.js">
+      <file name="tweets.controller.js" path="D:\collage\senior1 spring\software\Twitter\app\controllers\tweets.controller.js">
         <metrics statements="72" coveredstatements="53" conditionals="32" coveredconditionals="19" methods="16" coveredmethods="11"/>
         <line num="2" count="6" type="stmt"/>
         <line num="3" count="6" type="stmt"/>
@@ -407,7 +407,7 @@
         <line num="205" count="1" type="stmt"/>
         <line num="214" count="1" type="stmt"/>
       </file>
-      <file name="user.controller.js" path="F:\backend learning\twitter\app\controllers\user.controller.js">
+      <file name="user.controller.js" path="D:\collage\senior1 spring\software\Twitter\app\controllers\user.controller.js">
         <metrics statements="227" coveredstatements="23" conditionals="74" coveredconditionals="0" methods="18" coveredmethods="0"/>
         <line num="2" count="6" type="stmt"/>
         <line num="3" count="6" type="stmt"/>
@@ -638,9 +638,9 @@
         <line num="392" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="twitter.app.middleware">
+    <package name="Twitter.app.middleware">
       <metrics statements="123" coveredstatements="105" conditionals="60" coveredconditionals="46" methods="17" coveredmethods="17"/>
-      <file name="authJwt.js" path="F:\backend learning\twitter\app\middleware\authJwt.js">
+      <file name="authJwt.js" path="D:\collage\senior1 spring\software\Twitter\app\middleware\authJwt.js">
         <metrics statements="77" coveredstatements="65" conditionals="44" coveredconditionals="33" methods="10" coveredmethods="10"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -720,13 +720,13 @@
         <line num="144" count="6" type="stmt"/>
         <line num="150" count="6" type="stmt"/>
       </file>
-      <file name="index.js" path="F:\backend learning\twitter\app\middleware\index.js">
+      <file name="index.js" path="D:\collage\senior1 spring\software\Twitter\app\middleware\index.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
         <line num="3" count="6" type="stmt"/>
       </file>
-      <file name="verifySignUp.js" path="F:\backend learning\twitter\app\middleware\verifySignUp.js">
+      <file name="verifySignUp.js" path="D:\collage\senior1 spring\software\Twitter\app\middleware\verifySignUp.js">
         <metrics statements="43" coveredstatements="37" conditionals="16" coveredconditionals="13" methods="7" coveredmethods="7"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -773,9 +773,9 @@
         <line num="79" count="6" type="stmt"/>
       </file>
     </package>
-    <package name="twitter.app.models">
+    <package name="Twitter.app.models">
       <metrics statements="25" coveredstatements="25" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-      <file name="index.js" path="F:\backend learning\twitter\app\models\index.js">
+      <file name="index.js" path="D:\collage\senior1 spring\software\Twitter\app\models\index.js">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -785,7 +785,7 @@
         <line num="6" count="6" type="stmt"/>
         <line num="7" count="6" type="stmt"/>
       </file>
-      <file name="tweet.model.js" path="F:\backend learning\twitter\app\models\tweet.model.js">
+      <file name="tweet.model.js" path="D:\collage\senior1 spring\software\Twitter\app\models\tweet.model.js">
         <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -797,7 +797,7 @@
         <line num="73" count="9" type="stmt"/>
         <line num="75" count="6" type="stmt"/>
       </file>
-      <file name="user.model.js" path="F:\backend learning\twitter\app\models\user.model.js">
+      <file name="user.model.js" path="D:\collage\senior1 spring\software\Twitter\app\models\user.model.js">
         <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -810,9 +810,9 @@
         <line num="100" count="6" type="stmt"/>
       </file>
     </package>
-    <package name="twitter.app.routes">
+    <package name="Twitter.app.routes">
       <metrics statements="85" coveredstatements="85" conditionals="0" coveredconditionals="0" methods="16" coveredmethods="16"/>
-      <file name="OAuth.routes.js" path="F:\backend learning\twitter\app\routes\OAuth.routes.js">
+      <file name="OAuth.routes.js" path="D:\collage\senior1 spring\software\Twitter\app\routes\OAuth.routes.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -823,7 +823,7 @@
         <line num="14" count="6" type="stmt"/>
         <line num="15" count="6" type="stmt"/>
       </file>
-      <file name="admin.routes.js" path="F:\backend learning\twitter\app\routes\admin.routes.js">
+      <file name="admin.routes.js" path="D:\collage\senior1 spring\software\Twitter\app\routes\admin.routes.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="6" type="stmt"/>
         <line num="3" count="6" type="stmt"/>
@@ -834,7 +834,7 @@
         <line num="15" count="6" type="stmt"/>
         <line num="16" count="6" type="stmt"/>
       </file>
-      <file name="adminBlock.routes.js" path="F:\backend learning\twitter\app\routes\adminBlock.routes.js">
+      <file name="adminBlock.routes.js" path="D:\collage\senior1 spring\software\Twitter\app\routes\adminBlock.routes.js">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -844,7 +844,7 @@
         <line num="11" count="20" type="stmt"/>
         <line num="14" count="6" type="stmt"/>
       </file>
-      <file name="auth.routes.js" path="F:\backend learning\twitter\app\routes\auth.routes.js">
+      <file name="auth.routes.js" path="D:\collage\senior1 spring\software\Twitter\app\routes\auth.routes.js">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -857,7 +857,7 @@
         <line num="16" count="6" type="stmt"/>
         <line num="17" count="6" type="stmt"/>
       </file>
-      <file name="search.routes.js" path="F:\backend learning\twitter\app\routes\search.routes.js">
+      <file name="search.routes.js" path="D:\collage\senior1 spring\software\Twitter\app\routes\search.routes.js">
         <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -869,7 +869,7 @@
         <line num="14" count="6" type="stmt"/>
         <line num="15" count="6" type="stmt"/>
       </file>
-      <file name="settings.routes.js" path="F:\backend learning\twitter\app\routes\settings.routes.js">
+      <file name="settings.routes.js" path="D:\collage\senior1 spring\software\Twitter\app\routes\settings.routes.js">
         <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -884,7 +884,7 @@
         <line num="19" count="6" type="stmt"/>
         <line num="20" count="6" type="stmt"/>
       </file>
-      <file name="tweets.routes.js" path="F:\backend learning\twitter\app\routes\tweets.routes.js">
+      <file name="tweets.routes.js" path="D:\collage\senior1 spring\software\Twitter\app\routes\tweets.routes.js">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -898,7 +898,7 @@
         <line num="19" count="6" type="stmt"/>
         <line num="20" count="6" type="stmt"/>
       </file>
-      <file name="user.routes.js" path="F:\backend learning\twitter\app\routes\user.routes.js">
+      <file name="user.routes.js" path="D:\collage\senior1 spring\software\Twitter\app\routes\user.routes.js">
         <metrics statements="20" coveredstatements="20" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -922,9 +922,9 @@
         <line num="25" count="6" type="stmt"/>
       </file>
     </package>
-    <package name="twitter.app.utils">
+    <package name="Twitter.app.utils">
       <metrics statements="30" coveredstatements="28" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="5"/>
-      <file name="email.js" path="F:\backend learning\twitter\app\utils\email.js">
+      <file name="email.js" path="D:\collage\senior1 spring\software\Twitter\app\utils\email.js">
         <metrics statements="11" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
         <line num="1" count="6" type="stmt"/>
         <line num="2" count="6" type="stmt"/>
@@ -938,7 +938,7 @@
         <line num="36" count="0" type="stmt"/>
         <line num="40" count="6" type="stmt"/>
       </file>
-      <file name="search.js" path="F:\backend learning\twitter\app\utils\search.js">
+      <file name="search.js" path="D:\collage\senior1 spring\software\Twitter\app\utils\search.js">
         <metrics statements="19" coveredstatements="19" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
         <line num="2" count="6" type="stmt"/>
         <line num="3" count="6" type="stmt"/>
