@@ -102,7 +102,7 @@ if(req.body.text)
             notificationType: 'tweet',
             notificationHeader:{
               text: " In case you missed "+ String(activeUser.name) +"  has tweeted",
-              images: activeUser.dummyimgurl
+              images: activeUser.profile_image_url
             },
             notificationContent: newtweet,
             userRecivedNotification: followers
@@ -224,7 +224,7 @@ exports.favorite= async(req,res) =>{
 //                                                    Message handling                                               //
 
             let favouriteListQuery=await Tweet.find({_id:tweetId}).populate('favorites').select('favorites -_id')
-            let imageArray = favouriteListQuery[0].favorites.map(({ dummyimgurl }) => dummyimgurl)
+            let imageArray = favouriteListQuery[0].favorites.map(({   profile_image_url }) =>   profile_image_url)
             let imageUrlList= imageArray.slice(Math.max(imageArray.length - 3, 0))
             let nameListQuery=await Tweet.find({_id:tweetId}).populate('favorites').select('favorites -_id')
             let nameArray = nameListQuery[0].favorites.map(({ name }) => name)

@@ -13,7 +13,6 @@ const userSchema = new Schema({
     unique: true,
     sparse: true
   },
-  dummyimgurl:{  type: String},
   username: {
     type: String,
     required: true,
