@@ -40,8 +40,8 @@ if (process.env.DB_NAME == "Twitter_db"){
     process.exit();
   });
 }
-  
-  
+
+
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to test Auth application." });
 });
@@ -55,13 +55,13 @@ require('./app/routes/search.routes')(app);
 require('./app/routes/admin.routes')(app);
 require('./app/routes/adminBlock.routes')(app);
 require('./app/routes/tweets.routes')(app);
-
+require('./app/routes/notifications.routes')(app);
 //require('./app/routes/OAuth.routesTest')(app);
 
 //export the app
 module.exports = app;
 
-// // server listening on port 8080 
+// // server listening on port 8080
 // const PORT = process.env.PORT || 8080;
 // app.listen(PORT, () => {
 //   console.log(`Server is running on port ${PORT}.`);
