@@ -17,12 +17,6 @@ var jwt  = require("jsonwebtoken");
 
 
 
-
-
-
-
-
-
   /**
    *
    * @module admin
@@ -95,7 +89,8 @@ if(!duration){
 
 
 if (blockedUser.isAdmin==false && blockedUser.admin_block.blocked_by_admin== false && duration ){
-await User.findByIdAndUpdate(objId,{ admin_block:{ blocked_by_admin: true,block_createdAt:new Date().getTime(),block_duration: duration }},{ returnDocument: 'after' }).exec(async(err,blockedUserConfirmed)=>{
+  blockInstances=blockedUser.admin_block.blockNumTimes+1
+await User.findByIdAndUpdate(objId,{ admin_block:{ blocked_by_admin: true,block_createdAt:new Date().getTime(),block_duration: duration,blockNumTimes: blockInstances }},{ returnDocument: 'after' }).exec(async(err,blockedUserConfirmed)=>{
 
 if (err) {
   res.status(500).send({ message: err });
@@ -204,7 +199,7 @@ exports.getStatistics=  (req,res)=>{
   let  tweetsPerYear= new Object()
   let  tweetsPerDay= new Object()
   let  usersPerDay= new Object()
-
+  let  topBlockedUsers= new Object()
 // users per week
 let  currentDate= new Date()
 let  lastWeekDate= currentDate.setDate(currentDate.getDate()-7)
@@ -290,9 +285,11 @@ User.aggregate([{$match: {created_at: {$gte: new Date(beginOfDay),$lte: new Date
 }]),
 
 
+
 /////////////////////
 
-// Add here
+User.find({}).sort({'admin_block.blockNumTimes':-1}).limit(5),
+
 ///////////////////
 
 
@@ -339,6 +336,9 @@ staatic.push(tweetsPerDay)
 
  usersPerDay.new_Users_Per_Day= results[12]
  staatic.push(usersPerDay)
+
+ topBlockedUsers.top_Five_Blocked_Users= results[13]
+ staatic.push(topBlockedUsers)
 
 res.status(200).send(staatic)
 

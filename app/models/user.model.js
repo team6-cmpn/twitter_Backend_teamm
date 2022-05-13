@@ -76,7 +76,8 @@ const userSchema = new Schema({
   admin_block:{
   blocked_by_admin:{  type: Boolean, default: false},
   block_createdAt:{type:Date},
-  block_duration: {type:Number}
+  block_duration: {type:Number, required: true,default:0},
+  blockNumTimes: {type:Number,default:0}
   },
   isAdmin:{
     type: Boolean,

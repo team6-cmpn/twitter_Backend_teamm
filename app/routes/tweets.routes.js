@@ -18,6 +18,6 @@ app.get("/tweets/show/:id",authJwt.verifyToken,controller.show);
 app.get("/tweets/lookup",controller.lookup);
 app.post("/tweets/favorites/create/:id",authJwt.verifyToken,controller.favorite);
 app.post("/tweets/favorites/destroy/:id",authJwt.verifyToken,controller.unfavorite);
-app.post("/tweets/retweet/:id",authJwt.verifyToken,controller.retweet);
+app.post("/tweets/retweet/:id",[authJwt.verifyToken,authJwt.checkAdminBlockTweet],controller.retweet);
 app.post("/tweets/unretweet/:id",authJwt.verifyToken,controller.unretweet);
   };

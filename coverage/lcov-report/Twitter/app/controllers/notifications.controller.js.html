@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for twitter/app/utils/search.js</title>
+    <title>Code coverage report for twitter/app/controllers/notifications.controller.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">twitter/app/utils</a> search.js</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">twitter/app/controllers</a> notifications.controller.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">36.84% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>19/19</span>
+                <span class='fraction'>7/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">36.84% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>19/19</span>
+                <span class='fraction'>7/19</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -91,63 +91,72 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">//const { searchUserByName } = require("../controllers/search.controller");
-const db = require("../models");
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const db = require("../models");
+const config = require("../config/auth.config");
+const Notification = db.notification;
 const User = db.user;
-const tweet = db.tweet;
-require("dotenv").config();
+const Tweet = db.tweet;
 &nbsp;
-exports.searchUserByName = async (name) =&gt; {
-    const userFound = await db.user.find({ name: { $regex: `${name}` , $options : 'i' } });
-    console.log(userFound);
-    return userFound;
-    
+exports.showNotifications= <span class="fstat-no" title="function not covered" >as</span>ync(req,res)=&gt;{
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >await Notification.find({userRecivedNotification:req.userId}).populate('notificationContent').sort({created_at:-1}).exec( <span class="fstat-no" title="function not covered" >as</span>ync (err, notifications) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >if (err){</span>
+<span class="cstat-no" title="statement not covered" >  res.status(500).send({ message: err });</span>
+<span class="cstat-no" title="statement not covered" >  return;</span>
 }
+<span class="cstat-no" title="statement not covered" >if (notifications){</span>
 &nbsp;
-exports.searchUserByUserName = async (username) =&gt; {
-    const userFound = await db.user.find({ username: { $regex: `${username}` , $options : 'i' } });
-    console.log(userFound);
-    return userFound;
+<span class="cstat-no" title="statement not covered" >res.status(200).send(notifications)</span>
+}})}
+&nbsp;
+&nbsp;
+&nbsp;
+exports.showFavouritesNotifications= <span class="fstat-no" title="function not covered" >as</span>ync(req,res)=&gt;{
+&nbsp;
+<span class="cstat-no" title="statement not covered" >await Notification.find({userRecivedNotification:req.userId, notificationType: 'favourite'}).populate('notificationContent').sort({created_at:-1}).exec( <span class="fstat-no" title="function not covered" >as</span>ync (err, notifications) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >if (err){</span>
+<span class="cstat-no" title="statement not covered" >  res.status(500).send({ message: err });</span>
+<span class="cstat-no" title="statement not covered" >  return;</span>
 }
-&nbsp;
-exports.searchTweetText = async (text) =&gt; {
-    const tweetFound = await tweet.find({ text: { $regex: `${text}` , $options : 'i' } }).sort( {created_at : 1} );
-    console.log(tweetFound);
-    return tweetFound; 
-}
-&nbsp;
-exports.searchMentions = async (text)=&gt;{
-    const Mentioned = await tweet.find({text : {$regex: `${text}` , $options : 'i' } });
-    return Mentioned; 
-}</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >if (notifications){</span>
+<span class="cstat-no" title="statement not covered" >res.status(200).send(notifications)</span>
+}})}
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
