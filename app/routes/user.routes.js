@@ -10,11 +10,15 @@ module.exports = function(app) {
   });
   //app.use(authJwt.verifyToken);
   app.get("/user/show/:id" , controller.userShow);
-  app.get("/user/lookup/:username" , controller.usersLookup);
+  app.get("/user/lookup/:ids" , controller.usersLookup);
   app.get("/user/followingIDs/:id" , controller.userFollowingIDs);
   app.get("/user/followingList/:id" , controller.userFollowingList);
   app.get("/user/followersList/:id" , controller.userFollowersList);
   app.get("/user/followersIDs/:id" , controller.userFollowersIDs);
+  app.get("/user/blockedIDs/:id" , controller.userBlocksIDs);
+  app.get("/user/blockedList/:id" , controller.userBlocksList);
+  app.get("/user/mutedIDs/:id" , controller.userMutedIDs);
+  app.get("/user/mutedList/:id" , controller.userMutedList);
   app.get("/friendships/lookup",[authJwt.verifyToken],controller.friendshipsLookup)
   app.get("/friendships/no_retweets/ids",[authJwt.verifyToken],controller.friendshipsLookup)
   app.get("/friendships/show/:source_id/:target_id",controller.friendshipsShow);

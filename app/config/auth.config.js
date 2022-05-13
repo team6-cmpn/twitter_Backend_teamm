@@ -1,6 +1,6 @@
 module.exports = {
     secret: "ourtwitterlittlesecretkey",
-    jwtExpiration: 1200,           // 20 min
+    jwtExpiration: 56565656,           // 20 min
     jwtRefreshExpiration: 28800,   // 8 hours
     
     // jwtExpiration: 40,           // 40 sec

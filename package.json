@@ -8,7 +8,8 @@
     "test": "env-cmd -f ./app/config/test.env jest --verbose --coverage --runInBand --force-exit --testTimeout=15000",
     "start-gendoc": "node swagger.js",
     "test:watch": "jest --watch",
-    "jsdoc": "jsdoc -c jsdoc.json"
+    "jsdoc": "jsdoc -c jsdoc.json",
+    "start": "node server.js"
   },
   "jest": {
     "testEnvironment": "node",
@@ -37,6 +38,7 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.10",
+    "multer": "^1.4.4",
     "nodemailer": "^6.7.3",
     "nodemon": "^2.0.15",
     "onesignal-node": "^3.3.0",

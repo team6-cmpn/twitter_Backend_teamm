@@ -1,12 +1,13 @@
-
 const db = require("../models");
+const {getListRelationsIDs,getUsersFromArray,getUsersRelationsList} = require("../utils/user.js")
+
 const User = db.user;
 const Relation=db.relations;
 const Tweet = db.tweet;
 require("dotenv").config();
 exports.userBoard = (req, res) => {
-    res.status(200).send({userid : req.userId});
-  };
+  res.status(200).send({userid : req.userId});
+};
 
 exports.userShow =  async (req, res)  => {
   const users = await  User.find({ _id :  req.params.id  }  );
@@ -16,97 +17,87 @@ exports.userShow =  async (req, res)  => {
   res.status(200).send({user: users});
   }
 
-  exports.usersLookup =  async (req, res) =>{
-    const users = [];
-    //console.log(req.params.username);
-    const usernamesArray= req.params.username.split(",");
-    
-    for (let i = 0; i < usernamesArray.length; i++) {
-      const user = await User.find({ username :  usernamesArray[i] });
-      if (user != null)
-      {
-      users.push(user);
-      }
-    }
-    if (users.length==0){
-      res.status(404).send({ message: "User Not found." });
-    }else{
+exports.usersLookup =  async (req, res) =>{
+  //console.log(req.params.username);
+  const userIDsArray= req.params.ids.split(",");
+  const users= await getUsersFromArray(userIDsArray);
+  if (users.length==0 | users=="user not found"){
+    res.status(404).send({ message: "Users Not found." });
+  }else{
     res.status(200).send({user: users});
-    }
-    //res.status(200).send("ok");
-
-    // users = await  User.find({ username :  req.params.username  });
   }
-
-  exports.userFollowingIDs =  async (req, res) =>{
-    const following = [];
-    const user = await  User.findOne({ _id :  req.params.id  }  );
-    if (user != null)
-    {
-    console.log(user.relations[0]);
-    for(i=0;i<user.relations.length;i++){
-      const relation = await Relation.findOne({ _id :  user.relations[i]  });
-      console.log(relation);
-      if (relation.following==true){
-        following.push(relation.user_id);
-      }
-    }
-    if (following.length==0){
-      res.status(400).send({ message: "no following list." });
-    }
-    else{
-    res.status(200).send(following);
-    }
-  }
-    else if (user == null){
-      res.status(404).send({ message: "User Not found." });
-    }
+  //res.status(200).send("ok");
+  
+  // users = await  User.find({ username :  req.params.username  });
 }
 
-  exports.userFollowingList =  async (req, res) =>{
-    const following = [];
-    const user = await  User.findOne({ _id :  req.params.id  }  );
-    console.log(user.relations[0]);
-    for(i=0;i<user.relations.length;i++){
-      const relation = await Relation.findOne({ _id :  user.relations[i]  });
-      console.log(relation);
-      if (relation.following==true){
-        const followingUser = await User.findOne({ _id :  relation.user_id  });
-        following.push(followingUser);
-      }
-    }
-    res.status(200).send(following);
-  }
 
+exports.userBlocksIDs =  async (req, res) =>{
+  const blocks = await getListRelationsIDs(req.params.id, "blocked");
+  if (blocks=="user not found")
+  {
+    res.status(404).send(blocks);
+  }
+  res.status(200).send(blocks);
+}
 
 exports.userFollowersIDs =  async (req, res) =>{
-  const followers = [];
-    const user = await  User.findOne({ _id :  req.params.id  }  );
-    console.log(user.relations[0]);
-    for(i=0;i<user.relations.length;i++){
-      const relation = await Relation.findOne({ _id :  user.relations[i]  });
-      console.log(relation);
-      if (relation.follower==true){
+  const followers = await getListRelationsIDs(req.params.id, "followers");
+  if (followers=="user not found")
+  {
+    res.status(404).send(followers);
+  }
+  res.status(200).send(followers);
+}
+exports.userFollowingIDs =  async (req, res) =>{
+  const following = await getListRelationsIDs(req.params.id, "following");
+  if (following=="user not found")
+  {
+    res.status(404).send(following);
+  }
+  res.status(200).send(following);
+}  
 
-        followers.push(relation.user_id);
-      }
-    }
-    res.status(200).send(followers);
+exports.userFollowingList =  async (req, res) =>{
+  const following = await getUsersRelationsList(req.params.id, "following");
+  if(following=="user not found"){
+    res.status(404).send(following);
+  }
+  res.status(200).send(following);
 }
 
+
+
 exports.userFollowersList =  async (req, res) =>{
-  const followers = [];
-    const user = await  User.findOne({ _id :  req.params.id  }  );
-    console.log(user.relations[0]);
-    for(i=0;i<user.relations.length;i++){
-      const relation = await Relation.findOne({ _id :  user.relations[i]  });
-      console.log(relation);
-      if (relation.follower==true){
-        const followerUser = await User.findOne({ _id :  relation.user_id  });
-        followers.push(followerUser);
-      }
-    }
-    res.status(200).send(followers);
+  const followers = await getUsersRelationsList(req.params.id, "followers");
+  if(followers=="user not found"){
+    res.status(404).send(followers);
+  }
+  res.status(200).send(followers);
+}
+
+exports.userBlocksList =  async (req, res) =>{
+  const blocks = await getUsersRelationsList(req.params.id, "blocked");
+  if(blocks=="user not found"){
+    res.status(404).send(blocks);
+  }
+  res.status(200).send(blocks);
+}
+
+exports.userMutedIDs =  async (req, res) =>{
+  const muted = await getListRelationsIDs(req.params.id, "muted");
+  if(muted=="user not found"){
+    res.status(404).send(muted);
+  }
+  res.status(200).send(muted);
+}
+
+exports.userMutedList = async (req, res) =>{
+  const muted = await getUsersRelationsList(req.params.id, "muted");
+  if(muted=="user not found"){
+    res.status(404).send(muted);
+  }
+  res.status(200).send(muted);
 }
 
 exports.friendshipsLookup =  async (req, res) =>{
@@ -190,6 +181,9 @@ exports.friendshipsCreate = async (req, res) =>{
   found=0; // 0 not found , 1 found 
   const user = await  User.findOne({ _id :  req.userId});
   const relations = user.relations;
+  console.log( user); 
+  if (relations)
+  {
   for (i = 0; i < relations.length; i++) {
     const relation = await Relation.findOne({ _id :  relations[i]  });
     if (relation != null &&(relation.user_id==req.params.id)&&(relation.following==false)){
@@ -204,10 +198,9 @@ exports.friendshipsCreate = async (req, res) =>{
       return;
     }
   }
+}
   if (found==0){
-    const targetUser= await User.findOne({ 
-      //_id :  req.params.target_id,
-      username: "ola"  });
+    const targetUser= await User.findOne({ _id :  req.params.id });
     console.log(targetUser);
     const relation = new Relation({
       user_id: targetUser._id,
@@ -230,6 +223,7 @@ exports.friendshipsCreate = async (req, res) =>{
     });
     await relation.save();
     await User.updateOne({ _id :  user._id  }, { $push: { relations: relation._id } });
+    console.log(user);
     const receiveRlation = new Relation({
       user_id: user.id,
       username: user.username,
@@ -330,35 +324,6 @@ exports.userUpdateProfile = async (req, res) =>{
 }
 
 
-exports.userBlocksIDs =  async (req, res) =>{
-  const blocks = [];
-    const user = await  User.findOne({ _id :  req.userId  }  );
-    console.log(user.relations[0]);
-    for(i=0;i<user.relations.length;i++){
-      const relation = await Relation.findOne({ _id :  user.relations[i]  });
-      console.log(relation);
-      if (relation.blocked==true){
-
-        blocks.push(relation.user_id);
-      }
-    }
-    res.status(200).send(blocks);
-}
-
-exports.userBlocksList =  async (req, res) =>{
-  const blocks = [];
-    const user = await  User.findOne({ _id :  req.userId  }  );
-    console.log(user.relations[0]);
-    for(i=0;i<user.relations.length;i++){
-      const relation = await Relation.findOne({ _id :  user.relations[i]  });
-      console.log(relation);
-      if (relation.blocked==true){
-        const blockedUser = await User.findOne({ _id :  relation.user_id  });
-        blocks.push(blockedUser);
-      }
-    }
-    res.status(200).send(blocks);
-}
 
 exports.userTweetsList = async (req, res) =>{
 
@@ -392,6 +357,7 @@ exports.userLikedTweetsList = async(req, res) =>{
     return;
   }
 }
+
 
 
 

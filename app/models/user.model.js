@@ -31,19 +31,6 @@ const userSchema = new Schema({
     type: String,
     //required: true
   },
-  followers: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User"
-    }
-  ],
-  following: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User"
-    }
-  ],
-
   relations: [
     {
       type:Schema.Types.ObjectId,
@@ -81,7 +68,7 @@ const userSchema = new Schema({
     type: Boolean,
     default:false
   },
-  favorites:[
+  likes:[
     {
       type: Schema.Types.ObjectId,
       ref:"Tweet"
