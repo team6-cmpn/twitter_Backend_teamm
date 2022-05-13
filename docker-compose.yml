@@ -13,7 +13,7 @@ services:
       - /server/node_modules
     ports:
       - "8080:8080"
-      - "587":"587"
+      - "587:587"
     networks:
       - mern-app
     depends_on:
