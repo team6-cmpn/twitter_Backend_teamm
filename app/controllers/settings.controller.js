@@ -49,6 +49,9 @@ exports.changePassword = (req, res) => {
       if (!user) {
         return res.status(404).send({ message: "User Not found." });
       }
+      if (!user.password){
+        return res.status(400).send({ message: "This user signed up by google account and has no twitter password" });
+      }
     //   if (!user.confirmed){
     //     return res.status(400).send({message:"please confirm your email before login"});
     //   }
