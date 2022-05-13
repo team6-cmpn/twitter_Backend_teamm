@@ -1,5 +1,6 @@
 const { verifySignUp } = require("../middleware");
 const controller = require("../controllers/auth.controller");
+const { verify } = require("jsonwebtoken");
 
 module.exports = function(app) {
     
@@ -11,9 +12,10 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/auth/signup", [verifySignUp.checkExistingUsernameOrEmail,verifySignUp.checkValidEmail, verifySignUp.checkStrenghtOfPassword], controller.signup);
+  app.post("/auth/signup", [verifySignUp.checkExistingUsernameOrEmail,verifySignUp.checkValidEmail, verifySignUp.checkStrenghtOfPassword, verifySignUp.checkValidPhoneNumber], controller.signup);
   app.post("/auth/signin", controller.signin);
   app.post("/auth/resendEmail" ,controller.resendEmail);
+  app.post("/auth/resendSMS" ,controller.resendSMS);
   app.post("/auth/confirmation" ,controller.confirmEmail);
   //app.get("/auth/confirmation/:emailtoken" ,controller.confirmEmail);
   //app.post("/auth/signup-google", controller.singupGoogle) 

@@ -1,6 +1,7 @@
 require("dotenv").config();
 const config = require("../config/auth.config");
 const sendEmail = require("../utils/email");
+const {sendSMS} = require("../utils/sms");
 const {signin} = require("./auth.controller");
 const db = require("../models");
 const User = db.user;
@@ -98,12 +99,14 @@ exports.sendForgetPasswordEmail = (req, res) => {
     const user = new User({
       //id: req.body.id,
       username: req.body.username,
-      email: req.body.email,
+      data: req.body.data,
+      //email: req.body.email,
     });
 
     const newVerificationCode = Math.floor(100000 + Math.random() * 900000);
     User.findOneAndUpdate({
-        email: user.email
+      $or:[ {email: req.body.data},{ phoneNumber: req.body.data}]
+      //email: req.body.email
       },
       {$set: {verificationCode:newVerificationCode }},{new: true})
       .exec((err, foundUser) => {
@@ -115,11 +118,24 @@ exports.sendForgetPasswordEmail = (req, res) => {
           res.status(404).send({ message: "user not found" });
           return;
         }
+        if (isNaN(req.body.data.substring(1))){
+          const message = `please copy this confirmation code to your account to reset your password ${newVerificationCode}`;
+          sendEmail(foundUser.email, "Forget Password Email", message);
         
-        const message = `${newVerificationCode}`;
-        sendEmail(user.email, "Forget Password Email", message);
-      
-        res.status(200).send({ message: "An Email sent to your account please click on it to reset your password" });
+          res.status(200).send({ message: "An Email sent to your account please click on it to reset your password" });
+       
+        }else {
+          const from = "Twitter Team"
+          const to = req.body.data
+          const text = `please copy this confirmation code to your account to reset your password ${newVerificationCode} Thank you very much`;
+          const isSent = sendSMS(from, to, text);
+          console.log(isSent);
+          if(isSent){
+            res.status(200).send({ message: "A verification code was sent to your mobile phone please click on it to reset your password"});
+          }else{
+            res.status(500).send({ message: `sms didn't send error`});
+          }
+        }
       //   jwt.sign(
       //     {
       //       "id" :foundUser._id,
