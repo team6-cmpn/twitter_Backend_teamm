@@ -68,7 +68,7 @@ const userSchema = new Schema({
     type: Boolean,
     default:false
   },
-  likes:[
+  favorites:[
     {
       type: Schema.Types.ObjectId,
       ref:"Tweet"
