@@ -13,7 +13,7 @@ const { tweet } = require('../models');
 const user1=new User(
     {
         username : "essam ahmed",
-        id:'62503267a848908b0b2102e3',
+        _id:'62503267a848908b0b2102e3',
         email : "bcq34@frjidffooq.com",
         password : "$2afbg$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C",
         followers : [],
@@ -35,7 +35,7 @@ const user1=new User(
     const user2=new User({
 
         username : "admin2",
-        id:"62503267a848908b0b2102f3",
+        _id:"62503267a848908b0b2102f3",
         email : "bcq34@jidffooq.com",
         password : "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C",
         followers : [],

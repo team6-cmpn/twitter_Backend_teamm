@@ -55,7 +55,7 @@ const tweetSchema = new Schema({
     favorites:[
         {
           type: Schema.Types.ObjectId,
-          ref:"Tweet"
+          ref:"User"
         }
       ],
     mention: {
@@ -63,7 +63,7 @@ const tweetSchema = new Schema({
     },
     username:{
         type: String
-    }, 
+    },
     retweetUsers:[
         {
             type: Schema.Types.ObjectId,

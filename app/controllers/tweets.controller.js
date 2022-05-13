@@ -10,6 +10,8 @@ var {TokenExpiredError}  = require("jsonwebtoken");
 var jwt  = require("jsonwebtoken");
 const { tweet, user } = require("../models");
 const { findOneAndDelete, findByIdAndUpdate } = require("../models/user.model");
+const {getListRelations} = require("../utils/user.js");
+
 //const { post } = require("../../app");
 
 
@@ -87,28 +89,30 @@ if(req.body.text)
         User.findById(req.userId, async function (err, activeUser) {
 
 
-console.log(activeUser.followers[0])
-console.log(activeUser._id)
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                           send notification to followers when tweeting                   //
+
+
+
+        followers=await getListRelations(activeUser._id,"followers")
+        console.log(followers)
+        if(followers.length>0){
           notification= new Notification({
             notificationType: 'tweet',
-            notificationHeader: " In case you missed "+ String(activeUser.name) +"  has tweeted" ,
+            notificationHeader:{
+              text: " In case you missed "+ String(activeUser.name) +"  has tweeted",
+              images: activeUser.dummyimgurl
+            },
             notificationContent: newtweet,
-            user: activeUser.followers
+            userRecivedNotification: followers
           })
           notification.save()
+        await pusher.trigger(String(followers), 'tweet-event',notification);
+        }
 
-//var channel= activeUser.followers.map(function(ids){return String(ids)})
- /*
-channels=[]
-  for (let id of activeUser.followers){
-    channels.push(String(id))
-  }
-  console.log(channels)
-  */
-        await pusher.trigger(String(activeUser.followers), 'tweet-event',{header:notification.notificationHeader, content: notification.notificationContent});
-
-
+//                                                                                                          //
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
         })
         res.status(201).send(newtweet);
 
@@ -202,46 +206,62 @@ exports.favorite= async(req,res) =>{
       await User.findByIdAndUpdate(userId,{$push:{favorites: tweetId}},{new: true}).exec(async (err,userfavorites)=>{
         if(userfavorites){
           //res.status(200).send("success! liked");
+
           tweet.findById(tweetId).exec(async (err,tweetdata)=>{
             if(err){
               res.status(400).send({message: err});
             }
-            //insert tweet likes 
+            //insert tweet likes
             if(!tweetdata.favorites.includes(userId)){
 
-              await Tweet.findByIdAndUpdate(tweetId,{$push:{favorites: userId}},{new: true})
-              tweetdata.favorite_count = tweetdata.favorites.length+1;
-              /////////////////////////////////////////////////
-            //  userRecivingNotification = User.findById(tweetdata.user)
-            //  console.log(userRecivingNotification)
-            User.findById(tweetdata.user, async function (err, userRecivingNotification) {
-              console.log(tweetdata)
-              console.log(userRecivingNotification.username)
-              console.log(userData.name)
+              await Tweet.findByIdAndUpdate(tweetId,{$push:{favorites: userId}},{new: true}).exec(async (err,tweetfavorites)=>{
+                if(tweetfavorites){
+              tweetfavorites.favorite_count = tweetfavorites.favorites.length;
 
-              notification= new Notification({
-                notificationType: 'favourite',
-                notificationHeader:  String(userData.name) +" liked your tweet",
-                notificationContent: tweetdata,
-                user: userRecivingNotification
-              })
-              notification.save()
 
-        await pusher.trigger(String(userRecivingNotification._id), 'favourite-event',{header:notification.notificationHeader, content: notification.notificationContent});
+            }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                    Message handling                                               //
+
+            let favouriteListQuery=await Tweet.find({_id:tweetId}).populate('favorites').select('favorites -_id')
+            let imageArray = favouriteListQuery[0].favorites.map(({ dummyimgurl }) => dummyimgurl)
+            let imageUrlList= imageArray.slice(Math.max(imageArray.length - 3, 0))
+            let nameListQuery=await Tweet.find({_id:tweetId}).populate('favorites').select('favorites -_id')
+            let nameArray = nameListQuery[0].favorites.map(({ name }) => name)
+            let nameArrayHandle= nameArray.slice(0,2)
+            numberOfUsersHandling=tweetfavorites.favorite_count>2  ?   String(userData.name)+ " and "+String(tweetfavorites.favorite_count-1)+ " others" : String(nameArrayHandle[1])+ " and"+String(nameArrayHandle[0])
+
+//                                                                                                                    //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+             User.findById(  tweetfavorites.user, async function (err, userRecivingNotification) {
+              if(userRecivingNotification._id != req.userId){
+
+                notification= new Notification({
+                  notificationType: 'favourite',
+                  notificationHeader: {
+                    images:imageUrlList,
+                    text: ` ${ tweetfavorites.favorite_count==1? String(userData.name) +" liked your tweet" :   numberOfUsersHandling +" liked your tweet"}`
+                  },
+                  notificationContent: tweetfavorites,
+                  userRecivedNotification: userRecivingNotification
+                })
+                notification.save()
+await User.findByIdAndUpdate(userRecivingNotification._id, {$addToSet:{notifications: notification }},{ returnDocument: 'after' })
+                .exec(async(err,usernotific)=>{
+                  if(err){
+                    res.status(500).send({ message: err });
+                    return;
+                  }
+                  if (usernotific){
+                     await pusher.trigger(String(usernotific._id), 'favourite-event',notification);
+                }})
+              }
 
             })
+              res.status(200).send({"favorite_count":tweetfavorites.favorite_count});
+})}})}})}
 
-
-              ///////////////////////////////////////////////////
-
-              console.log(tweetdata.favorites)
-              //var count = tweetdata.favorite_count;
-              res.status(200).send({"favorite_count":tweetdata.favorite_count});
-            }
-          })
-        }
-      })
-    }
     else{
       res.send({message:"tweet already liked"})
       //console.log('tweet already liked')
@@ -297,7 +317,7 @@ exports.retweet= async(req,res)=>{
     if(!userData.retweets.includes(tweetId)){
         // await Tweet.create({user: userId, retweetData: tweetId}).exec(async(err,retweet)=>{
         //   if (err){
-        //     
+        //
         //   }res.status(400).send({message: err});
         tweet.findOne({_id: req.params.id}).exec(async (err,requiredTweet)=>{
           if (err){
@@ -320,16 +340,16 @@ exports.retweet= async(req,res)=>{
                     res.status(400).send({message: err});
                   }
                 //console.log(tweetdata)
-                //insert tweet retweets  
+                //insert tweet retweets
                 if(!tweetdata.retweetUsers.includes(userId)){
                   await Tweet.findByIdAndUpdate(tweetId,{$push:{retweetUsers: userId}},{new: true}).exec(async(err,retweetedTweet)=>{
                     //console.log(retweetedTweet)
                     retweetedTweet.retweet_count = tweetdata.retweetUsers.length+1;
                     //console.log(tweetdata.retweet_count)
-                    res.status(200).send(retweetedTweet)  
+                    res.status(200).send(retweetedTweet)
                   });
 
-                } 
+                }
                 //res.status(200).send(tweetdata)
                 })
 
@@ -355,7 +375,7 @@ exports.unretweet= async(req,res)=>{
     if(userData.retweets.includes(tweetId)){
         // await Tweet.create({user: userId, retweetData: tweetId}).exec(async(err,retweet)=>{
         //   if (err){
-        //     
+        //
         //   }res.status(400).send({message: err});
         tweet.findOne({_id: req.params.id}).exec(async (err,requiredTweet)=>{
           if (err){
@@ -378,16 +398,16 @@ exports.unretweet= async(req,res)=>{
                     res.status(400).send({message: err});
                   }
                 //console.log(tweetdata)
-                //insert tweet retweets  
+                //insert tweet retweets
                 if(tweetdata.retweetUsers.includes(userId)){
                   await Tweet.findByIdAndUpdate(tweetId,{$pull:{retweetUsers: userId}},{new: true}).exec(async(err,retweetedTweet)=>{
                     //console.log(retweetedTweet)
                     retweetedTweet.retweet_count = tweetdata.retweetUsers.length-1;
                     //console.log(tweetdata.retweet_count)
-                    res.status(200).send(retweetedTweet)  
+                    res.status(200).send(retweetedTweet)
                   });
 
-                } 
+                }
                 //res.status(200).send(tweetdata)
                 })
 
@@ -395,7 +415,7 @@ exports.unretweet= async(req,res)=>{
             });
           }
         });
-        
+
       }
       else{
         res.send({message:"tweet already unretweeted"})

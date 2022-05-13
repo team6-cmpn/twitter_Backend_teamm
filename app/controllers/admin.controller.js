@@ -101,14 +101,27 @@ if (err) {
   res.status(500).send({ message: err });
   return;
 }
-////
 
+notification= new Notification({
+  notificationType: 'block',
+  notificationHeader:{
+    text: "You are blocked by admin for "+String(duration)+" days"
+  },
+  userRecivedNotification: blockedUserConfirmed
+})
+notification.save()
+await User.findByIdAndUpdate(blockedUserConfirmed._id, {$addToSet:{notifications: notification }},{ returnDocument: 'after' })
+.exec(async(err,usernotific)=>{
+  if(err){
+    res.status(500).send({ message: err });
+    return;
+  }
+  if (usernotific){
+     await pusher.trigger(String(usernotific._id), 'block-event',notification);
+}})
 res.status(200).send(blockedUserConfirmed)
-
 });
-}
-
-}});
+}}});
 }
 
 

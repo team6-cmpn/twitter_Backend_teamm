@@ -13,6 +13,7 @@ const userSchema = new Schema({
     unique: true,
     sparse: true
   },
+  dummyimgurl:{  type: String},
   username: {
     type: String,
     required: true,
@@ -44,6 +45,23 @@ const userSchema = new Schema({
       ref: "User"
     }
   ],
+
+  relations: [
+    {
+      type:Schema.Types.ObjectId,
+      ref: "relations"
+    }
+  ],
+
+
+  notifications: [
+    {
+      type:Schema.Types.ObjectId,
+      ref: "Notification"
+    }
+  ],
+
+
   created_at: {
     type: Date,
     default: new Date()

@@ -13,9 +13,14 @@ const notificationSchema = new Schema({
       required: true
   },
 
+  created_at: {
+    type: Date,
+    default: new Date()
+  },
+
 notificationHeader:{
-  type: String,
-  required: true
+images:  [{type: String}],
+text: String
 },
 
 notificationContent:{
@@ -23,17 +28,13 @@ notificationContent:{
   ref:"Tweet"
 },
 
-user: [
+userRecivedNotification: [
   {
     type: Schema.Types.ObjectId,
     ref: "User"
   }
 ],
 
-tweet: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-},
 
 })
 
