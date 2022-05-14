@@ -1,4 +1,4 @@
-const { searchUserByName } = require("../controllers/search.controller");
+//const { searchUserByName } = require("../controllers/search.controller");
 const { relations } = require("../models");
 const db = require("../models");
 const User = db.user;

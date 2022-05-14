@@ -57,6 +57,7 @@ require('./app/routes/adminBlock.routes')(app);
 require('./app/routes/tweets.routes')(app);
 require('./app/routes/notifications.routes')(app);
 require('./app/routes/image.routes')(app);
+require('./app/routes/bookmarks.routes')(app);
 //require('./app/routes/OAuth.routesTest')(app);
 
 //export the app

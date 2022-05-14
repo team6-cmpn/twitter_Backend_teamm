@@ -10,13 +10,12 @@ module.exports = function(app) {
     );
     next();
   });
-    app.get("/search/top", controller.searchTop);
-    app.get("/search/people", controller.searchPeople);
-    app.get("/search/latest", controller.seachLatest);
-    //app.get("/search/latest", controller.searchLatest);
-//   app.post("/settings/changePassword",[authJwt.verifyToken, verifySignUp.checkStrenghtOfPassword],controller.changePassword);
-//   app.post("/settings/forgetPassword",controller.sendForgetPasswordEmail);
-//   app.get("/settings/forgetPassword/:emailtoken" ,controller.receiveForgetPasswordEmail);
-//   app.post("/settings/resetForgetPassword",[authJwt.verifyToken,verifySignUp.checkStrenghtOfPassword],controller.resetForgetPassword);
+    app.get("/search/top",[authJwt.verifyToken], controller.searchTop);
+    app.get("/search/people",[authJwt.verifyToken], controller.searchPeople);
+    app.get("/search/latest",[authJwt.verifyToken], controller.seachLatest);
+    app.get("/search/photos",[authJwt.verifyToken], controller.searchPhotos);
+    app.put("/search/saveUser/:id",[authJwt.verifyToken], controller.saveSearchedUser);
+    app.delete("/search/deleteSaved/:id",[authJwt.verifyToken],controller.deleteSearch);
+    app.get("/search/getsaved",[authJwt.verifyToken], controller.getSavedSearch);
   
 };
