@@ -608,6 +608,9 @@
           },
           "403": {
             "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -626,6 +629,11 @@
             "name": "tweetsCount",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "x-access-token",
+            "in": "header",
             "type": "string"
           }
         ],
@@ -1689,28 +1697,14 @@
       "post": {
         "description": "",
         "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "409" : {
-            "description": "error in uploading image"
-          }
-        }
+        "responses": {}
       }
     },
     "/image/tweet/upload": {
       "post": {
         "description": "",
         "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "409" : {
-            "description": "error in uploading image"
-          }
-        }
+        "responses": {}
       }
     }
   }
