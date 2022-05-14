@@ -17,5 +17,6 @@ module.exports = function(app) {
     app.put("/search/saveUser/:id",[authJwt.verifyToken], controller.saveSearchedUser);
     app.delete("/search/deleteSaved/:id",[authJwt.verifyToken],controller.deleteSearch);
     app.get("/search/getsaved",[authJwt.verifyToken], controller.getSavedSearch);
+    app.delete("/search/deleteAllSaved",[authJwt.verifyToken], controller.deleteAllSearch);
   
 };

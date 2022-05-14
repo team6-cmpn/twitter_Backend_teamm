@@ -115,3 +115,32 @@ exports.getBookmarks=async(req,res)=>{
    console.log(bookmarks);
    res.status(200).send({message:"done",bookmarks:bookmarks});
 }
+
+
+/**
+ * 
+ * @module bookmarks
+ */
+
+/**
+ * @global
+ * @typedef {object} reqBodyRemoveBookmarks
+ * @property {string} token the access token
+ * @property {string} tweet_id the id of the tweet to be removed from bookmarks 
+
+ */
+/** 
+ * This function removes all tweets from the bookmarks if it was saved before by the user 
+ * 
+ * 
+ * @param {reqBodyRemoveBookmark} req request sent from the front
+ * 
+ */
+exports.deleteAllBookmarks=async(req,res)=>{
+    const user=await User.findOne({_id:req.userId});
+    const bookmarks= user.bookMarks;
+    console.log(bookmarks);
+   // await User.updateOne({_id:req.userId },{ $set: {bookMarks : {_id : bookmarks}} });
+    await User.updateOne({_id:req.userId},{$set:{bookMarks:[]}});
+    res.status(200).send({message:"done"});
+}

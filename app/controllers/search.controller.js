@@ -368,3 +368,41 @@ exports.getSavedSearch=async(req,res)=>{
     const savedText=user.savedText;
     res.status(200).send({message:"done",savedUsers:savedUser , savedText:savedText});
 }
+
+
+/**
+ * 
+ * @module search
+ */
+
+/**
+ * @global
+ * @typedef {object} reqBodyDeleteAllSearch
+ * @property {string} token the access token
+ * @property {string} text the id of the user/text to delete   
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyDeleteAllSearch
+ * @property {object}  Deleted  represents the deleted searches  
+ */
+/** 
+ * This function deletes a saved search   
+ * 
+ * @param {reqBodyDeleteAllSearch} req request sent from the front
+ * @param {responseBodyDeleteAllSearch} res response sent to the front
+ * 
+ */
+exports.deleteAllSearch=async(req,res)=>{
+    const user=await User.findOne({_id:req.userId});
+    const savedUser=user.savedUsers;
+    const savedText=user.savedText;
+    if(savedText.length>0){
+        await User.updateOne({_id:req.userId},{$set:{savedText:[]}});
+    }
+    if(savedUser.length>0){
+        await User.updateOne({_id:req.userId},{$set:{savedUsers:[]}});
+    }
+    res.status(200).send({message:"done",savedUsers:savedUser , savedText:savedText});
+}

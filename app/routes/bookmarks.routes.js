@@ -13,5 +13,6 @@ module.exports = function(app) {
     app.put("/bookmarks/add/:id",[authJwt.verifyToken], controller.addBookmark);
     app.delete("/bookmarks/remove/:id",[authJwt.verifyToken], controller.removeBookmark);
     app.get("/bookmarks/get",[authJwt.verifyToken], controller.getBookmarks);
+    app.delete("/bookmarks/removeAll",[authJwt.verifyToken], controller.deleteAllBookmarks);
   
 };
