@@ -31,6 +31,14 @@ const userSchema = new Schema({
     type: String,
     //required: true
   },
+  savedText:[
+    {
+      type: String,
+    
+    }
+  ],
+  savedUsers:Array,
+  bookMarks: Array ,
   relations: [
     {
       type:Schema.Types.ObjectId,

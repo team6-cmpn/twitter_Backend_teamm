@@ -51,6 +51,7 @@ const tweetSchema = new Schema({
         ref: 'Extended_Entities'
     },
     favorited: Boolean,
+    hasImage: Boolean,
     retweeted: Boolean,
     favorites:[
         {
