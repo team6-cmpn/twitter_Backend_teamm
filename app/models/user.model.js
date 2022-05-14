@@ -45,16 +45,12 @@ const userSchema = new Schema({
       ref: "relations"
     }
   ],
-
-
   notifications: [
     {
       type:Schema.Types.ObjectId,
       ref: "Notification"
     }
   ],
-
-
   created_at: {
     type: Date,
     default: new Date()

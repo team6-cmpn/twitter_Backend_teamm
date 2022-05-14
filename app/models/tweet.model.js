@@ -52,6 +52,9 @@ const tweetSchema = new Schema({
     },
     favorited: Boolean,
     hasImage: Boolean,
+    imageUrl: {
+        type: String
+    },
     retweeted: Boolean,
     favorites:[
         {
@@ -74,6 +77,10 @@ const tweetSchema = new Schema({
     retweetData:{
         type: Schema.Types.ObjectId,
         ref: "Tweet"
+    },
+    mentionedUser:{
+        type: Schema.Types.ObjectId,
+        ref: 'User'    
     },
 });
 

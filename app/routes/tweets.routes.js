@@ -15,9 +15,11 @@ module.exports = function(app) {
 app.post("/tweets/update",[authJwt.verifyToken,authJwt.checkAdminBlockTweet],controller.update);
 app.post("/tweets/destroy/:id",authJwt.verifyToken,controller.destroyTweet);
 app.get("/tweets/show/:id",authJwt.verifyToken,controller.show);
-app.get("/tweets/lookup",controller.lookup);
+app.get("/tweets/lookup/:page/:tweetsCount",controller.lookup);
 app.post("/tweets/favorites/create/:id",authJwt.verifyToken,controller.favorite);
 app.post("/tweets/favorites/destroy/:id",authJwt.verifyToken,controller.unfavorite);
 app.post("/tweets/retweet/:id",[authJwt.verifyToken,authJwt.checkAdminBlockTweet],controller.retweet);
 app.post("/tweets/unretweet/:id",authJwt.verifyToken,controller.unretweet);
-  };
+app.get("/tweets/retweeters/:id",controller.retweeters);
+app.get("/tweets/favoritelist/:id",controller.favoriteList);  
+};
