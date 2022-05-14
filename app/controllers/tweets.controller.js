@@ -10,7 +10,7 @@ var {TokenExpiredError}  = require("jsonwebtoken");
 var jwt  = require("jsonwebtoken");
 const { tweet, user } = require("../models");
 const { findOneAndDelete, findByIdAndUpdate } = require("../models/user.model");
-const {getListRelations} = require("../utils/user.js");
+const {getListRelationsIDs} = require("../utils/user.js");
 
 //const { post } = require("../../app");
 
@@ -95,7 +95,7 @@ if(req.body.text)
 
 
 
-        followers=await getListRelations(activeUser._id,"followers")
+        followers=await getListRelationsIDs(activeUser._id,"followers")
         console.log(followers)
         if(followers.length>0){
           notification= new Notification({
