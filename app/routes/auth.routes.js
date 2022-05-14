@@ -12,7 +12,7 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/auth/signup", [verifySignUp.checkExistingUsernameOrEmail,verifySignUp.checkValidEmail, verifySignUp.checkStrenghtOfPassword, verifySignUp.checkValidPhoneNumber], controller.signup);
+  app.post("/auth/signup", [verifySignUp.checkExistingUsernameOrEmail,verifySignUp.checkValidUsername,verifySignUp.checkValidEmail, verifySignUp.checkStrenghtOfPassword, verifySignUp.checkValidPhoneNumber], controller.signup);
   app.post("/auth/signin", controller.signin);
   app.post("/auth/resendEmail" ,controller.resendEmail);
   app.post("/auth/resendSMS" ,controller.resendSMS);

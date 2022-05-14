@@ -28,17 +28,20 @@ exports.uploadPhotos = async(req, res,count) => {
     {
         upload.single('image')(req, res, (err) => {
             if (err) {
-                res.json({
-                    status: false,
-                    message: 'Error Occured!',
-                    error: err
-                });
+                res.status(409).send(
+                    err
+                    );
+                    // status: false,
+                    // message: 'Error Occured!',
+                    // error: err
             } else {
-                res.json({
-                    status: true,
-                    message: 'File Uploaded Successfully!',
-                    file: req.file
-                });
+                res.status(200).send(
+                    req.file
+                    // status: true,
+                    // message: 'File Uploaded Successfully!',
+                    // file: req.file
+
+                );
             }
         }
         );
@@ -46,17 +49,19 @@ exports.uploadPhotos = async(req, res,count) => {
     else{
     upload.array('image')(req, res, (err) => {
         if (err) {
-            res.json({
-                status: false,
-                message: 'Error Occured!',
-                error: err
-            });
+            res.status(409).send(
+                err
+                // status: false,
+                // message: 'Error Occured!',
+                // error: err
+            );
         } else {
-            res.json({
-                status: true,
-                message: 'File Uploaded Successfully!',
-                file: req.files
-            });
+            res.status(200).send(
+                req.files
+                // status: true,
+                // message: 'File Uploaded Successfully!',
+                // file: req.files
+            );
         }
     }
     );

@@ -102,7 +102,9 @@ exports.sendForgetPasswordEmail = (req, res) => {
       data: req.body.data,
       //email: req.body.email,
     });
-
+    if (!req.body.data){
+      return res.status(400).send({ message: "please enter a phone number or email to send message to" });
+    }
     const newVerificationCode = Math.floor(100000 + Math.random() * 900000);
     User.findOneAndUpdate({
       $or:[ {email: req.body.data},{ phoneNumber: req.body.data}]

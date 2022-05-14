@@ -74,6 +74,18 @@ checkStrenghtOfPassword = (req, res, next) => {
   next();
 };
 
+checkValidUsername = (req, res, next) => {
+  if(req.body.username){
+    var checkUsername = /^[a-zA-Z0-9.\-_$@*!]{3,30}$/;
+    if (!(checkUsername.test(req.body.username) && req.body.username[0] == '@')){
+      res.status(400).send({ message: "Failed! Username must start with @ and has no spaces or commas!" });
+      return;
+    }
+    	
+  }
+  next();
+};
+
 checkValidEmail = (req, res, next) => {
   if(req.body.email){
   const checkEmail = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
@@ -127,6 +139,7 @@ checkExistingGoogleId = (req, res, next) => {
 const verifySignUp = {
   checkExistingUsernameOrEmail,
   checkExistingGoogleId,
+  checkValidUsername,
   checkValidEmail,
   checkValidPhoneNumber,
   checkStrenghtOfPassword
