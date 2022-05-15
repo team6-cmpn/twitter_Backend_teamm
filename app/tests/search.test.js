@@ -176,93 +176,93 @@ const user1=new User(
 
 //setupDB('Twitter_db_test', true);
 
-describe('search people test', () => {
-    it('Should search for people in database', async () => {
-        const res = await request.get('/search/people').query({ text: '@essam ahmed'});
+// describe('search people test', () => {
+//     it('Should search for people in database', async () => {
+//         const res = await request.get('/search/people').query({ text: '@essam ahmed'});
 
-                 expect(res.status).toBe(200);
-                 expect(res.body.usernames[0].username).toBe('essam ahmed');
-                 expect(res.body.message).toBe('okay!');
+//                  expect(res.status).toBe(200);
+//                  expect(res.body.usernames[0].username).toBe('essam ahmed');
+//                  expect(res.body.message).toBe('okay!');
             
-      });
+//       });
 
     
-    it('Should give 404 search not found', async () => {
-        const res = await request.get('/search/people').query({ text: 'mosalnffnvah'});
+//     it('Should give 404 search not found', async () => {
+//         const res = await request.get('/search/people').query({ text: 'mosalnffnvah'});
           
-        //await User.find({ username : '3osajaahshngh'})
-        //.exec((err, user) => {
-            expect(res.status).toBe(404);
-            expect(res.body.message).toBe("Failed! name or user name not found");
-        //});
-    });
+//         //await User.find({ username : '3osajaahshngh'})
+//         //.exec((err, user) => {
+//             expect(res.status).toBe(404);
+//             expect(res.body.message).toBe("Failed! name or user name not found");
+//         //});
+//     });
 
-});
+// });
 
 
-describe('search tweet test', () => {
-  it('Should search for tweettext in database', async () => {
-      const res = await request.get('/search/Latest')
-          .query({
-          text : 'oppo'
-          });            
-          // Searches the user in the database
-      await Tweet.find({ text : 'oppo is the worst @oppo'})
-          .exec((err, tweet) => {
-                expect(res.status).toBe(200);
-                expect(res.body.message).toBe('okay!');
-                expect(res.body.tweets.text).toBe(tweet.text);
+// describe('search tweet test', () => {
+//   it('Should search for tweettext in database', async () => {
+//       const res = await request.get('/search/Latest')
+//           .query({
+//           text : 'oppo'
+//           });            
+//           // Searches the user in the database
+//       await Tweet.find({ text : 'oppo is the worst @oppo'})
+//           .exec((err, tweet) => {
+//                 expect(res.status).toBe(200);
+//                 expect(res.body.message).toBe('okay!');
+//                 expect(res.body.tweets.text).toBe(tweet.text);
           
-      });
+//       });
 
-  });
-  it('Should give 404 search not found', async () => {
-      const res = await request.get('/search/Latest')
-          .send({
-          text : '08042802840284'
-          });
-          expect(res.status).toBe(404);
-          expect(res.body.message).toBe("Failed! tweet text not found");
+//   });
+//   it('Should give 404 search not found', async () => {
+//       const res = await request.get('/search/Latest')
+//           .send({
+//           text : '08042802840284'
+//           });
+//           expect(res.status).toBe(404);
+//           expect(res.body.message).toBe("Failed! tweet text not found");
 
-    });
-});
+//     });
+// });
 
 
-describe('search top test', () => {
-    it('Should search for people , tweets,mentions in database', async () => {
-        const res = await request.get('/search/top').query({ text: '@essam ahmed'});
+// describe('search top test', () => {
+//     it('Should search for people , tweets,mentions in database', async () => {
+//         const res = await request.get('/search/top').query({ text: '@essam ahmed'});
 
-                 expect(res.status).toBe(200);
-                 expect(res.body.usernames[0].username).toBe('essam ahmed');
-                 expect(res.body.message).toBe('okay!');
+//                  expect(res.status).toBe(200);
+//                  expect(res.body.usernames[0].username).toBe('essam ahmed');
+//                  expect(res.body.message).toBe('okay!');
             
-      });
+//       });
 
-      it('Should search for people , tweets,mentions in database', async () => {
-        const res = await request.get('/search/top')
-        .query({
-            text : 'oppo'
-            });            
-            // Searches the user in the database
-        await Tweet.find({ text : 'oppo is the worst @oppo'})
-            .exec((err, tweet) => {
-                  expect(res.status).toBe(200);
-                  expect(res.body.message).toBe('okay!');
-                  expect(res.body.tweets.text).toBe(tweet.text);
+//       it('Should search for people , tweets,mentions in database', async () => {
+//         const res = await request.get('/search/top')
+//         .query({
+//             text : 'oppo'
+//             });            
+//             // Searches the user in the database
+//         await Tweet.find({ text : 'oppo is the worst @oppo'})
+//             .exec((err, tweet) => {
+//                   expect(res.status).toBe(200);
+//                   expect(res.body.message).toBe('okay!');
+//                   expect(res.body.tweets.text).toBe(tweet.text);
             
-        });
+//         });
             
-      });    
-    it('Should give 404 search not found', async () => {
-        const res = await request.get('/search/people').query({ text: 'mosalnffnvah'});
+//       });    
+    // it('Should give 404 search not found', async () => {
+    //     const res = await request.get('/search/people').query({ text: 'mosalnffnvah'});
           
-        //await User.find({ username : '3osajaahshngh'})
-        //.exec((err, user) => {
-            expect(res.status).toBe(404);
-            expect(res.body.message).toBe("Failed! name or user name not found");
-        //});
-    });
+    //     //await User.find({ username : '3osajaahshngh'})
+    //     //.exec((err, user) => {
+    //         expect(res.status).toBe(404);
+    //         expect(res.body.message).toBe("Failed! name or user name not found");
+    //     //});
+    // });
 
-});
+//});
 
 
