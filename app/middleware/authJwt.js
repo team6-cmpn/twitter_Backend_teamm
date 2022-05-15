@@ -41,7 +41,7 @@ checkIsAdmin = (req, res, next) => {
        res.status(403).send({ message: "Forbidden, you must be an admin" })
      }
      else{
-       
+
          next()
      }
    }
@@ -73,12 +73,13 @@ if (user){
            duration=user.admin_block.block_duration
            startFromDate= user.admin_block.block_createdAt
            startFromDate= startFromDate.toDateString()
-           res.status(400).send({message: "this user is already blocked for "+String(duration)+" days "+ "starting from "+String(startFromDate)})
+           res.status(400).send({message: "you can't do this action, you are blocked by admin for "+String(duration)+" days "+ "starting from "+String(startFromDate)})
          }
     }
 
      if(user.admin_block.blocked_by_admin==false || Difference_In_Days> user.admin_block.block_duration){
-        await User.findByIdAndUpdate( req.userId,{ admin_block:{ blocked_by_admin:false  }},{ returnDocument: 'after' }).exec((err,user)=>{
+       blocktimes=user.admin_block.blockNumTimes
+        await User.findByIdAndUpdate( req.userId,{ admin_block:{ blocked_by_admin:false, blockNumTimes: blocktimes  }},{ returnDocument: 'after' }).exec((err,user)=>{
          if (err){
            res.status(500).send({ message: err });
            return;
@@ -119,7 +120,8 @@ if (user){
 
 
      if( Difference_In_Days> user.admin_block.block_duration){
-        await User.findByIdAndUpdate( user._id,{ admin_block:{ blocked_by_admin:false  }},{ returnDocument: 'after' }).exec((err,user)=>{
+       blocktimes=user.admin_block.blockNumTimes
+        await User.findByIdAndUpdate( user._id,{ admin_block:{ blocked_by_admin:false,blockNumTimes: blocktimes  }},{ returnDocument: 'after' }).exec((err,user)=>{
          if (err){
            res.status(500).send({ message: err });
            return;

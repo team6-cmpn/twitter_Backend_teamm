@@ -21,7 +21,13 @@ const mongoose = require('mongoose');
         username: 'Zell2',
         email: 'testing2@gmail.com',
         password: 'Ola123ola#'
-    }, {
+    }, 
+    {
+        username: 'smsTest',
+        phoneNumber: '+201097277904',
+        password: 'Ola123ola#'
+    }, 
+    {
         username: 'Zell3',
         email: 'testing3@gmail.com',
         password: 'Ola123ola#',
@@ -183,27 +189,37 @@ describe('Change password Test', () => {
 
 });
 
-describe('Forget password send email', () => {
+describe('Forget password send email or sms', () => {
     it('Should send an email to the user if he forgot the password and want to reset it', async () => {
         const res = await request.post('/settings/forgetPassword')
             .send({
             username: 'Zell2',
-            email: 'testing2@gmail.com',
+            data: 'testing2@gmail.com',
             });
             expect(res.status).toBe(200);
             expect(res.body.message).toBe("An Email sent to your account please click on it to reset your password");
     });
-
+    
     it('Should give 404 user not exist', async () => {
         const res = await request.post('/settings/forgetPassword')
-            .send({
+        .send({
             username: 'ZellZyElfol',
-            email: 'testingZell@gmail.com',
-            });
-            expect(res.status).toBe(404);
-            expect(res.body.message).toBe("user not found");
-
+            data: 'testingZell@gmail.com',
+        });
+        expect(res.status).toBe(404);
+        expect(res.body.message).toBe("user not found");
+        
     });
+    // UNCOMMENT AT THE DISSCUSSION
+    // it('Should send an sms to the user if he forgot the password and want to reset it', async () => {
+    //     const res = await request.post('/settings/forgetPassword')
+    //         .send({
+    //         username: 'smsTest',
+    //         data: '+201097277904',
+    //         });
+    //         expect(res.status).toBe(200);
+    //         expect(res.body.message).toBe("A verification code was sent to your mobile phone please click on it to reset your password");
+    // });
 });
 
 describe('forget password recieve email Test', () => {

@@ -65,7 +65,7 @@ const relationsSchema = new Schema({
     }
 });
   
-module.exports = mongoose.model("relations", relationsSchema);
+module.exports = mongoose.model("Relation", relationsSchema);
 
 // {
 //     "user_id": "625dce80b598cd20b1ebd282",

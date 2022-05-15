@@ -14,20 +14,20 @@ const sendEmail = async (email, subject, text) => {
         pass: "lolosoftwaretest2000",
       },
     });
-    transporter.verify().then(console.log).catch(console.error);
-    // //verify transporter
-    // transporter.verify((err,success)=>{
-    //   // if(err){
-    //   //   console.log("transporter error");
-    //   //   console.log(err);
-    //   // }else{
-    //   //   console.log("ready for message");
-    //   //   console.log(success);
-    //   // }
-    // })
+    
+    //verify transporter
+    transporter.verify((err,success)=>{
+      // if(err){
+      //   console.log("transporter error");
+      //   console.log(err);
+      // }else{
+      //   console.log("ready for message");
+      //   console.log(success);
+      // }
+    })
     // send mail
     await transporter.sendMail({
-      from: "lolosoftwaretest@gmail.com",
+      from: process.env.USER,
       to: email,
       subject: subject,
       text: text,

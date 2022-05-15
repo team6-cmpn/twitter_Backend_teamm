@@ -13,7 +13,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger-output.json');
 
 var corsOptions = {
-  origin: '*'
+  origin: "http://localhost:3000"
 };
 
 app.use(cors(corsOptions));
@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to test Auth application." });
 });
 
-//PLEASE INCLUDE YOUR ROUTES
+//PLEASE INCLUDE YOUR ROUTES HERE
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/OAuth.routes')(app);
@@ -55,7 +55,9 @@ require('./app/routes/search.routes')(app);
 require('./app/routes/admin.routes')(app);
 require('./app/routes/adminBlock.routes')(app);
 require('./app/routes/tweets.routes')(app);
-
+require('./app/routes/notifications.routes')(app);
+require('./app/routes/image.routes')(app);
+require('./app/routes/bookmarks.routes')(app);
 //require('./app/routes/OAuth.routesTest')(app);
 
 //export the app

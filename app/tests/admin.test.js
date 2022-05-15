@@ -111,7 +111,7 @@ const user1=new User(
       following : [],
       admin_block : {
           blocked_by_admin : true,
-          block_duration: 20,
+          block_duration: 2220,
         block_createdAt: ("2022-04-17T02:59:23.228Z")
       },
       isAdmin : false,

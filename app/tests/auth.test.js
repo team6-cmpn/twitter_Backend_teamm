@@ -12,22 +12,22 @@ const mongoose = require('mongoose');
 
     const userdata = [
       {
-        username: 'Zell',
+        username: '@Zell',
         email: 'testing@gmail.com',
         password: 'Ola123ola#',
         confirmed: true
     }, {
-        username: 'Zell2',
+        username: '@Zell2',
         email: 'testing2@gmail.com',
         password: 'Ola123ola#'
     }, {
-        username: 'Zell3',
+        username: '@Zell3',
         email: 'testing3@gmail.com',
         password: 'Ola123ola#',
         confirmed: true
     },
     {
-        username: 'Zellconfirm',
+        username: '@Zellconfirm',
         email: 'testingconfirm@gmail.com',
         password: 'Ola123ola#',
         verificationCode: "321880"
@@ -36,6 +36,10 @@ const mongoose = require('mongoose');
       googleId :"111",
       username: "coco",
       email: "req@coco.com"
+    },{
+        username: '@smsTest',
+        phoneNumber: '+201097277955',
+        password: 'Ola123ola#'
     },
 
   ];
@@ -62,11 +66,11 @@ afterAll(async () => {
 
 
 
-describe('signup with email Test', () => {
-    it('Should save user to database', async () => {
+describe('signup with email or mobile phone Test', () => {
+    it('Should save user to database with email ', async () => {
         const res = await request.post('/auth/signup')
             .send({
-            username: 'ZellTest',
+            username: '@ZellTest',
             email: 'testingZell@gmail.com',
             password: 'Ola123ola#'
             });
@@ -79,15 +83,38 @@ describe('signup with email Test', () => {
                 .exec((err, user) => {
             expect(res.status).toBe(200);
             expect(res.body.message).toBe("An Email sent to your account please verify");
-            expect(user.username).toBe('ZellTest');
+            expect(user.username).toBe('@ZellTest');
             expect(user.email).toBe('testingZell@gmail.com');
 
   });
     });
+    // UNCOMMENT AT THE DISSCUSSION
+//     it('Should save user to database with phone number', async () => {
+//         const res = await request.post('/auth/signup')
+//             .send({
+//             username: '@OLasmsTest',
+//             phoneNumber: '+201097277904',
+//             password: 'Ola123ola#'
+//             });
+//             // Ensures response contains name and email
+//             // expect(res.body.name).toBeTruthy();
+//             // expect(res.body.email).toBeTruthy();
+
+//             // Searches the user in the database
+//             await User.findOneAndDelete({phoneNumber: '+201097277904'})
+//                 .exec((err, user) => {
+//             expect(res.status).toBe(200);
+//             expect(res.body.message).toBe("A verification code was sent to your mobile phone please verify");
+//             // console.log(user);
+//             // expect(user.username).toBe('@OLasmsTest');
+//             // expect(user.phoneNumber).toBe('+201097277904');
+
+//   });
+//     });
     it('Should give 400 username already exists', async () => {
         const res = await request.post('/auth/signup')
             .send({
-            username: 'Zell',
+            username: '@Zell',
             email: 'testingZell@gmail.com',
             password: 'Ola123ola#'
             });
@@ -98,7 +125,7 @@ describe('signup with email Test', () => {
     it('Should give 400 email already exists', async () => {
         const res = await request.post('/auth/signup')
             .send({
-            username: 'Zelllol',
+            username: '@Zelllol',
             email: 'testing@gmail.com',
             password: 'Ola123ola#'
             });
@@ -106,10 +133,21 @@ describe('signup with email Test', () => {
             expect(res.body.message).toBe("Failed! There is an existing account with this Email");
 
     });
+    it('Should give 400 phone number already exists', async () => {
+        const res = await request.post('/auth/signup')
+            .send({
+            username: '@olaTest',
+            phoneNumber: '+201097277955',
+            password: 'Ola123ola#'
+            });
+            expect(res.status).toBe(400);
+            expect(res.body.message).toBe("Failed! There is an existing account with this phoneNumber");
+
+    });
     it('Should give 400 email not valid', async () => {
         const res = await request.post('/auth/signup')
             .send({
-            username: 'Zelllol1',
+            username: '@Zelllol1',
             email: 'testing.gmail.com',
             password: 'Ola123ola#'
             });
@@ -117,10 +155,21 @@ describe('signup with email Test', () => {
             expect(res.body.message).toBe("Failed! Email not valied!");
 
     });
+    it('Should give 400 phone number not valid', async () => {
+        const res = await request.post('/auth/signup')
+            .send({
+            username: '@hamada',
+            phoneNumber: '01056988402',
+            password: 'Ola123ola#'
+            });
+            expect(res.status).toBe(400);
+            expect(res.body.message).toBe("Failed! phone number not valied!");
+
+    });
     it('Should give 400 weak password', async () => {
         const res = await request.post('/auth/signup')
             .send({
-            username: 'Zelllol2',
+            username: '@Zelllol2',
             email: 'testing11@gmail.com',
             password: 'Ola'
             });
@@ -135,7 +184,7 @@ describe('resend email test', () => {
         const newEmailtoken = jwt.sign(
             { 
               //"id" : "6260161a7c620af6ccc13149",
-              "username" : "resendTest",
+              "username" : "@resendTest",
               "password" :"Ola123ola#",
               "email" : "lolosoftwaretest@gmail.com" 
             }, 
@@ -164,7 +213,7 @@ describe('confirm email Test', () => {
         //const user = await User.findOne({ "username" : "Zellconfirm" })
         //console.log(user);
         const signinUser = {
-            data :"Zellconfirm",
+            data :"@Zellconfirm",
             password: "Ola123ola#"
         }
         const response = await request.post('/auth/signin')
@@ -223,7 +272,7 @@ describe('confirm email Test', () => {
 describe('signin with email Test', () => {
     it('Should retrive user and token from database', async () => {
         const signinUser = {
-            data :"Zell",
+            data :"@Zell",
             password: "Ola123ola#"
         }
         const res = await request.post('/auth/signin')
@@ -235,13 +284,13 @@ describe('signin with email Test', () => {
             expect(res.status).toBe(200);
             expect(res.body.accessToken).toBeTruthy();
             //console.log(res.body.accessToken);
-            expect(user.username).toBe('Zell');
+            expect(user.username).toBe('@Zell');
             expect(user.email).toBe('testing@gmail.com');
         });
     });
     it('Should give 404 as user not found', async () => {
         const signinUser = {
-            data :"Zell1",
+            data :"@Zell1",
             password: "Ola123ola#"
         }
         const res = await request.post('/auth/signin')
@@ -256,7 +305,7 @@ describe('signin with email Test', () => {
     });
     it('Should give 400 as user not confirmed', async () => {
         const signinUser = {
-            data :"Zell2",
+            data :"@Zell2",
             password: "Ola123ola#"
         }
         const res = await request.post('/auth/signin')
@@ -271,7 +320,7 @@ describe('signin with email Test', () => {
     });
     it('Should give 401 as password is wrong', async () => {
         const signinUser = {
-            data :"Zell3",
+            data :"@Zell3",
             password: "12345678"
         }
         const res = await request.post('/auth/signin')

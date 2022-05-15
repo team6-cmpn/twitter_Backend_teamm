@@ -51,11 +51,15 @@ const tweetSchema = new Schema({
         ref: 'Extended_Entities'
     },
     favorited: Boolean,
+    hasImage: Boolean,
+    imageUrl: {
+        type: String
+    },
     retweeted: Boolean,
     favorites:[
         {
           type: Schema.Types.ObjectId,
-          ref:"Tweet"
+          ref:"User"
         }
       ],
     mention: {
@@ -63,9 +67,21 @@ const tweetSchema = new Schema({
     },
     username:{
         type: String
-        // type: Schema.Types.ObjectId,
-        // ref: 'User'
-    },  
+    },
+    retweetUsers:[
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
+    retweetData:{
+        type: Schema.Types.ObjectId,
+        ref: "Tweet"
+    },
+    mentionedUser:{
+        type: Schema.Types.ObjectId,
+        ref: 'User'    
+    },
 });
 
  tweetSchema.methods.toJSON = function() {
