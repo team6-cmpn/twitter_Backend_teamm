@@ -136,7 +136,12 @@
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
@@ -172,6 +177,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -179,18 +199,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -239,17 +249,20 @@ exports.uploadPhotos = <span class="fstat-no" title="function not covered" >as</
     {
 <span class="cstat-no" title="statement not covered" >        upload.single('image')(req, res, <span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >            if (err) {</span>
-<span class="cstat-no" title="statement not covered" >                res.json({</span>
-                    status: false,
-                    message: 'Error Occured!',
-                    error: err
-                });
+<span class="cstat-no" title="statement not covered" >                res.status(409).send(</span>
+                    err
+                    );
+                    // status: false,
+                    // message: 'Error Occured!',
+                    // error: err
             } else {
-<span class="cstat-no" title="statement not covered" >                res.json({</span>
-                    status: true,
-                    message: 'File Uploaded Successfully!',
-                    file: req.file
-                });
+<span class="cstat-no" title="statement not covered" >                res.status(200).send(</span>
+                    req.file
+                    // status: true,
+                    // message: 'File Uploaded Successfully!',
+                    // file: req.file
+&nbsp;
+                );
             }
         }
         );
@@ -257,17 +270,19 @@ exports.uploadPhotos = <span class="fstat-no" title="function not covered" >as</
     else{
 <span class="cstat-no" title="statement not covered" >    upload.array('image')(req, res, <span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (err) {</span>
-<span class="cstat-no" title="statement not covered" >            res.json({</span>
-                status: false,
-                message: 'Error Occured!',
-                error: err
-            });
+<span class="cstat-no" title="statement not covered" >            res.status(409).send(</span>
+                err
+                // status: false,
+                // message: 'Error Occured!',
+                // error: err
+            );
         } else {
-<span class="cstat-no" title="statement not covered" >            res.json({</span>
-                status: true,
-                message: 'File Uploaded Successfully!',
-                file: req.files
-            });
+<span class="cstat-no" title="statement not covered" >            res.status(200).send(</span>
+                req.files
+                // status: true,
+                // message: 'File Uploaded Successfully!',
+                // file: req.files
+            );
         }
     }
     );
@@ -289,7 +304,7 @@ exports.uploadPhotos = <span class="fstat-no" title="function not covered" >as</
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Sat May 14 2022 17:15:57 GMT+0200 (Eastern European Standard Time)
+                at Sun May 15 2022 02:21:21 GMT+0200 (Eastern European Standard Time)
             </div>
         <script src="../../../prettify.js"></script>
         <script>
