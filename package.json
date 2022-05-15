@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "devStart": "env-cmd -f ./app/config/dev.env nodemon server.js",
-    "test": "env-cmd -f ./app/config/test.env jest --verbose --coverage --runInBand --force-exit --testTimeout=15000",
+    "test": "env-cmd -f ./app/config/test.env jest --runInBand ",
     "start-gendoc": "node swagger.js",
     "test:watch": "jest --watch",
     "jsdoc": "jsdoc -c jsdoc.json",
