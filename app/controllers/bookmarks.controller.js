@@ -35,10 +35,13 @@ const Tweet = db.tweet;
 exports.addBookmark= async(req,res)=>{
     const user = await  User.findOne({ _id :  req.userId});
     const tweet=await Tweet.findOne({_id: req.params.id});
-    const bookmark=user.bookMarks;
-
-    if(bookmark.includes(req.params.id)){
-        res.status(200).send({message:"already saved",savedbookMark:tweet});
+    mark=[];
+    for (let index = 0; index < user.bookMarks.length; index++) {
+        mark.push(user.bookMarks[index]._id);
+    } 
+    
+    if(mark.toString().includes((req.params.id).toString())){
+        res.status(400).send({message:"already saved",savedbookMark:tweet});
     }
     else{
         await User.updateOne({bookMarks : user.bookMarks },{ $push: {bookMarks : tweet} });

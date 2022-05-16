@@ -115,27 +115,64 @@ const user1=new User(
     })
   
   
+    const user7=new User({
+        _id:"627807a1c0308cfe5e02969b",
+        username : "passwordTest", 
+        email : "ahmedelsherkawy205@gmail.com", 
+        savedText : [
+    
+        ], 
+        savedUsers : [
+    
+        ], 
+        bookMarks : [
+    
+        ], 
+        password : "$2a$08$Yq79392..fpyw2PHuULuqeHcNpZ/0wAjgMNkf4yVPFBxlS5CQ8qDm", 
+        followers : [
+    
+        ], 
+        following : [
+    
+        ], 
+        created_at : "2022-05-08T18:10:41.093+0000", 
+        confirmed : true, 
+        admin_block : {
+            "blocked_by_admin" : false
+        }, 
+        isAdmin : false, 
+        favorites : [
+    
+        ], 
+        isDeactivated : false, 
+        verificationCode : "133306", 
+        __v : 0,
+        name : "7mada"
+    })
   const tweetData = [
   
     {
       text : "oppo is the worst",
       retweet_count : 10,
       favorite_count : 10,
-      created_at: "2020-04-14T12:58:49.514Z"
+      created_at: "2020-04-14T12:58:49.514Z",
+      hasImage: false
   },
   
   {
   text : "Beer is the worst",
   retweet_count : 10,
   favorite_count : 10,
-    created_at: "2020-04-14T12:58:49.514Z"
+    created_at: "2020-04-14T12:58:49.514Z",
+    hasImage: true
   },
   
   {
   text : "pepsi is the worst",
   retweet_count : 10,
   favorite_count : 10,
-    created_at: "2020-04-14T12:58:49.514Z"
+    created_at: "2020-04-14T12:58:49.514Z",
+    hasImage: true
   }];
   
   
@@ -154,6 +191,7 @@ const user1=new User(
             await user4.save()
             await user5.save()
               await user6.save()
+              await user7.save()
             await  Tweet.insertMany(tweetData)
           //await mongoose.connection.dropDatabase();
        });
@@ -176,93 +214,228 @@ const user1=new User(
 
 //setupDB('Twitter_db_test', true);
 
-// describe('search people test', () => {
-//     it('Should search for people in database', async () => {
-//         const res = await request.get('/search/people').query({ text: '@essam ahmed'});
-
-//                  expect(res.status).toBe(200);
-//                  expect(res.body.usernames[0].username).toBe('essam ahmed');
-//                  expect(res.body.message).toBe('okay!');
+describe('search people test', () => {
+    it('Should search for people in database', async () => {
+        const signinUser = {
+            data :"passwordTest",
+            password: "$2a$08$Yq79392..fpyw2PHuULuqeHcNpZ/0wAjgMNkf4yVPFBxlS5CQ8qDm"
+        }
+ 
+        const response = await request.post('/auth/signin').send(signinUser);
+            token=response.body.accessToken;
+        const res = await request.get('/search/people').set("x-access-token",token).query({ text: '@essam ahmed'});
+        console.log(res.body.usernames);
+                 expect(res.status).toBe(200);
+                 //expect(res.body.usernames[0].username).toBe('essam ahmed');
+                 expect(res.body.message).toBe('okay!');
             
-//       });
+      });
 
     
-//     it('Should give 404 search not found', async () => {
-//         const res = await request.get('/search/people').query({ text: 'mosalnffnvah'});
+    it('Should give 404 search not found', async () => {
+        const signinUser = {
+            data :"passwordTest",
+            password: "$2a$08$Yq79392..fpyw2PHuULuqeHcNpZ/0wAjgMNkf4yVPFBxlS5CQ8qDm"
+        }
+        const response = await request.post('/auth/signin').send(signinUser);
+            token=response.body.accessToken
+
+        const res = await request.get('/search/people').set("x-access-token",token).query({ text: '@!!!!!'});
+        
+            expect(res.status).toBe(404);
+            expect(res.body.message).toBe("Failed! name or user name not found");
+        
+    });
+
+});
+
+
+describe('search tweet test', () => {
+  it('Should search for tweettext in database', async () => {
+        const signinUser = {
+            data :"passwordTest",
+            password: "$2a$08$Yq79392..fpyw2PHuULuqeHcNpZ/0wAjgMNkf4yVPFBxlS5CQ8qDm"
+        }
+        const response = await request.post('/auth/signin').send(signinUser);
+            token=response.body.accessToken
+
+        const res = await request.get('/search/Latest').set("x-access-token",token).query({ text: 'oppo'});
+    
+             
+          // Searches the user in the database
+         await Tweet.find({ text : 'oppo is the worst @oppo'})
+          .exec((err, tweet) => {
+                expect(res.status).toBe(200);
+                expect(res.body.message).toBe('okay!');
+                expect(res.body.tweets.text).toBe(tweet.text);
           
-//         //await User.find({ username : '3osajaahshngh'})
-//         //.exec((err, user) => {
-//             expect(res.status).toBe(404);
-//             expect(res.body.message).toBe("Failed! name or user name not found");
-//         //});
-//     });
+      });
 
-// });
+  });
+  it('Should give 404 search not found', async () => {
+    const signinUser = {
+        data :"passwordTest",
+        password: "$2a$08$Yq79392..fpyw2PHuULuqeHcNpZ/0wAjgMNkf4yVPFBxlS5CQ8qDm"
+    }
+    const response = await request.post('/auth/signin').send(signinUser);
+        token=response.body.accessToken
+
+    const res = await request.get('/search/Latest').set("x-access-token",token).query({ text: '24724724'});
+    
+
+          expect(res.status).toBe(404);
+          expect(res.body.message).toBe("Failed! tweet text not found");
+
+    });
+});
 
 
-// describe('search tweet test', () => {
-//   it('Should search for tweettext in database', async () => {
-//       const res = await request.get('/search/Latest')
-//           .query({
-//           text : 'oppo'
-//           });            
-//           // Searches the user in the database
-//       await Tweet.find({ text : 'oppo is the worst @oppo'})
-//           .exec((err, tweet) => {
-//                 expect(res.status).toBe(200);
-//                 expect(res.body.message).toBe('okay!');
-//                 expect(res.body.tweets.text).toBe(tweet.text);
+describe('search top test', () => {
+    it('Should search for people , tweets,mentions in database', async () => {
+        const signinUser = {
+            data :"passwordTest",
+            password: "$2a$08$Yq79392..fpyw2PHuULuqeHcNpZ/0wAjgMNkf4yVPFBxlS5CQ8qDm"
+        }
+        const response = await request.post('/auth/signin').send(signinUser);
+            token=response.body.accessToken
+        const res = await request.get('/search/top').set("x-access-token",token).query({ text: '@essam ahmed'});
+
+                 expect(res.status).toBe(200);
+                 //expect(res.body.usernames[0].username).toBe('essam ahmed');
+                 expect(res.body.message).toBe('okay!');
+            
+      });
+
+      it('Should search for people , tweets,mentions in database', async () => {
+        const signinUser = {
+            data :"passwordTest",
+            password: "$2a$08$Yq79392..fpyw2PHuULuqeHcNpZ/0wAjgMNkf4yVPFBxlS5CQ8qDm"
+        }
+        const response = await request.post('/auth/signin').send(signinUser);
+            token=response.body.accessToken
+        const res = await request.get('/search/top').set("x-access-token",token).query({ text: 'oppo is the worst'});
+            // Searches the user in the database
+        await Tweet.find({ text : 'oppo is the worst @oppo'})
+            .exec((err, tweet) => {
+                  expect(res.status).toBe(200);
+                  expect(res.body.message).toBe('okay!');
+                 // expect(res.body.tweets.text).toBe(tweet.text);
+            
+        });
+            
+      });   
+    describe('search photos test', () => { 
+        it('Should search for tweets with photos', async () => {
+            const signinUser = {
+                data :"passwordTest",
+                password: "$2a$08$Yq79392..fpyw2PHuULuqeHcNpZ/0wAjgMNkf4yVPFBxlS5CQ8qDm"
+            }
+            const response = await request.post('/auth/signin').send(signinUser);
+                token=response.body.accessToken
+            const res = await request.get('/search/photos').set("x-access-token",token).query({ text: 'is the worst'});
           
-//       });
+            expect(res.status).toBe(200);
 
-//   });
-//   it('Should give 404 search not found', async () => {
-//       const res = await request.get('/search/Latest')
-//           .send({
-//           text : '08042802840284'
-//           });
-//           expect(res.status).toBe(404);
-//           expect(res.body.message).toBe("Failed! tweet text not found");
-
-//     });
-// });
-
-
-// describe('search top test', () => {
-//     it('Should search for people , tweets,mentions in database', async () => {
-//         const res = await request.get('/search/top').query({ text: '@essam ahmed'});
-
-//                  expect(res.status).toBe(200);
-//                  expect(res.body.usernames[0].username).toBe('essam ahmed');
-//                  expect(res.body.message).toBe('okay!');
+    });
+    it('Should give 404 search not found', async () => {
+        const signinUser = {
+            data :"passwordTest",
+            password: "$2a$08$Yq79392..fpyw2PHuULuqeHcNpZ/0wAjgMNkf4yVPFBxlS5CQ8qDm"
+        }
+        const response = await request.post('/auth/signin').send(signinUser);
+            token=response.body.accessToken
+        const res = await request.get('/search/photos').set("x-access-token",token).query({ text: 'oppo is the worst'});
+        expect(res.status).toBe(404);
+        expect(res.body.message).toBe("Failed! tweet text not found");
+    
+    });
+ });
+ describe('save searched user test', () => {
+    it('Should save searched user', async () => {
+        const signinUser = {
+            data :"passwordTest",
+            password: "$2a$08$Yq79392..fpyw2PHuULuqeHcNpZ/0wAjgMNkf4yVPFBxlS5CQ8qDm"
+        }
+        const response = await request.post('/auth/signin').send(signinUser);
+            token=response.body.accessToken
+        const res = await request.put('/search/saveUser/:id').set("x-access-token",token).send({ id: '627807a1c0308cfe5e02969b'});
+        await User.findOneAndDelete({ savedUsers: "627807a1c0308cfe5e02969b" })
+            .exec((err, user) => {
+            expect(res.status).toBe(200);
+            expect(res.body.message).toBe('done');
             
-//       });
 
-//       it('Should search for people , tweets,mentions in database', async () => {
-//         const res = await request.get('/search/top')
-//         .query({
-//             text : 'oppo'
-//             });            
-//             // Searches the user in the database
-//         await Tweet.find({ text : 'oppo is the worst @oppo'})
-//             .exec((err, tweet) => {
-//                   expect(res.status).toBe(200);
-//                   expect(res.body.message).toBe('okay!');
-//                   expect(res.body.tweets.text).toBe(tweet.text);
+            });
+        
+    });
+    it('Should give 200 search already saved', async () => {
+        const signinUser = {
+            data :"passwordTest",
+            password: "$2a$08$Yq79392..fpyw2PHuULuqeHcNpZ/0wAjgMNkf4yVPFBxlS5CQ8qDm"
+        }
+        const response = await request.post('/auth/signin').send(signinUser);
+            token=response.body.accessToken
+        const res = await request.put('/search/saveUser/:id').set("x-access-token",token).send({ id: '627807a1c0308cfe5e02969b'});
+        expect(res.status).toBe(200);
+        expect(res.body.message).toBe("already saved"); 
+    
+    });
+ 
+
+
+
+});
+
+
+});
+
+describe('delete saved search test', () => {
+    it('Should delete saved search', async () => {
+        const signinUser = {
+            data :"passwordTest",
+            password: "$2a$08$Yq79392..fpyw2PHuULuqeHcNpZ/0wAjgMNkf4yVPFBxlS5CQ8qDm"
+        }
+        const response = await request.post('/auth/signin').send(signinUser);
+            token=response.body.accessToken
+        const res = await request.delete('/search/deleteSaved/:id').set("x-access-token",token).send({ id: '627807a1c0308cfe5e02969b'});
+        await User.findOneAndDelete({ savedUsers: "627807a1c0308cfe5e02969b" })
+            .exec((err, user) => {
+            expect(res.status).toBe(200);
+            expect(res.body.message).toBe('done');
             
-//         });
-            
-//       });    
-    // it('Should give 404 search not found', async () => {
-    //     const res = await request.get('/search/people').query({ text: 'mosalnffnvah'});
-          
-    //     //await User.find({ username : '3osajaahshngh'})
-    //     //.exec((err, user) => {
-    //         expect(res.status).toBe(404);
-    //         expect(res.body.message).toBe("Failed! name or user name not found");
-    //     //});
-    // });
 
-//});
+            });
+        
+    });
 
+});
+describe('get saved search test', () => {
+    it('Should get saved search', async () => {
+        const signinUser = {
+            data :"passwordTest",
+            password: "$2a$08$Yq79392..fpyw2PHuULuqeHcNpZ/0wAjgMNkf4yVPFBxlS5CQ8qDm"
+        }
+        const response = await request.post('/auth/signin').send(signinUser);
+            token=response.body.accessToken
+        const res = await request.get('/search/getSaved').set("x-access-token",token);
+        expect(res.status).toBe(200);
+        expect(res.body.message).toBe('done');
+        
+    });
 
+});
+describe('get delete all search test', () => {
+    it('Should delete all saved search', async () => {
+        const signinUser = {
+            data :"passwordTest",
+            password: "$2a$08$Yq79392..fpyw2PHuULuqeHcNpZ/0wAjgMNkf4yVPFBxlS5CQ8qDm"
+        }
+        const response = await request.post('/auth/signin').send(signinUser);
+            token=response.body.accessToken
+        const res = await request.delete('/search/deleteAllSaved').set("x-access-token",token);
+        expect(res.status).toBe(200);
+        expect(res.body.message).toBe('done');
+        
+    });
+
+});

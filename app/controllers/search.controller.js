@@ -111,7 +111,7 @@ exports.searchPeople =  async (req, res) =>{
     if(req.query.text[0]=="@"){
         let username=req.query.text.substring(1);
         const userName = await  searchUserByUserName(username,req.userId);
-        if((!userName)||(userName.length==0)){
+        if((!userName)||(userName.length==0)||(userName==null)||((userName.length>=2)&&(userName[1].length==0))){
     
             res.status(404).send({message: "Failed! name or user name not found"});
              
@@ -124,36 +124,37 @@ exports.searchPeople =  async (req, res) =>{
                 if(saved.includes(req.query.text)){
                     
                     res.status(200).send({message: "okay!", usernames:userName }); 
-              }
-            else{
-                await User.updateOne({savedText : user.savedText },{ $push: { savedText : req.query.text} }); 
-                res.status(200).send({message: "okay!", usernames:userName });
+                }
+                else{
+                    await User.updateOne({savedText : user.savedText },{ $push: { savedText : req.query.text} }); 
+                    res.status(200).send({message: "okay!", usernames:userName });
+                }
             }
         }
-    } }
+    }
     else{
-    const users = await  searchUserByName(req.query.text,req.userId);
+        const users = await  searchUserByName(req.query.text,req.userId);
     
-    if((!users)||(users.length==0)){
+            if((!users)||(users.length==0||users==null)||(users.length>=2&&users[1].length==0)){
     
-        res.status(404).send({message: "Failed! name or user name not found"});
+                res.status(404).send({message: "Failed! name or user name not found"});
          
-    }
-    else{
-        const user = await  User.findOne({ _id :  req.userId});
-        const saved=user.savedText;
-        if (user != null){
-            if(saved.includes(req.query.text)){ 
-                res.status(200).send({message: "okay!", user: users}); 
-          }
-           else{
-            await User.updateOne({savedText : user.savedText },{ $push: { savedText : req.query.text} }); 
-            res.status(200).send({message: "okay!", user: users}); 
-           }
-        }
+            }
+            else{
+                const user = await  User.findOne({ _id :  req.userId});
+                const saved=user.savedText;
+                if (user != null){
+                    if(saved.includes(req.query.text)){ 
+                        res.status(200).send({message: "okay!", user: users}); 
+                }
+                else{
+                    await User.updateOne({savedText : user.savedText },{ $push: { savedText : req.query.text} }); 
+                    res.status(200).send({message: "okay!", user: users}); 
+                }
+            }
     
+        }
     }
-}
 }
 
 
