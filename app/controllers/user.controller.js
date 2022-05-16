@@ -1,5 +1,6 @@
 const db = require("../models");
-const {getListRelationsIDs,getUsersFromArray,getUsersRelationsList} = require("../utils/user.js")
+const { findOne } = require("../models/user.model");
+const {getListRelationsIDs,getUsersFromArray,getUsersRelationsList,createNewRelation,setRelationtoBlock} = require("../utils/user.js")
 
 const User = db.user;
 const Relation=db.relations;
@@ -123,7 +124,7 @@ exports.friendshipsLookup =  async (req, res) =>{
     console.log(users);
     res.status(200).send(users);
 }
-
+/// not used
 exports.friendshipsNo_retweets = async (req, res) =>{
   const no_retweetsUsers = [];
     const user = await  User.findOne({ _id :  req.userId }  );
@@ -177,11 +178,56 @@ exports.friendshipsShow = async (req, res) =>{
     res.status(404).send("No relations");
   }
 }
+
+exports.userChangePhoneNumber = async (req, res) =>{
+  await User.updateOne({ _id :  req.userId  }, { $set: { phone_number: req.body.phone_number } });
+  res.status(200).send("phone number changed");}
+  
+  exports.userChangeUsername = async (req, res) =>{
+    await User.updateOne({_id :  req.userId}, {$set: {username :  req.body.username}});
+    res.status(200).send({ message: "Username changed successfully!" });}
+    // const user = await User.findOne({_id :  req.userId});
+  // if(req.body.username){
+  //   var checkUsername = /^[a-zA-Z0-9.\-_$@*!]{3,30}$/;
+  //   if (!(checkUsername.test(req.body.username) && req.body.username[0] == '@')){
+  //     res.status(400).send({ message: "Failed! Username must start with @ and has no spaces or commas!" });
+  //     return;
+  //   }
+  //   else if(req.body.username.length>30){
+  //     res.status(400).send({ message: "Failed! Username must be less than 30 characters!" });
+  //     return;
+  //   }
+  //   else if(await User.findOne({username :  req.body.username})){
+  //     res.status(400).send({ message: "Failed! Username already exists!" });
+  //     return;
+  //   }
+  //   else {
+    //}
+    	
+ // }
+  
+
+
+exports.userChangeEmail = async (req, res) =>{
+  // if(req.body.email){
+  //   const checkEmail = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+  //   const isValid = checkEmail.test(String(req.body.email).toLowerCase());
+  //   if (!isValid){
+  //     res.status(400).send({ message: "Failed! Email not valied!" });
+  //     return;
+  //   }
+  //   else{
+      await User.findOneAndUpdate({ _id :  req.userId }, { email: req.body.email });
+      res.status(200).send({ message: "Email changed!" });
+    // }
+    // }
+  }
+
 exports.friendshipsCreate = async (req, res) =>{
   found=0; // 0 not found , 1 found 
   const user = await  User.findOne({ _id :  req.userId});
   const relations = user.relations;
-  console.log( user); 
+  console.log(user); 
   if (relations)
   {
   for (i = 0; i < relations.length; i++) {
@@ -189,7 +235,17 @@ exports.friendshipsCreate = async (req, res) =>{
     if (relation != null &&(relation.user_id==req.params.id)&&(relation.following==false)){
       found=1;
       await Relation.updateOne({ _id :  relation._id  }, { $set: { following: true } });
-       res.status(200).send("following");
+      await User.updateOne({ _id :  user._id  }, {$inc : {followings_count: 1 }}); 
+      blockedUser= await User.findOne({_id:req.params.id});
+       targetRelation=blockedUser.relations
+        for (i=0;i<targetRelation.length;i++)
+        {
+          if (targetRelation[i].user_id == user._id){
+            await Relation.updateOne({ _id :  targetRelation[i]._id  }, { $set: { follower: true } });
+            await User.updateOne({ _id :  blockedUser._id  }, {$inc : {followers_count: 1 }});
+          }
+        }
+      res.status(200).send("following");
        return;
     }
     else if (relation != null && (relation.user_id==req.params.id)&&(relation.following==true)){
@@ -201,54 +257,27 @@ exports.friendshipsCreate = async (req, res) =>{
 }
   if (found==0){
     const targetUser= await User.findOne({ _id :  req.params.id });
-    console.log(targetUser);
-    const relation = new Relation({
-      user_id: targetUser._id,
-      username: targetUser.username,
-      name: targetUser.name,
-      following: true,
-      follower: false,
-      blocked: false,
-      mute: false,
-      mute_until: null,
-      want_retweets: true,
-      no_retweets: false,
-      all_replies: false,
-      marked_spam: false,
-      blocked_by: null,
-      following_request_sent: false,
-      following_request_received: false,
-      Notifications_enabled: true,
-      created_at: new Date(),
-    });
+    relation = await createNewRelation(targetUser);
+    relation.following=true;
+    relation.want_retweets=true;
+    relation.Notifications_enabled=true;
+    console.log(relation);
     await relation.save();
     await User.updateOne({ _id :  user._id  }, { $push: { relations: relation._id } });
-    console.log(user);
-    const receiveRlation = new Relation({
-      user_id: user.id,
-      username: user.username,
-      name: user.name,
-      following: false,
-      follower: true,
-      blocked: false,
-      mute: false,
-      mute_until: null,
-      want_retweets: true,
-      no_retweets: false,
-      all_replies: false,
-      marked_spam: false,
-      blocked_by: null,
-      following_request_sent: false,
-      following_request_received: false,
-      Notifications_enabled: false,
-      created_at: new Date(),
-    });
+    await User.updateOne({ _id :  user._id  }, {$inc : {followings_count: 1 }}); 
+    receiveRlation = await createNewRelation(user);
+    receiveRlation.follower=true;
+    receiveRlation.want_retweets=true;
     await receiveRlation.save();
     await User.updateOne({ _id :  req.params.id  }, { $push: { relations: receiveRlation._id } });
+    await User.updateOne({ _id :  req.params._id  }, {$inc : {followers_count: 1 }}); 
     res.status(200).send(targetUser);
     return;
   }
 }
+
+
+
 exports.friendshipsDestroy = async (req, res) =>{
   found=0; // 0 not found , 1 found
   const user = await  User.findOne({ _id :  req.userId});
@@ -288,6 +317,9 @@ else {
   return;
 }
 }
+
+
+
 exports.friendshipsUpdate = async (req, res) =>{
   found=0; // 0 not found , 1 found
   const user = await  User.findOne({ _id :  req.userId});
@@ -308,7 +340,52 @@ exports.friendshipsUpdate = async (req, res) =>{
   }
 }
 
-
+exports.userBlocking = async(req,res)=>
+{
+  found=0; // 0 not found , 1 found 
+  const user = await  User.findOne({ _id :  req.userId});
+  const relations = user.relations; 
+  if (relations)
+  {
+  for (i = 0; i < relations.length; i++) {
+    relation = await Relation.findOne({ _id :  relations[i]  });
+    if (relation != null &&(relation.user_id==req.params.id)&&(relation.blocked==false)){
+      found=1;
+      
+      //await Relation.updateOne({ _id :  relation._id  }, { $set: { following: true } });
+       block = await setRelationtoBlock(relation._id,"blocked");
+       blockedUser= await User.findOne({_id:req.params.id});
+       targetRelation=blockedUser.relations
+        for (i=0;i<targetRelation.length;i++)
+        {
+          if (targetRelation[i].user_id == user._id){
+            await setRelationtoBlock(targetRelation[i]._id,"blocked_by");
+          }
+        }
+      res.status(200).send("blocked");  
+       return;
+    }
+    else if (relation != null && (relation.user_id==req.params.id)&&(relation.blocked==true)){
+      found=1;
+      res.status(403).send("the user is already blocking the user");
+      return;
+    } 
+  } 
+} 
+  if (found==0){
+    const targetUser= await User.findOne({ _id :  req.params.id });
+    relation = await createNewRelation(targetUser);
+    relation.blocked=true;
+    await relation.save();
+    await User.updateOne({ _id :  user._id  }, { $push: { relations: relation._id } });
+    receiveRlation = await createNewRelation(user);
+    receiveRlation.blocked_by=true;
+    await receiveRlation.save();
+    await User.updateOne({ _id :  req.params.id  }, { $push: { relations: receiveRlation._id } });
+    res.status(200).send(targetUser);
+    return;
+  }
+}
 exports.userUpdateProfile = async (req, res) =>{
   const user = await  User.findOne({ _id :  req.userId});
   if (user != null){
@@ -322,7 +399,26 @@ exports.userUpdateProfile = async (req, res) =>{
     return;
   }
 }
-
+///// used after omnya 
+exports.userMediaList = async (req, res) =>{
+  const user = await  User.findOne({ _id :  req.userId});
+  if (user != null){
+    tweets=[]
+    const media = await Tweet.find({user_id:user._id});
+    for(i=0;i<media.length;i++)
+    {
+      if (media.hasImage==true)
+      {
+        tweets.push(media[i]);
+      }
+    }
+    res.status(200).send(tweets);
+  }
+  else{
+    res.status(404).send("No user found");
+    return;
+  }
+}
 
 
 exports.userTweetsList = async (req, res) =>{
@@ -344,7 +440,7 @@ exports.userLikedTweetsList = async(req, res) =>{
   const authUser = await  User.findOne({ _id :  req.userId  }  );
   tweets=[]
   if (authUser != null){
-    const tweetsIds =  authUser.favorites;
+    const tweetsIds =  authUser.likes5;
     for(i=0;i<tweetsIds.length;i++){
       tweet=await Tweet.findOne({ _id :  tweetsIds[i]  });
       tweets.push(tweet);
@@ -356,7 +452,7 @@ exports.userLikedTweetsList = async(req, res) =>{
     res.status(404).send("No user found");
     return;
   }
-}
+} 
 
 
 

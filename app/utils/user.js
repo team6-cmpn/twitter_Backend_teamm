@@ -41,10 +41,11 @@ exports.getListRelationsIDs= async(id,data) =>
     }
     user=user[0] 
     if (user != null){
+        console.log(user.relations);
         //console.log(user.relations[0]);
         for(i=0;i<user.relations.length;i++){
-            const relation = await Relation.findOne({ _id :  user.relations[i]  });
-            //console.log(i);
+            relation = await Relation.findOne({ _id :  user.relations[i]  });
+            console.log(relation._id);
             //followers who follow the user ID
             if (data =="followers" && relation.follower==true){
                 
@@ -59,10 +60,58 @@ exports.getListRelationsIDs= async(id,data) =>
                 dataList.push(relation.user_id);
             }
             if (data == "muted" && relation.mute==true){
-                dataList.push(relations.user_id);
-            } 
+                dataList.push(relation.user_id);
+            }  
         }
         //console.log(dataList);
         return dataList;
     }
+}
+
+exports.createNewRelation= async(targetUser)=>
+{
+    //console.log(targetUser);
+    const relation = new Relation({
+      user_id: targetUser._id,
+      username: targetUser.username,
+      name: targetUser.name,
+      following: false,
+      follower: false,
+      blocked: false,
+      mute: false,
+      mute_until: null,
+      want_retweets: false,
+      no_retweets: false,
+      all_replies: false,
+      marked_spam: false,
+      blocked_by: null,
+      following_request_sent: false,
+      following_request_received: false,
+      Notifications_enabled: false,
+      created_at: new Date(),
+    });
+    return relation;
+}
+
+exports.setRelationtoBlock=async(id,data)=>
+{
+    await Relation.updateOne({_id : id},{$set :{following: false,
+        follower: false,
+        mute: false,
+        mute_until: null,
+        want_retweets: false,
+        no_retweets: false,
+        all_replies: false,
+        marked_spam: false,
+        following_request_sent: false,
+        following_request_received: false,
+        Notifications_enabled: false}});
+    if (data="blocked"){
+        await Relation.updateOne({_id : id},{$set :{blocked: true}});
+    }
+    else if (data="blocked_by"){
+        await Relation.updateOne({_id : id},{$set :{blocked_by: true}});
+    }
+    return "relation updated";
+
 }
