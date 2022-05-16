@@ -103,9 +103,7 @@ if(req.body.text)
       })
       //check if there is mention and return mentioned user id
       if(req.body.mention){
-        console.log(req.body.mention)
         User.findOne({username:req.body.mention}).exec(async (err,mentioneduser)=>{
-          //console.log(mentioneduser)
           if(err){
             res.send({message:err})
           }
@@ -118,8 +116,7 @@ if(req.body.text)
       tweet.save()
       .then(newtweet => {
         User.findById(req.userId, async function (err, activeUser) {
-          console.log(req.userId)
-          console.log("user")
+
 
 
 
@@ -129,7 +126,7 @@ if(req.body.text)
 
 
         followers=await getListRelationsIDs(activeUser._id,"followers")
-        console.log(followers)
+        //console.log(followers)
         if(followers.length>0){
           notification= new Notification({
             notificationType: 'tweet',
@@ -185,12 +182,16 @@ exports.show=  async(req,res)=>{
   var tweetId = req.params.id;
   var tweet = await Tweet.findById(tweetId);
   if(!tweet){
-    res.status(404).send("tweet not found")
+    res.status(404).send({message:"tweet not found"})
   }
   else{
   //get required tweet object(contain tweet and the user created it)
     requiredTweet = await getTweet(tweetId,tweet.user);
-    res.status(200).send({"tweet":requiredTweet[0],"user":requiredTweet[1]})
+    if(requiredTweet){
+      res.status(200).send({"tweet":requiredTweet[0],"user":requiredTweet[1]})
+    }else{
+      res.status(400).send({message:"couldn't find tweetobject"})
+    }
   }
   }
    ////https://stackoverflow.com/questions/67680295/node-js-mongoose-findone-id-req-params-id-doesnt-work
@@ -200,25 +201,35 @@ exports.lookup= async(req,res)=>{
   //to convert string to numbers
   page = parseInt(req.params.page);
   tweetsCount = parseInt(req.params.tweetsCount);
-
+ 
   //get users list followed by authenticated user 
   var usersIdList = await getListRelationsIDs(req.userId,"following")
 
   //find tweets array of those users and sort them to the most recent tweets
-  var followingsTweets = await Tweet.find({user:{$in: usersIdList}})
-  .sort({created_at:-1})
-  .skip(tweetsCount*(page-1))
-  .limit(tweetsCount)
+  if (usersIdList){
+    var followingsTweets = await Tweet.find({user:{$in: usersIdList}})
+    .sort({created_at:-1})
+    .skip(tweetsCount*(page-1))
+    .limit(tweetsCount)
+  
+    var tweetsArray = [];
+  
+    for(let i = 0; i< followingsTweets.length;i++){
+      var tweetelement = followingsTweets[i];
+      var tweet = await getTweet(tweetelement.id,tweetelement.user)
+      tweetsArray.push(tweet);
+    }
+    if (tweetsArray){
+      res.status(200).send(tweetsArray)
+    }else{
+      res.send({message:"tweets array error"})
+    }
 
-  var tweetsArray = [];
+  }else{
+    res.status(404).send({message:"following list error"})
 
-  for(let i = 0; i< followingsTweets.length;i++){
-    var tweetelement = followingsTweets[i];
-    var tweet = await getTweet(tweetelement.id,tweetelement.user)
-    tweetsArray.push(tweet);
   }
 
-  res.status(200).send(tweetsArray)
 };
 
 // /**
@@ -345,11 +356,6 @@ exports.retweet= async(req,res)=>{
           }
           if(requiredTweet){
             var retweet = await Tweet.create(requiredTweet)
-            console.log(retweet)
-            // .catch(err =>{
-            //   res.status(400).send({message: err})
-            // })
-            //insert usrs retweets
             await User.findByIdAndUpdate(userId,{$push:{retweets: retweet._id}},{new: true}).exec(async (err,userRetweets)=>{
               if(err){
                 res.status(400).send({message: err});
@@ -359,20 +365,15 @@ exports.retweet= async(req,res)=>{
                   if(err){
                     res.status(400).send({message: err});
                   }
-                //console.log(tweetdata)
                 //insert tweet retweets
                 if(!tweetdata.retweetUsers.includes(userId)){
                   await Tweet.findByIdAndUpdate(tweetId,{$push:{retweetUsers: userId}},{new: true}).exec(async(err,retweetedTweet)=>{
-                    //console.log(retweetedTweet)
                     retweetedTweet.retweet_count = tweetdata.retweetUsers.length+1;
-                    //console.log(tweetdata.retweet_count)
                     res.status(200).send(retweetedTweet)
                   });
 
                 }
-                //res.status(200).send(tweetdata)
                 })
-
               }
             });
           }
@@ -388,42 +389,52 @@ exports.unretweet= async(req,res)=>{
   var tweetId = req.params.id;
   var userId = req.userId;
 
-  user.findById(userId).exec(async (err,userData)=>{
-    if(err){
-      res.status(400).send({message: err});
-    }
+  var tweetcheck = await Tweet.findById(tweetId);
+  if(tweetcheck){
+    User.findById(userId).exec(async (err,userData)=>{
+      if(err){
+        res.status(400).send({message: err});
+      }
+      if (userData){
     if(userData.retweets.includes(tweetId)){
-        tweet.findOne({_id: req.params.id}).exec(async (err,requiredTweet)=>{
-          if (err){
-            res.status(400).send({message: err});
-          }
-          if(requiredTweet){
-            var retweet = await Tweet.create(requiredTweet)
-            await User.findByIdAndUpdate(userId,{$pull:{retweets: retweet._id}},{new: true}).exec(async (err,userRetweets)=>{
-              if(err){
-                res.status(400).send({message: err});
-              }
-              if(userRetweets){
-                Tweet.findById(tweetId).exec(async (err,tweetdata)=>{
-                  if(err){
-                    res.status(400).send({message: err});
-                  }
-                if(tweetdata.retweetUsers.includes(userId)){
-                  await Tweet.findByIdAndUpdate(tweetId,{$pull:{retweetUsers: userId}},{new: true}).exec(async(err,retweetedTweet)=>{
-                    retweetedTweet.retweet_count = tweetdata.retweetUsers.length-1;
-                    res.status(200).send(retweetedTweet)
-                  });
+          Tweet.findOne({_id: req.params.id}).exec(async (err,requiredTweet)=>{
+            if (err){
+              res.status(400).send({message: err});
+            }
+            if(requiredTweet){
+              var retweet = await Tweet.create(requiredTweet)
+              await User.findByIdAndUpdate(userId,{$pull:{retweets: retweet._id}},{new: true}).exec(async (err,userRetweets)=>{
+                if(err){
+                  res.status(400).send({message: err});
                 }
-                })
-              }
-            });
-          }
-        });
+                if(userRetweets){
+                  Tweet.findById(tweetId).exec(async (err,tweetdata)=>{
+                    if(err){
+                      res.status(400).send({message: err});
+                    }
+                  if(tweetdata.retweetUsers.includes(userId)){
+                    await Tweet.findByIdAndUpdate(tweetId,{$pull:{retweetUsers: userId}},{new: true}).exec(async(err,retweetedTweet)=>{
+                      retweetedTweet.retweet_count = tweetdata.retweetUsers.length-1;
+                      res.status(200).send(retweetedTweet)
+                    });
+                  }
+                  })
+                }
+              });
+            }
+          });
+        }else{
+          res.send({message:"tweet already unretweeted"})
+        }
       }
-      else{
-        res.send({message:"tweet already unretweeted"})
-      }
-  });
+    });
+  }else{
+    res.status(400).send({message: "tweet not found"});
+
+  }
+  
+ 
+
 };
 
 
@@ -440,9 +451,9 @@ exports.destroyTweet= async(req,res) =>{
             if(err){
               res.status(400).send({message:err});
             }
-            if(!deletedTweet){
-              res.status(403).send({message:"tweet id doesn't exist"});
-            }
+            // if(!deletedTweet){
+            //   res.status(403).send({message:"tweet id doesn't exist"});
+            // }
             if(deletedTweet){
               res.status(200).send({message:"success! tweet deleted"});
             }
@@ -450,6 +461,8 @@ exports.destroyTweet= async(req,res) =>{
       }else{
         res.send({message:"can't delete another user tweet"})
       }
+    }else{
+      res.status(403).send({message:"tweet id doesn't exist"});
     }
 
   })
@@ -458,30 +471,26 @@ exports.destroyTweet= async(req,res) =>{
 
 exports.retweeters= async(req,res)=>{
   var tweetId = req.params.id;
-  var userId = req.userId;
-  Tweet.findById(tweetId).exec(async(err,requiredTweet)=>{
-    if(err){
-      res.status(404).send({message:err});
-    }
+  var requiredTweet = await Tweet.findById(tweetId)
     if(requiredTweet){
       var retweeters = requiredTweet.retweetUsers;
       var retweetUsers = await getUsersFromArray(retweeters);
       res.status(200).send({"retweetersList":retweetUsers})
     }
-  })
+    if(!requiredTweet){
+      res.status(404).send({message:"tweet not found in database"})
+    }
 };
 
 exports.favoriteList= async(req,res)=>{
   var tweetId = req.params.id;
-  var userId = req.userId;
-  Tweet.findById(tweetId).exec(async(err,requiredTweet)=>{
-    if(err){
-      res.status(404).send({message:err});
-    }
+  var requiredTweet = await Tweet.findById(tweetId)
     if(requiredTweet){
       var likers = requiredTweet.favorites;
       var favoriteUsers = await getUsersFromArray(likers);
       res.status(200).send({"favoriteusers":favoriteUsers})
     }
-  })
+    if(!requiredTweet){
+      res.status(404).send({message:"tweet not found in database"})
+    }
 };
