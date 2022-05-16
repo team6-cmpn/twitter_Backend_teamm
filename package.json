@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "devStart": "env-cmd -f ./app/config/dev.env nodemon server.js",
-    "test": "env-cmd -f ./app/config/test.env jest --verbose --coverage --runInBand --force-exit --testTimeout=15000",
+    "test": "env-cmd -f ./app/config/test.env jest --runInBand ",
     "start-gendoc": "node swagger.js",
     "test:watch": "jest --watch",
     "jsdoc": "jsdoc -c jsdoc.json",
@@ -34,10 +34,12 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "faker": "^6.6.6",
     "googleapis": "^99.0.0",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.10",
+    "mongoose-data-seed": "^2.1.6",
     "multer": "^1.4.4",
     "nodemailer": "^6.7.3",
     "nodemon": "^2.0.15",
@@ -47,6 +49,7 @@
     "twilio": "^3.77.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^6.3.1",
     "@types/express": "^4.17.13",
     "env-cmd": "^10.1.0",
     "eslint": "^8.11.0",
