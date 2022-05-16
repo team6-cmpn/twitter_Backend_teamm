@@ -10,22 +10,22 @@ const userSchema = new Schema({
   name: {
     type: String,
     required: false,
-    unique: true,
+    //unique: true,
     sparse: true
   },
   username: {
     type: String,
     required: true,
-    unique: true
+    //unique: true
   },
   phoneNumber: {
     type: String,
-    unique: true,
+    //unique: true,
     sparse: true
   },
   email: {
     type: String,
-    unique: true
+    //unique: true
   },
   password: {
     type: String,
