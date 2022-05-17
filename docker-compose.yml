@@ -62,5 +62,6 @@ networks:
 volumes:
   mongo-data:
     driver: local
-
+  prometheus-data:
+    driver: local
     
