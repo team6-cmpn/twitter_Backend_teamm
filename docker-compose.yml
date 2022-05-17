@@ -24,6 +24,18 @@ services:
       - mern-app
     volumes:
       - mongo-data:/data/db
+  cadvisor:
+    image: google/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - 8000:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - mern-app
 networks:
   mern-app:
     driver: bridge
