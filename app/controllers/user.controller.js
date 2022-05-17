@@ -11,6 +11,30 @@ exports.userBoard = (req, res) => {
   res.status(200).send({userid : req.userId});
 };
 //tested
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserShow
+ * @property {string} id the id of wanted user  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserShow
+ * @property {object}  user  user object represent the user with the spacific id
+ */
+/** 
+ * This function searches for user with the id in the request paramters and returns the user object
+ * 
+ * @param {reqParamsUserShow} req request sent from the front
+ * @param {responseBodyUserShow} res response sent to the front
+ * 
+ */
 exports.userShow =  async (req, res)  => {
   const users = await  User.findOne({ _id :  req.params.id  }  );
   //console.log(req.params.id)
@@ -22,6 +46,33 @@ exports.userShow =  async (req, res)  => {
      res.status(404).send({ message: "User Not found." });
   }
 
+
+  /**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserLookup
+ * @property {string} ids the id of wanted users comma seperated  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserLookup
+ * @property {object}  users  array of user objects represent the user with the ids
+ */
+/** 
+ * This function searches for users with the ids in the request paramters and returns the user objects in array
+ * 
+ * @param {reqParamsUserLookup} req request sent from the front
+ * @param {responseBodyUserLookup} res response sent to the front
+ * 
+ */
+
+  
 exports.usersLookup =  async (req, res) =>{
   //console.log(req.params.username);
   const userIDsArray= req.params.ids.split(",");
@@ -38,48 +89,176 @@ exports.usersLookup =  async (req, res) =>{
 }
 
 
+ /**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserBlocksIDs
+ * @property {string} ids the id of user who wants to get the blockes list of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserBlocksIDs
+ * @property {object}  ids  array of user Ids represent the users who the user with spacific id is blocked
+ */
+/** 
+ * This function get the block list of the user with the id in the request paramters and returns the user Ids in array
+ * 
+ * @param {reqParamsUserBlockssIDs} req request sent from the front
+ * @param {responseBodyUserBlockssIDs} res response sent to the front
+ * 
+ */
+
 exports.userBlocksIDs =  async (req, res) =>{
   const blocks = await getListRelationsIDs(req.params.id, "blocked");
   if (blocks=="user not found")
   {
-    res.status(404).send(blocks);
+    res.status(404).send({blocks:blocks});
+    return;
   }
-  res.status(200).send(blocks);
+  res.status(200).send({blocks:blocks});
 }
+
+ /**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserFollowersIDs
+ * @property {string} ids the id of user who wants to get the followers list of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserFollowersIDs
+ * @property {object}  ids  array of user Ids represent the users who the user with spacific id are followers
+ */
+/** 
+ * This function get the followers list of the user with the id in the request paramters and returns the user Ids in array
+ * 
+ * @param {reqParamsUserFollowersIDsp} req request sent from the front
+ * @param {responseBodyUserFollowersIDs} res response sent to the front
+ * 
+ */
 
 exports.userFollowersIDs =  async (req, res) =>{
   const followers = await getListRelationsIDs(req.params.id, "followers");
   if (followers=="user not found")
   {
-    res.status(404).send(followers);
+    res.status(404).send({follower:followers});
+    return;
   }
-  res.status(200).send(followers);
+  res.status(200).send({follower:followers});
 }
+  /**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserFollowingIDs
+ * @property {string} ids the id of user who wants to get the following list of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserFollowingIDs
+ * @property {object}  ids  array of user Ids represent the users who the user with spacific id is following
+ */
+/** 
+ * This function get the following list of the user with the id in the request paramters and returns the user Ids in array
+ * 
+ * @param {reqParamsUserFollowingIDsp} req request sent from the front
+ * @param {responseBodyUserFollowingIDs} res response sent to the front
+ * 
+ */
 exports.userFollowingIDs =  async (req, res) =>{
   const following = await getListRelationsIDs(req.params.id, "following");
   if (following=="user not found")
   {
-    res.status(404).send(following);
+    res.status(404).send({following:following});
+    return;
   }
-  res.status(200).send(following);
+  res.status(200).send({following:following});
 }  
+
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserFollowingIDs
+ * @property {string} ids the id of user who wants to get the following list of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserFollowingIDs
+ * @property {object}  users  array of user objects represent the users who the user with spacific id is following
+ */
+/** 
+ * This function get the following list of the user with the id in the request paramters and returns the user objects in array
+ * 
+ * @param {reqParamsUserFollowingIDsp} req request sent from the front
+ * @param {responseBodyUserFollowingIDs} res response sent to the front
+ * 
+ */
 
 exports.userFollowingList =  async (req, res) =>{
   const following = await getUsersRelationsList(req.params.id, "following");
   if(following=="user not found"){
-    res.status(404).send(following);
+    res.status(404).send({following:following});
+    return;
   }
-  res.status(200).send(following);
+  res.status(200).send({following:following});
 }
 
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserFollowingList
+ * @property {string} id the id of user who wants to get the following list of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserFollowingList
+ * @property {object}  users  array of user objects represent the users who the user with spacific id is follower
+ */
+/** 
+ * This function get the followers list of the user with the id in the request paramters and returns the user objects in array
+ * 
+ * @param {reqParamsUserFollowingList} req request sent from the front
+ * @param {responseBodyUserFollowingList} res response sent to the front
+ * 
+ */
 
 
 exports.userFollowersList =  async (req, res) =>{
   const followers = await getUsersRelationsList(req.params.id, "followers");
   if(followers=="user not found"){
-    res.status(404).send(followers);
+    res.status(404).send({follower:followers});
+    return;
   }
-  res.status(200).send(followers);
+  res.status(200).send({follower:followers});
 }
 
 exports.userBlocksList =  async (req, res) =>{
@@ -449,6 +628,9 @@ exports.friendshipsUpdate = async (req, res) =>{
     return;
   }
 }
+
+
+
 exports.userUnBlocking = async(req,res)=>
 {
   found=0; // 0 not found , 1 found 
@@ -496,6 +678,35 @@ exports.userUnBlocking = async(req,res)=>
     return;
   }
 }
+
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserBlocking
+ * @property {string} id the id of user who wants to block him  
+ * 
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserBlocking
+ * @property {object}  user  user object who is blocked
+ * @property {text} message saying the statues of the target user
+ */
+/** 
+ * This function get the followers list of the user with the id in the request paramters and returns the user objects in array
+ * 
+ * @param {reqParamsUserBlocking} req request sent from the front
+ * @param {responseBodyUserBlocking} res response sent to the front
+ * 
+ */
+
+
+
 exports.userBlocking = async(req,res)=>
 {
   found=0; // 0 not found , 1 found 
@@ -518,12 +729,12 @@ exports.userBlocking = async(req,res)=>
             await setRelationtoBlock(targetRelation[i]._id,"blocked_by");
           }
         }
-      res.status(200).send("blocked");  
+      res.status(200).send({message:"blocked"});  
        return;
     }
     else if (relation != null && (relation.user_id==req.params.id)&&(relation.blocked==true)){
       found=1;
-      res.status(403).send("the user is already blocking the user");
+      res.status(400).send({message:"the user is already blocking the user"});
       return;
     } 
   } 

@@ -10,7 +10,7 @@ const { createNewRelation} = require('../utils/user.js')
 
 
 const user1=new User({
-        username : "essam ahmed",
+        username : "essamAhmed",
         email : "bcq34@frjidffooq.com",
         password : "$2afbg$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C",
         followers : [],
@@ -279,3 +279,202 @@ describe('test make follow API', () => {
 
 })
 
+describe('get the user following ids ', () => {
+    it('testing get the user following ids ' , async() => {
+        const signinUser = {
+            data :"admin2",
+            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+        }
+        const response = await request.post('/auth/signin')
+        .send(signinUser);
+        token=response.body.accessToken;
+        const userObject= await User.findOne({username: 'samy'});
+        const userID=response.body.user._id;
+        const res2 = await request.post('/friendship/create'+userObject._id).set("x-access-token",token);
+        const res = await request.get('/user/followingIDs/'+userID);
+        expect(res.status).toBe(200);
+        expect(res.body.following[0].toString()).toBe(userObject._id.toString());
+    })
+
+    it ('testing get the user following ids when user is not following anyone' , async() => {
+        const signinUser = {
+            data :"admin2",
+            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+        }
+        const response = await request.post('/auth/signin')
+        .send(signinUser);
+        token=response.body.accessToken;
+        const userObject= await User.findOne({username: 'samy'});
+        const userID=userObject;
+        const res = await request.get('/user/followingIDs/'+userID);
+        expect(res.status).toBe(404);
+        expect(res.body.following).toBe("user not found");
+
+    })
+})
+
+describe('get the user follower ids ', () => {
+    it('testing get the user follower ids ' , async() => {
+        const signinUser = {
+            data :"admin2",
+            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+        }
+        const response = await request.post('/auth/signin')
+        .send(signinUser);
+        token=response.body.accessToken;
+        const userObject= await User.findOne({username: 'samy'});
+        const userID=response.body.user._id;
+        const res2 = await request.post('/friendships/create/'+userObject._id).set("x-access-token",token);
+        const res = await request.get('/user/followersIDs/'+userObject._id);
+        expect(res.status).toBe(200);
+        expect(res.body.follower[0].toString()).toBe(userID.toString());
+    })
+
+    it ('testing get the user follower ids when user is not following anyone' , async() => {
+        const signinUser = {
+            data :"admin2",
+            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+        }
+        const response = await request.post('/auth/signin')
+        .send(signinUser);
+        token=response.body.accessToken;
+        const userObject= await User.findOne({username: 'samy'});
+        const userID=response.body.user._id;
+        const res = await request.get('/user/followersIDs/'+userID);
+        expect(res.status).toBe(404);
+        expect(res.body.follower).toBe("user not found");
+      })
+})
+
+
+describe('get the user following list ', () => {
+  it('testing get the user following list ' , async() => {
+      const signinUser = {
+          data :"admin2",
+          password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+      }
+      const response = await request.post('/auth/signin')
+      .send(signinUser);
+      token=response.body.accessToken;
+      const userObject= await User.findOne({username: 'samy'});
+      const userID=response.body.user._id;
+      const res2 = await request.post('/friendship/create/'+userObject._id).set("x-access-token",token);
+      const res = await request.get('/user/followingList/'+userID);
+      expect(res.status).toBe(200);
+      expect(res.body.following[0]._id.toString()).toBe(userObject._id.toString());
+  })
+
+  it ('testing get the user following list when user is not following anyone' , async() => {
+      const signinUser = {
+          data :"admin2",
+          password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+      }
+      const response = await request.post('/auth/signin')
+      .send(signinUser);
+      token=response.body.accessToken;
+      const userObject= await User.findOne({username: 'samy'});
+      const userID=userObject;
+      const res = await request.get('/user/followingList/'+userID);
+      expect(res.status).toBe(404);
+      expect(res.body.following).toBe("user not found");
+
+  })
+})
+
+
+describe('get the user follower list ', () => {
+  it('testing get the user follower list ' , async() => {
+      const signinUser = {
+          data :"admin2",
+          password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+      }
+      const response = await request.post('/auth/signin')
+      .send(signinUser);
+      token=response.body.accessToken;
+      const userObject= await User.findOne({username: 'samy'});
+      const userID=response.body.user._id;
+      const res2 = await request.post('/friendships/create/'+userObject._id).set("x-access-token",token);
+      const res = await request.get('/user/followersList/'+userObject._id);
+      expect(res.status).toBe(200);
+      expect(res.body.follower[0]._id.toString()).toBe(userID.toString());
+  })
+
+  it ('testing get the user follower ids when user is not following anyone' , async() => {
+      const signinUser = {
+          data :"admin2",
+          password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+      }
+      const response = await request.post('/auth/signin')
+      .send(signinUser);
+      token=response.body.accessToken;
+      const userObject= await User.findOne({username: 'samy'});
+      const userID=response.body.user._id;
+      const res = await request.get('/user/followersIDs/'+userID);
+      expect(res.status).toBe(404);
+      expect(res.body.follower).toBe("user not found");
+    })
+})
+
+
+describe('post block the user',()=>
+{
+    it('testing block the user',async()=>{
+        const signinUser = {
+            data :"admin2",
+            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+        }
+        const response = await request.post('/auth/signin')
+        .send(signinUser);
+        token=response.body.accessToken;
+        const userObject= await User.findOne({username: 'samy'});
+        const userID=response.body.user._id;
+        const res2 = await request.post('/friendships/create/'+userObject._id).set("x-access-token",token);
+        const res = await request.post('/friendships/block/'+userObject._id).set("x-access-token",token);
+        expect(res.status).toBe(200);
+        expect(res.body.message).toBe("blocked");
+    })
+
+    it('testing block the user when user is not following anyone',async()=>{
+        const signinUser = {
+            data :"essamAhmed",
+            password: "$2afbg$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+        }
+        const response = await request.post('/auth/signin')
+        .send(signinUser);
+        token=response.body.accessToken;
+        const userObject= await User.findOne({username: 'samy'});
+        const res = await request.post('/friendships/block/'+userObject._id).set("x-access-token",token);
+        expect(res.status).toBe(200);
+        expect(res.body._id.toString()).toBe(userObject._id.toString());
+    })
+
+    it('testing block the user aleady blocked',async()=>{
+      const signinUser = {
+          data :"essamAhmed",
+          password: "$2afbg$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+      }
+      const response = await request.post('/auth/signin')
+      .send(signinUser);
+      token=response.body.accessToken;
+      const userObject= await User.findOne({username: 'samy'});
+      const res = await request.post('/friendships/block/'+userObject._id).set("x-access-token",token);
+      expect(res.status).toBe(400);
+      expect(res.body.message).toBe("the user is already blocking the user");
+    })
+})
+
+describe( 'get the blocked users' , () => {
+  it('testing get the blocked users',async()=>{
+      const userObject= await User.findOne({username: 'essamAhmed'});
+      const targetUser= await User.findOne({username: 'samy'});
+      const res = await request.get('/user/blockedIDs/'+userObject._id);
+      expect(res.status).toBe(200);
+      expect(res.body.blocks[0].toString()).toBe(targetUser._id.toString());
+})
+it('testing get the blocked users when user is not blocking anyone',async()=>{
+    const userObject= await User.findOne({username: 'samy'});
+    const res = await request.get('/user/blockedIDs/'+userObject._id);
+    expect(res.status).toBe(404);
+    expect(res.body.blocks).toBe("user not found");
+})
+})
