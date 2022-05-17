@@ -1,5 +1,6 @@
 const db = require("../models");
 const { findOne } = require("../models/user.model");
+const sendEmail = require("../utils/email");
 const {getListRelationsIDs,getUsersFromArray,getUsersRelationsList,createNewRelation,setRelationtoBlock} = require("../utils/user.js")
 
 const User = db.user;
@@ -11,11 +12,14 @@ exports.userBoard = (req, res) => {
 };
 
 exports.userShow =  async (req, res)  => {
-  const users = await  User.find({ _id :  req.params.id  }  );
-    if (users[0]==null) {
-      return res.status(404).send({ message: "User Not found." });
+  const users = await  User.findOne({ _id :  req.params.id  }  );
+  console.log(req.params.id)
+  console.log(users)
+    if (users) {
+      res.status(200).send({user: users});
+      return;
     }
-  res.status(200).send({user: users});
+     res.status(404).send({ message: "User Not found." });
   }
 
 exports.usersLookup =  async (req, res) =>{
@@ -184,9 +188,15 @@ exports.userChangePhoneNumber = async (req, res) =>{
   res.status(200).send("phone number changed");}
   
   exports.userChangeUsername = async (req, res) =>{
-    await User.updateOne({_id :  req.userId}, {$set: {username :  req.body.username}});
+    newUsername=req.body.username.substring(1);
+    if (await User.findOne({username:newUsername}))
+    {
+      res.status(400).send({ message: "Username already taken" });
+
+    }
+    else{await User.updateOne({_id :  req.userId}, {$set: {username :  newUsername}});
     res.status(200).send({ message: "Username changed successfully!" });}
-    // const user = await User.findOne({_id :  req.userId});
+  }// const user = await User.findOne({_id :  req.userId});
   // if(req.body.username){
   //   var checkUsername = /^[a-zA-Z0-9.\-_$@*!]{3,30}$/;
   //   if (!(checkUsername.test(req.body.username) && req.body.username[0] == '@')){
@@ -217,9 +227,22 @@ exports.userChangeEmail = async (req, res) =>{
   //     return;
   //   }
   //   else{
-      await User.findOneAndUpdate({ _id :  req.userId }, { email: req.body.email });
-      res.status(200).send({ message: "Email changed!" });
-    // }
+    newEmail=req.body.email;
+    if (await User.findOne({email:newEmail}))
+    {
+      console.log(await User.find({email:newEmail}))
+      res.status(400).send({ message: "email already taken" });
+
+    }
+    else{
+    await User.findOneAndUpdate({ _id :  req.userId }, { email: req.body.email });
+    // const message = `<p>You have a new email comfirmation request</p>
+    // <p>Please copy this verification code to confirm your email: ${user.verificationCode}</p>
+    // <p>Thank you very much</p>`;
+    // sendEmail(user.email, "Confirm Email", message);
+    // res.status(200).send({ message: "An Email sent to your account please verify" });
+    res.status(200).send({ message: "Email changed successfully!" });
+  }// }
     // }
   }
 
@@ -250,7 +273,7 @@ exports.friendshipsCreate = async (req, res) =>{
     }
     else if (relation != null && (relation.user_id==req.params.id)&&(relation.following==true)){
       found=1;
-      res.status(403).send("the user is already following the user");
+      res.status(403).send({message:"the user is already following the user"});
       return;
     }
   }
@@ -271,6 +294,54 @@ exports.friendshipsCreate = async (req, res) =>{
     await receiveRlation.save();
     await User.updateOne({ _id :  req.params.id  }, { $push: { relations: receiveRlation._id } });
     await User.updateOne({ _id :  req.params._id  }, {$inc : {followers_count: 1 }}); 
+    res.status(200).send(targetUser);
+    return;
+  }
+}
+
+
+exports.friendshipsMute = async (req, res) =>{
+  found=0; // 0 not found , 1 found 
+  const user = await  User.findOne({ _id :  req.userId});
+  const relations = user.relations;
+  console.log(user); 
+  if (relations)
+  {
+  for (i = 0; i < relations.length; i++) {
+    const relation = await Relation.findOne({ _id :  relations[i]  });
+    if (relation != null &&(relation.user_id==req.params.id)&&(relation.muted==false)){
+      found=1;
+      await Relation.updateOne({ _id :  relation._id  }, { $set: { muted: true } });
+      
+      // blockedUser= await User.findOne({_id:req.params.id});
+      //  targetRelation=blockedUser.relations
+      //   for (i=0;i<targetRelation.length;i++)
+      //   {
+      //     if (targetRelation[i].user_id == user._id){
+      //       await Relation.updateOne({ _id :  targetRelation[i]._id  }, { $set: { muted_by: true } });
+      //       await User.updateOne({ _id :  blockedUser._id  }, {$inc : {followers_count: 1 }});
+      //     }
+      //   }
+      res.status(200).send("muted");
+       return;
+    }
+    else if (relation != null && (relation.user_id==req.params.id)&&(relation.mute==true)){
+      found=1;
+      res.status(403).send({message:"the user is already following the user"});
+      return;
+    }
+  }
+}
+  if (found==0){
+    const targetUser= await User.findOne({ _id :  req.params.id });
+    relation = await createNewRelation(targetUser);
+    relation.mute=true;
+    console.log(relation);
+    await relation.save();
+    await User.updateOne({ _id :  user._id  }, { $push: { relations: relation._id } }); 
+    receiveRlation = await createNewRelation(user);
+    await receiveRlation.save();
+    await User.updateOne({ _id :  req.params.id  }, { $push: { relations: receiveRlation._id } });
     res.status(200).send(targetUser);
     return;
   }
@@ -401,7 +472,7 @@ exports.userUpdateProfile = async (req, res) =>{
 }
 ///// used after omnya 
 exports.userMediaList = async (req, res) =>{
-  const user = await  User.findOne({ _id :  req.userId});
+  const user = await  User.findOne({ _id :  req.params.id});
   if (user != null){
     tweets=[]
     const media = await Tweet.find({user_id:user._id});
@@ -423,7 +494,7 @@ exports.userMediaList = async (req, res) =>{
 
 exports.userTweetsList = async (req, res) =>{
 
-  const authUser = await  User.findOne({ _id :  req.userId  }  );
+  const authUser = await  User.findOne({ _id :  req.params.id }  );
   if (authUser != null){
     const tweets = [];
     const tweet = await Tweet.find({ user: authUser._id   });
@@ -437,7 +508,7 @@ exports.userTweetsList = async (req, res) =>{
 }
 
 exports.userLikedTweetsList = async(req, res) =>{
-  const authUser = await  User.findOne({ _id :  req.userId  }  );
+  const authUser = await  User.findOne({ _id :  req.params.id  }  );
   tweets=[]
   if (authUser != null){
     const tweetsIds =  authUser.likes5;
