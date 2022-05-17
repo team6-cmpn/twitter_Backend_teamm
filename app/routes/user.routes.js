@@ -29,9 +29,9 @@ module.exports = function(app) {
   app.post("/friendships/mute/:id",[authJwt.verifyToken],controller.friendshipsMute)
   app.post("/friendships/unmute/:id",[authJwt.verifyToken],controller.friendshipsUnMute)
   app.post("/user/update",[authJwt.verifyToken],controller.userUpdateProfile)
-  app.get("/user/tweetsList",[authJwt.verifyToken],controller.userTweetsList);
-  app.get("/user/likedTweetsList",[authJwt.verifyToken],controller.userLikedTweetsList);
-  app.get("/user/mediaList",[authJwt.verifyToken],controller.userMediaList);
+  app.get("/user/tweetsList/:id",controller.userTweetsList);
+  app.get("/user/likedTweetsList/:id",controller.userLikedTweetsList);
+  app.get("/user/mediaList/:id",controller.userMediaList);
   app.post("/user/changeusername",[authJwt.verifyToken,verifySignUp.checkValidUsername],controller.userChangeUsername);
   app.post("/user/changeemail",[authJwt.verifyToken,verifySignUp.checkValidEmail],controller.userChangeEmail);
   app.post("/user/changePhoneNumber",[authJwt.verifyToken,verifySignUp.checkValidPhoneNumber],controller.userChangePhoneNumber);
