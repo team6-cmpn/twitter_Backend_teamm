@@ -28,11 +28,11 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-         - targets: ['localhost:9090','cadvisor:8000','pushgateway:9091']
+         - targets: ['localhost:9090','cadvisor:8000','pushgateway:9091' , 'node-exporter:9100']
 
 
   - job_name: docker
     scrape_interval: 5s
     static_configs:
     - targets:
-      - PRIVATE_IP_ADDRESS:9323
+      - 172.31.20.68:9323
