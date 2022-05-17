@@ -1,6 +1,6 @@
 
 require("dotenv").config();
-const config = require("../config/auth.config");
+const config = require("../config/pusher.config");
 const db = require("../models");
 const Tweet = db.tweet;
 const User = db.user;
@@ -18,12 +18,13 @@ const {getTweet} = require("../utils/tweet.js");
 
 
 
+
 const pusher = new Pusher({
-appId : "1406245",
-key : "a02c7f30c561968a632d",
-secret : "5908937248eea3363b9e",
-cluster : "eu",
-useTLS: true,
+appId : config.appId,
+key : config.key,
+secret : config.secret,
+cluster : config.cluster,
+useTLS: config.useTLS,
     });
 
 
@@ -99,7 +100,7 @@ if(req.body.text)
         }
         if(userData){
           tweet.user = userData;
-        } 
+        }
       })
       //check if there is mention and return mentioned user id
       if(req.body.mention){
@@ -201,8 +202,8 @@ exports.lookup= async(req,res)=>{
   //to convert string to numbers
   page = parseInt(req.params.page);
   tweetsCount = parseInt(req.params.tweetsCount);
- 
-  //get users list followed by authenticated user 
+
+  //get users list followed by authenticated user
   var usersIdList = await getListRelationsIDs(req.userId,"following")
 
   //find tweets array of those users and sort them to the most recent tweets
@@ -211,9 +212,9 @@ exports.lookup= async(req,res)=>{
     .sort({created_at:-1})
     .skip(tweetsCount*(page-1))
     .limit(tweetsCount)
-  
+
     var tweetsArray = [];
-  
+
     for(let i = 0; i< followingsTweets.length;i++){
       var tweetelement = followingsTweets[i];
       var tweet = await getTweet(tweetelement.id,tweetelement.user)
@@ -254,7 +255,7 @@ exports.favorite= async(req,res) =>{
             if(err){
               res.status(400).send({message: err});
             }
-            //insert tweet likes and return the count 
+            //insert tweet likes and return the count
             if(!tweetdata.favorites.includes(userId)){
 
               await Tweet.findByIdAndUpdate(tweetId,{$push:{favorites: userId}},{new: true}).exec(async (err,tweetfavorites)=>{
@@ -350,7 +351,7 @@ exports.retweet= async(req,res)=>{
       res.status(400).send({message: err});
     }
     if(!userData.retweets.includes(tweetId)){
-        tweet.findOne({_id: req.params.id}).exec(async (err,requiredTweet)=>{     
+        tweet.findOne({_id: req.params.id}).exec(async (err,requiredTweet)=>{
           if (err){
             res.status(400).send({message: err});
           }
@@ -432,8 +433,8 @@ exports.unretweet= async(req,res)=>{
     res.status(400).send({message: "tweet not found"});
 
   }
-  
- 
+
+
 
 };
 
