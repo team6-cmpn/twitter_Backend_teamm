@@ -12,8 +12,12 @@ exports.getUsersFromArray = async(list) =>
     {
         try {
             user = await  User.find({ _id :  list[i]  }  );
+            if (!user[0])
+            {
+                return "User Not found";
+            }
         } catch (error) {
-            return "user not found";
+            return "User Not found";
         }
         objectsList.push(user[0]);
     }

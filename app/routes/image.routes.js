@@ -10,6 +10,6 @@ module.exports = function(app) {
   });
   //app.use(authJwt.verifyToken);
     //app.post("/image/upload", upload.single("image"), controller.uploadPhoto);
-  app.post("/image/profile/upload" , controller.uploadProfilePhoto);
+  app.post("/image/profile/upload" ,[authJwt.verifyToken], controller.uploadProfilePhoto);
   app.post("/image/tweet/upload" , controller.uploadTweetPhotos);
 }
