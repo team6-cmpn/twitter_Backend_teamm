@@ -2,6 +2,12 @@
 // const controller = require("../controllers/user.controller");
 const multer = require('multer');
 const path = require('path');
+const { relations } = require("../models");
+const db = require("../models");
+const User = db.user;
+const tweet = db.tweet;
+const Relation = db.relations;
+require("dotenv").config();
 // module.exports = function(app) {
 //   app.use(function(req, res, next) {
 //     res.header(
@@ -35,6 +41,7 @@ exports.uploadPhotos = async(req, res,count) => {
                     // message: 'Error Occured!',
                     // error: err
             } else {
+                User.updateOne({_id:req.userId},{profile_photo:req.file.path});
                 res.status(200).send(
                     req.file
                     // status: true,

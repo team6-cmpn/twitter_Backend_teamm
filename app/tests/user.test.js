@@ -6,6 +6,7 @@ const supertest = require('supertest');
 const request = supertest(app);
 var jwt  = require("jsonwebtoken");
 const mongoose = require('mongoose');
+const { createNewRelation} = require('../utils/user.js')
 
 
 const user1=new User({
@@ -192,6 +193,33 @@ describe('test the getting user APIs', () => {
     
   })
 
+
+describe('test the user lookup API' , ()=>
+{
+    it('testing getting res 200 from userLookup', async() => {
+      const user1=await User.findOne({username: 'mostafa'});
+      const user2=await User.findOne({username: 'admin3'});
+      userIds=user1._id.toString()+','+user2._id.toString();
+        const res = await request.get('/user/lookup/'+userIds);
+      expect(res.status).toBe(200);
+      expect(res.body.user[0].username).toBe("mostafa");
+      expect(res.body.user[0]._id.toString()).toBe(user1._id.toString());
+      expect(res.body.user[1].username).toBe("admin3");
+      expect(res.body.user[1]._id.toString()).toBe(user2._id.toString());
+    })
+
+    it('testing getting res 404 from userLookup', async() => {
+      const user1=await User.findOneAndRemove({username: 'mostafa'});
+      const user2=await User.findOneAndRemove({username: 'admin3'});
+      userIds=user1._id.toString()+','+user2._id.toString();
+        const res = await request.get('/user/lookup/'+userIds);
+      expect(res.status).toBe(404);
+      expect(res.body.message).toBe("Users Not found.")
+    })
+
+})
+
+
 describe('test make follow API', () => {
     it('testing create a relation ' , async() => {
         const signinUser = {
@@ -205,10 +233,10 @@ describe('test make follow API', () => {
         const userID=userObject._id;
         const res = await request.post('/friendships/create/'+userID).set("x-access-token",token);
         expect(res.status).toBe(200);
-        expect(res.body._id.toString()).toBe(userID.toString());
+        expect(res.body.user_id.toString()).toBe(userID.toString());
     })
 
-    it('testing create a relation ' , async() => {
+    it('testing create an exicting relation ' , async() => {
         const signinUser = {
             data :"admin2",
             password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
@@ -218,11 +246,36 @@ describe('test make follow API', () => {
         token=response.body.accessToken;
         const userObject= await User.findOne({username: 'samy'});
         const userID=userObject._id;
+
         const res2 = await request.post('/friendships/create/'+userID).set("x-access-token",token);
         const res = await request.post('/friendships/create/'+userID).set("x-access-token",token);
-        expect(res.status).toBe(403);
+        expect(res.status).toBe(400);
         expect(res.body.message).toBe("the user is already following the user");
     })
 
+    it('testing following exicting relation ' , async() => {
+      const signinUser = {
+          data :"admin2",
+          password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+      }
+      const response = await request.post('/auth/signin')
+      .send(signinUser);
+      token=response.body.accessToken;
+      const userObject= await User.findOne({username: 'samy'});
+      const userID=userObject._id;
+      const newRelation = await createNewRelation(userObject);
+      newRelation.following=false;
+      newRelation.follower=false;
+      await newRelation.save();
+    await User.updateOne({ _id :  response.body.user._id  }, { $push: { relations: newRelation._id } });
+      const res2 = await request.post('/friendships/destroy/'+userID).set("x-access-token",token);
+      // await Relation.updateOne({_id:res2.body._id},{$set:{following:false}});
+      const res = await request.post('/friendships/create/'+userID).set("x-access-token",token);
+      console.log(res.body)
+      expect(res.status).toBe(200);
+      expect(res.body.message).toBe("following");
+  })
+
 
 })
+

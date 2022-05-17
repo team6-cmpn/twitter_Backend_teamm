@@ -10,11 +10,11 @@ require("dotenv").config();
 exports.userBoard = (req, res) => {
   res.status(200).send({userid : req.userId});
 };
-
+//tested
 exports.userShow =  async (req, res)  => {
   const users = await  User.findOne({ _id :  req.params.id  }  );
-  console.log(req.params.id)
-  console.log(users)
+  //console.log(req.params.id)
+  //console.log(users)
     if (users) {
       res.status(200).send({user: users});
       return;
@@ -26,7 +26,8 @@ exports.usersLookup =  async (req, res) =>{
   //console.log(req.params.username);
   const userIDsArray= req.params.ids.split(",");
   const users= await getUsersFromArray(userIDsArray);
-  if (users.length==0 | users=="user not found"){
+  console.log(users)
+  if (users=="User Not found"){
     res.status(404).send({ message: "Users Not found." });
   }else{
     res.status(200).send({user: users});
@@ -125,17 +126,18 @@ exports.friendshipsLookup =  async (req, res) =>{
 
       }
     }
-    console.log(users);
+    
+    //console.log(users);
     res.status(200).send(users);
 }
 /// not used
 exports.friendshipsNo_retweets = async (req, res) =>{
   const no_retweetsUsers = [];
     const user = await  User.findOne({ _id :  req.userId }  );
-    console.log(user.relations[0]);
+    //console.log(user.relations[0]);
     for(i=0;i<user.relations.length;i++){
       const relation = await Relation.findOne({ _id :  user.relations[i]  });
-      console.log(relation);
+      //console.log(relation);
       if (relation.no_retweet==true){
         const no_retweetsUser = await User.findOne({ _id :  relation.user_id  });
         no_retweetsUsers.push(no_retweetsUser);
@@ -148,7 +150,7 @@ exports.friendshipsShow = async (req, res) =>{
   found = 0;
   relationObject = {};
   const user = await  User.findOne({ _id :  req.params.source_id  }  );
-  console.log(user);
+  //console.log(user);
   for(i=0;i<user.relations.length;i++){
     const relation = await Relation.findOne({ _id :  user.relations[i]  });
     if (relation!=null && relation.user_id==req.params.target_id){
@@ -178,7 +180,7 @@ exports.friendshipsShow = async (req, res) =>{
     res.status(200).send(relationObject);
   }
   else{
-    console.log("not found");
+    //console.log("not found");
     res.status(404).send("No relations");
   }
 }
@@ -230,7 +232,7 @@ exports.userChangeEmail = async (req, res) =>{
     newEmail=req.body.email;
     if (await User.findOne({email:newEmail}))
     {
-      console.log(await User.find({email:newEmail}))
+      //console.log(await User.find({email:newEmail}))
       res.status(400).send({ message: "email already taken" });
 
     }
@@ -245,12 +247,12 @@ exports.userChangeEmail = async (req, res) =>{
   }// }
     // }
   }
-
+// tested
 exports.friendshipsCreate = async (req, res) =>{
   found=0; // 0 not found , 1 found 
   const user = await  User.findOne({ _id :  req.userId});
   const relations = user.relations;
-  console.log(user); 
+  //console.log(user); 
   if (relations)
   {
   for (i = 0; i < relations.length; i++) {
@@ -268,12 +270,12 @@ exports.friendshipsCreate = async (req, res) =>{
             await User.updateOne({ _id :  blockedUser._id  }, {$inc : {followers_count: 1 }});
           }
         }
-      res.status(200).send("following");
+      res.status(200).send({message:"following"});
        return;
     }
     else if (relation != null && (relation.user_id==req.params.id)&&(relation.following==true)){
       found=1;
-      res.status(403).send({message:"the user is already following the user"});
+      res.status(400).send({message:"the user is already following the user"});
       return;
     }
   }
@@ -284,7 +286,7 @@ exports.friendshipsCreate = async (req, res) =>{
     relation.following=true;
     relation.want_retweets=true;
     relation.Notifications_enabled=true;
-    console.log(relation);
+    //console.log(relation);
     await relation.save();
     await User.updateOne({ _id :  user._id  }, { $push: { relations: relation._id } });
     await User.updateOne({ _id :  user._id  }, {$inc : {followings_count: 1 }}); 
@@ -294,7 +296,7 @@ exports.friendshipsCreate = async (req, res) =>{
     await receiveRlation.save();
     await User.updateOne({ _id :  req.params.id  }, { $push: { relations: receiveRlation._id } });
     await User.updateOne({ _id :  req.params._id  }, {$inc : {followers_count: 1 }}); 
-    res.status(200).send(targetUser);
+    res.status(200).send(relation);
     return;
   }
 }
@@ -304,14 +306,14 @@ exports.friendshipsMute = async (req, res) =>{
   found=0; // 0 not found , 1 found 
   const user = await  User.findOne({ _id :  req.userId});
   const relations = user.relations;
-  console.log(user); 
+  //console.log(user); 
   if (relations)
   {
   for (i = 0; i < relations.length; i++) {
     const relation = await Relation.findOne({ _id :  relations[i]  });
-    if (relation != null &&(relation.user_id==req.params.id)&&(relation.muted==false)){
+    if (relation != null &&(relation.user_id==req.params.id)&&(relation.mute==false)){
       found=1;
-      await Relation.updateOne({ _id :  relation._id  }, { $set: { muted: true } });
+      await Relation.updateOne({ _id :  relation._id  }, { $set: { mute: true } });
       
       // blockedUser= await User.findOne({_id:req.params.id});
       //  targetRelation=blockedUser.relations
@@ -327,7 +329,7 @@ exports.friendshipsMute = async (req, res) =>{
     }
     else if (relation != null && (relation.user_id==req.params.id)&&(relation.mute==true)){
       found=1;
-      res.status(403).send({message:"the user is already following the user"});
+      res.status(400).send({message:"the user is already muting the user"});
       return;
     }
   }
@@ -336,7 +338,7 @@ exports.friendshipsMute = async (req, res) =>{
     const targetUser= await User.findOne({ _id :  req.params.id });
     relation = await createNewRelation(targetUser);
     relation.mute=true;
-    console.log(relation);
+    //console.log(relation);
     await relation.save();
     await User.updateOne({ _id :  user._id  }, { $push: { relations: relation._id } }); 
     receiveRlation = await createNewRelation(user);
@@ -347,6 +349,43 @@ exports.friendshipsMute = async (req, res) =>{
   }
 }
 
+exports.friendshipsUnMute = async (req, res) =>{
+  found=0; // 0 not found , 1 found 
+  const user = await  User.findOne({ _id :  req.userId});
+  const relations = user.relations;
+  //console.log(user); 
+  if (relations)
+  {
+  for (i = 0; i < relations.length; i++) {
+    const relation = await Relation.findOne({ _id :  relations[i]  });
+    if (relation != null &&(relation.user_id==req.params.id)&&(relation.mute==true)){
+      found=1;
+      await Relation.updateOne({ _id :  relation._id  }, { $set: { mute: false } });
+      res.status(200).send("un muted");
+       return;
+    }
+    else if (relation != null && (relation.user_id==req.params.id)&&(relation.mute==false)){
+      found=1;
+      res.status(400).send({message:"the user is already not muting the user"});
+      return;
+    }
+  }
+}
+  if (found==0){
+    res.status(400).send({message:"there is no relation between the users"});
+    // const targetUser= await User.findOne({ _id :  req.params.id });
+    // relation = await createNewRelation(targetUser);
+    // relation.mute=true;
+    // console.log(relation);
+    // await relation.save();
+    // await User.updateOne({ _id :  user._id  }, { $push: { relations: relation._id } }); 
+    // receiveRlation = await createNewRelation(user);
+    // await receiveRlation.save();
+    // await User.updateOne({ _id :  req.params.id  }, { $push: { relations: receiveRlation._id } });
+    // res.status(200).send(targetUser);
+    // return;
+  }
+}
 
 
 exports.friendshipsDestroy = async (req, res) =>{
@@ -359,7 +398,7 @@ exports.friendshipsDestroy = async (req, res) =>{
   for (i = 0; i < relations.length; i++) {
     const relation = await Relation.findOne({ _id :  relations[i]  });
     if (relation != null && (relation.user_id==req.params.id)&&(relation.following==true)){
-      console.log("11111111")
+      //console.log("11111111")
       found=1;
       await Relation.updateOne({ _id :  relation._id  }, { $set: { following: false } });
       for (i=0;i<targetRelations.length;i++)
@@ -373,7 +412,7 @@ exports.friendshipsDestroy = async (req, res) =>{
     }
     else if (relation != null && (relation.user_id==req.params.id)&&(relation.following==false)){
       found=1;
-      console.log("11111111")
+      //console.log("11111111")
       res.status(403).send("the user is not following the user");
       return;
     }
@@ -410,7 +449,53 @@ exports.friendshipsUpdate = async (req, res) =>{
     return;
   }
 }
+exports.userUnBlocking = async(req,res)=>
+{
+  found=0; // 0 not found , 1 found 
+  const user = await  User.findOne({ _id :  req.userId});
+  const relations = user.relations; 
+  if (relations)
+  {
+  for (i = 0; i < relations.length; i++) {
+    relation = await Relation.findOne({ _id :  relations[i]  });
+    if (relation != null &&(relation.user_id==req.params.id)&&(relation.blocked==true)){
+      found=1;
+      
+      await Relation.updateOne({ _id :  relation._id  }, { $set: { blocked: false } });
+       blockedUser= await User.findOne({_id:req.params.id});
+       targetRelation=blockedUser.relations
+        for (i=0;i<targetRelation.length;i++)
+        {
+          if (targetRelation[i].user_id == user._id){
+            await Relation.updateOne({ _id :  targetRelation[i]._id  }, { $set: { blocked_by: false } });
 
+          }
+        }
+      res.status(200).send("un blocked");  
+       return;
+    }
+    else if (relation != null && (relation.user_id==req.params.id)&&(relation.blocked==false)){
+      found=1;
+      res.status(400).send("the user is already not blocking the user");
+      return;
+    } 
+  } 
+} 
+  if (found==0){
+    res.status(400).send("there is no relation between the users");
+    // const targetUser= await User.findOne({ _id :  req.params.id });
+    // relation = await createNewRelation(targetUser);
+    // relation.blocked=true;
+    // await relation.save();
+    // await User.updateOne({ _id :  user._id  }, { $push: { relations: relation._id } });
+    // receiveRlation = await createNewRelation(user);
+    // receiveRlation.blocked_by=true;
+    // await receiveRlation.save();
+    // await User.updateOne({ _id :  req.params.id  }, { $push: { relations: receiveRlation._id } });
+    // res.status(200).send(targetUser);
+    return;
+  }
+}
 exports.userBlocking = async(req,res)=>
 {
   found=0; // 0 not found , 1 found 
@@ -461,7 +546,7 @@ exports.userUpdateProfile = async (req, res) =>{
   const user = await  User.findOne({ _id :  req.userId});
   if (user != null){
     await User.updateOne({ _id :  user._id  }, { $set: { name: req.body.name ,description:req.body.description} });
-    console.log(user)
+    //console.log(user)
     res.status(200).send("profile updated");
     return;
   }
