@@ -58,7 +58,29 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
     networks:
       - mern-app
-  # loki:
+  
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=/host'
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+    networks:
+      - mern-app
+
+networks:
+  mern-app:
+    driver: bridge
+volumes:
+  mongo-data:
+    driver: local
+  prometheus-data:
+    driver: local
+    
+# loki:
   #   image: grafana/loki:2.2.1
   #   ports:
   #     - "3100:3100"
@@ -76,21 +98,3 @@ services:
   #   command: -config.file=/etc/promtail/promtail-config.yaml
   #   networks:
   #     - mern-app
-    # node-exporter:
-    # image: prom/node-exporter:latest
-    # container_name: monitoring_node_exporter
-    # restart: unless-stopped
-    # expose:
-    #   - 9100
-    # networks:
-    #   - mern-app
-
-networks:
-  mern-app:
-    driver: bridge
-volumes:
-  mongo-data:
-    driver: local
-  prometheus-data:
-    driver: local
-    
