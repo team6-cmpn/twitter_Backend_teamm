@@ -16,6 +16,8 @@ services:
       - mern-app
     depends_on:
       - mongo
+    volumes:
+      - ./uploads:/server/upload
   mongo:
     image: mongo:focal
     ports:
