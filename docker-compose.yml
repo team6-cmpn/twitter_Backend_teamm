@@ -84,6 +84,7 @@ volumes:
   prometheus-data:
     driver: local
     
+    
 # loki:
   #   image: grafana/loki:2.2.1
   #   ports:
