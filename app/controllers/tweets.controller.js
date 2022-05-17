@@ -1,6 +1,6 @@
 
 require("dotenv").config();
-const config = require("../config/auth.config");
+const config = require("../config/pusher.config");
 const db = require("../models");
 const Tweet = db.tweet;
 const User = db.user;
