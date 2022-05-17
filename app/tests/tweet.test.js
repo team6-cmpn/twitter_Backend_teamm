@@ -66,10 +66,10 @@ const user1=new User(
         retweets:[
             '625d918e67dc9b72474001bc',
             '628036ed132f0fbc9e96b198'
-        ],
-        relations:[
-            '627ff1ad4a6395ce9d95de58', 
-        ]
+        ]//,
+        // relations:[
+        //     '627ff1ad4a6395ce9d95de58', 
+        // ]
     })
 
     const user2=new User({
@@ -93,10 +93,10 @@ const user1=new User(
             // '625d594a9b671cf4db621900'
         retweets:[
             '628036ed132f0fbc9e96b198'
-        ],
-        relations:[
-            '627ff1ad4a6395ce9d95de5b', 
-        ]
+        ]//,
+        // relations:[
+        //     '627ff1ad4a6395ce9d95de5b', 
+        // ]
 
     })
 
@@ -652,8 +652,8 @@ describe('favorite list of users  of a tweet test',()=>{
 // describe('newsfeed timeline tweeter test',()=>{
 //     it('return 200 with favorite list of users',async()=>{
 //         const signinUser = {
-//             data :"admin2",
-//             password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+//             data :"essam ahmed",
+//             password: "$2afbg$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
 //         }
 //         const response = await request.post('/auth/signin')
 //         .send(signinUser);
@@ -661,23 +661,28 @@ describe('favorite list of users  of a tweet test',()=>{
 
 //         const page = '1';
 //         const count ='5';
+//         const userID ='62503267a848908b0b2102f3';
+//         const res2 = await request.post('/friendships/create/'+userID).set("x-access-token",token);
 //         const res = await request.get('/tweets/lookup/'+ page+count).set("x-access-token",token)
+//         //expect(res2.status).toBe(200)
 //         expect(res.status).toBe(200)
+
+
 //     });
-//     // it('tweet not found',async()=>{
-//     //     const signinUser = {
-//     //         data :"admin2",
-//     //         password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
-//     //     }
-//     //     const response = await request.post('/auth/signin')
-//     //     .send(signinUser);
-//     //     token=response.body.accessToken
+    // it('tweet not found',async()=>{
+    //     const signinUser = {
+    //         data :"admin2",
+    //         password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+    //     }
+    //     const response = await request.post('/auth/signin')
+    //     .send(signinUser);
+    //     token=response.body.accessToken
 
-//     //     const page = '1';
-//     //     const count ='5';
-//     //     const res = await request.get('/tweets/lookup/'+ page+count).set("x-access-token",token)
-//     //     //expect(res.body.message).toBe("tweet not found in database")
-//     //     expect(res.status).toBe(404)
-//     // });
+    //     const page = '1';
+    //     const count ='5';
+    //     const res = await request.get('/tweets/lookup/'+ page+count).set("x-access-token",token)
+    //     //expect(res.body.message).toBe("tweet not found in database")
+    //     expect(res.status).toBe(404)
+    // });
 
-// });
+//});
