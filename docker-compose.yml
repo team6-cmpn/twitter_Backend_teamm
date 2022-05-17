@@ -36,6 +36,13 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     networks:
       - mern-app
+  pushgateway:
+    image: prom/pushgateway
+    container_name: pushgateway
+    ports:
+      - 9091:9091
+    networks:
+      - mern-app
 networks:
   mern-app:
     driver: bridge
