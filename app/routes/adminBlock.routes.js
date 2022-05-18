@@ -12,4 +12,5 @@ module.exports = function(app) {
   });
 
 app.post("/adminBlock/create",[authJwt.verifyToken,authJwt.checkIsAdmin,authJwt.checkAdminBlockCreate],controller.createBlock);
+app.post("/adminBlock/destroy",[authJwt.verifyToken,authJwt.checkIsAdmin],controller.destroyBlock);
   };

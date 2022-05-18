@@ -11,6 +11,13 @@ var jwt  = require("jsonwebtoken");
 
 
 
+const pusher = new Pusher({
+appId : config.appId,
+key : config.key,
+secret : config.secret,
+cluster : config.cluster,
+useTLS: config.useTLS,
+    });
 
 
 
@@ -47,26 +54,11 @@ var jwt  = require("jsonwebtoken");
 
 
 
-
-
-
 exports.createBlock= async(req,res)=>{
 
 
   let objId= req.query.userid
   let duration=req.body.duration
-
-
-
-const pusher = new Pusher({
-appId : config.appId,
-key : config.key,
-secret : config.secret,
-cluster : config.cluster,
-useTLS: config.useTLS,
-    });
-
-
 
 
    await User.findById(objId).exec( async (err, blockedUser) => {
@@ -119,6 +111,94 @@ res.status(200).send(blockedUserConfirmed)
 });
 }}});
 }
+
+
+
+
+
+/**
+ *
+ * @global
+ * @typedef {object}  requestBodyAdminDestroyBlock
+ * @property {string} userid the id of the user need to be unblocked
+ *
+ */
+
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyAdminDestroyBlock
+ * @property {message}
+ */
+
+ /**
+  * This function that admin use to block users for a certain amount of time defined in a duration of number of days if the user isnt already blocked and not an admin
+  *
+  * @param {requestBodyAdminDestroy} req the request sent from the front
+  * @param {responseBodyAdminDestroy} res the response which is sent back to the front
+  *
+  */
+
+
+
+
+
+
+
+exports.destroyBlock=async(req,res)=>{
+
+
+  let objId= req.query.userid
+  await User.findById(objId).exec( async (err, blockedUser) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    if(!blockedUser){
+      res.status(404).send({message: " normal user not found"})
+    }
+
+    if (blockedUser.admin_block.blocked_by_admin==false){
+      res.status(403).send({ message: "This user is already not blocked" })
+    }
+
+     if (blockedUser.admin_block.blocked_by_admin==true){
+       blocktimes=blockedUser.admin_block.blockNumTimes
+        await User.findByIdAndUpdate( objId,{ admin_block:{ blocked_by_admin:false, blockNumTimes: blocktimes  }},{ returnDocument: 'after' }).exec(async (err,user)=>{
+         if (err){
+           res.status(500).send({ message: err });
+           return;
+         }
+         if(user){
+
+           notification= new Notification({
+             notificationType: 'unblock',
+             notificationHeader:{
+               text: "You are unblocked by admin "
+             },
+             userRecivedNotification: user,
+               created_at: new Date()
+           })
+           notification.save()
+           await User.findByIdAndUpdate(user._id, {$addToSet:{notifications: notification }},{ returnDocument: 'after' })
+           .exec(async(err,usernotific)=>{
+             if(err){
+               res.status(500).send({ message: err });
+               return;
+             }
+             if (usernotific){
+                await pusher.trigger(String(usernotific._id), 'unblock-event',notification);
+           }})
+
+           res.status(200).send({ message: " User unblocked succeccfully " })
+         }
+     })
+   }
+})
+}
+
+
+
 
 
 
