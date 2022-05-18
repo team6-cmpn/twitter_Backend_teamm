@@ -99,7 +99,7 @@ if(req.body.text)
         }
         if(userData){
           tweet.user = userData;
-        } 
+        }
       })
       //check if there is mention and return mentioned user id
       if(req.body.mention){
@@ -201,8 +201,8 @@ exports.lookup= async(req,res)=>{
   //to convert string to numbers
   page = parseInt(req.params.page);
   tweetsCount = parseInt(req.params.tweetsCount);
- 
-  //get users list followed by authenticated user 
+
+  //get users list followed by authenticated user
   var usersIdList = await getListRelationsIDs(req.userId,"following")
 
   //find tweets array of those users and sort them to the most recent tweets
@@ -211,7 +211,7 @@ exports.lookup= async(req,res)=>{
     .sort({created_at:-1})
     .skip(tweetsCount*(page-1))
     .limit(tweetsCount)
-    
+
     var tweetsArray = [];
 
     for(let i = 0; i< followingsTweets.length;i++){
@@ -270,7 +270,7 @@ exports.favorite= async(req,res) =>{
             if(err){
               res.status(400).send({message: err});
             }
-            //insert tweet likes and return the count 
+            //insert tweet likes and return the count
             if(!tweetdata.favorites.includes(userId)){
 
               await Tweet.findByIdAndUpdate(tweetId,{$push:{favorites: userId}},{new: true}).exec(async (err,tweetfavorites)=>{
@@ -286,7 +286,7 @@ exports.favorite= async(req,res) =>{
             let nameListQuery=await Tweet.find({_id:tweetId}).populate('favorites').select('favorites -_id')
             let nameArray = nameListQuery[0].favorites.map(({ name }) => name)
             let nameArrayHandle= nameArray.slice(0,2)
-            numberOfUsersHandling=tweetfavorites.favorite_count>2  ?   String(userData.name)+ " and "+String(tweetfavorites.favorite_count-1)+ " others" : String(nameArrayHandle[1])+ " and"+String(nameArrayHandle[0])
+            numberOfUsersHandling=tweetfavorites.favorite_count>2  ?   String(userData.name)+ " and "+String(tweetfavorites.favorite_count-1)+ " others" : String(nameArrayHandle[1])+ " and "+String(nameArrayHandle[0])
 
 //                                                                                                                    //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -366,7 +366,7 @@ exports.retweet= async(req,res)=>{
       res.status(400).send({message: err});
     }
     if(!userData.retweets.includes(tweetId)){
-        tweet.findOne({_id: req.params.id}).exec(async (err,requiredTweet)=>{     
+        tweet.findOne({_id: req.params.id}).exec(async (err,requiredTweet)=>{
           if (err){
             res.status(400).send({message: err});
           }
