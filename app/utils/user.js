@@ -2,7 +2,7 @@
 const { relations } = require("../models");
 const db = require("../models");
 const User = db.user;
-const tweet = db.tweet;
+const Tweet = db.tweet;
 const Relation = db.relations;
 require("dotenv").config();
 exports.getUsersFromArray = async(list) =>
@@ -121,4 +121,16 @@ exports.setRelationtoBlock=async(id,data)=>
     }
     return "relation updated";
 
+}
+
+exports.getTweetsFromUser=async(id)=>
+{
+    tweets=[];
+    const allTweets=await Tweet.find();
+    for (i=0;i<allTweets.length;i++){
+        if (allTweets[i].user.toString()==id.toString()){
+            tweets.push(allTweets[i]);
+        }
+    }
+    return tweets;
 }

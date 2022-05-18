@@ -99,7 +99,7 @@ if(req.body.text)
         }
         if(userData){
           tweet.user = userData;
-        } 
+        }
       })
       //check if there is mention and return mentioned user id
       if(req.body.mention){
@@ -196,57 +196,67 @@ exports.show=  async(req,res)=>{
   }
    ////https://stackoverflow.com/questions/67680295/node-js-mongoose-findone-id-req-params-id-doesnt-work
   //// https://stackoverflow.com/questions/20044743/twitter-api-get-tweet-id
-
-exports.lookup= async(req,res)=>{
-  //to convert string to numbers
-  page = parseInt(req.params.page);
-  tweetsCount = parseInt(req.params.tweetsCount);
- 
-  //get users list followed by authenticated user 
-  var usersIdList = await getListRelationsIDs(req.userId,"following")
-
-  //find tweets array of those users and sort them to the most recent tweets
-  if (usersIdList.length != 0){
-    var followingsTweets = await Tweet.find({user:{$in: usersIdList}})
-    .sort({created_at:-1})
-    .skip(tweetsCount*(page-1))
-    .limit(tweetsCount)
-    
-    var tweetsArray = [];
-
-    for(let i = 0; i< followingsTweets.length;i++){
-      var tweetelement = followingsTweets[i];
-      var tweet = await getTweet(tweetelement._id,tweetelement.user)
-      tweetsArray.push({"tweet":tweet[0],"user":tweet[1]});
+  exports.lookup= async(req,res)=>{
+    //to convert string to numbers
+    page = parseInt(req.params.page);
+    tweetsCount = parseInt(req.params.tweetsCount);
+   
+    //get users list followed by authenticated user 
+    var usersIdList = await getListRelationsIDs(req.userId,"following")
+  
+    //find tweets array of those users and sort them to the most recent tweets
+    if (usersIdList.length != 0){
+      var followingsTweets = await Tweet.find({user:{$in: usersIdList}}) //////////
+      .sort({created_at:-1})
+      .skip(tweetsCount*(page-1))
+      .limit(tweetsCount)
+      if(followingsTweets){
+        var tweetsArray = [];
+  
+        for(let i = 0; i< followingsTweets.length;i++){
+          var tweetelement = followingsTweets[i];
+          var tweet = await getTweet(tweetelement._id,tweetelement.user)
+          tweetsArray.push({"tweet":tweet[0],"user":tweet[1]});
+        }
+        if (tweetsArray){
+          res.status(200).send(tweetsArray)
+        }else{
+          res.send({message:"tweets array error"})
+        }
+      }else{
+        res.send({message:"couldn't find tweets in database"})
+      }
+  
+  
     }
-    if (tweetsArray){
-      res.status(200).send(tweetsArray)
-    }else{
-      res.send({message:"tweets array error"})
+    if(!usersIdList){
+      res.status(404).send({message:"following list error"})
     }
-
-  }
-  if(!usersIdList){
-    res.status(404).send({message:"following list error"})
-  }
-  if(usersIdList.length == 0){
-    var currentDate = new Date()
-    var lastWeekDate = currentDate.setDate(currentDate.getDate()-7)
-    var newsfeedTweets = await Tweet.aggregate([{$match:{created_at:{$gte: new Date(lastWeekDate),$lte: new Date()}}}]).sort({created_at:-1}).skip(tweetsCount*(page-1)).limit(tweetsCount)
-
-    var tweetsArray = [];
-    for(let i = 0; i< newsfeedTweets.length;i++){
-      var tweetelement = newsfeedTweets[i];
-      var tweet = await getTweet(tweetelement._id,tweetelement.user)
-      tweetsArray.push({"tweet":tweet[0],"user":tweet[1]});
+    // if user is not following any one
+    if(usersIdList.length == 0){
+      var currentDate = new Date()
+      var lastWeekDate = currentDate.setDate(currentDate.getDate()-7)
+      var newsfeedTweets = await Tweet.aggregate([{$match:{created_at:{$gte: new Date(lastWeekDate),$lte: new Date()}}}]).sort({created_at:-1}).skip(tweetsCount*(page-1)).limit(tweetsCount)
+  
+      if(newsfeedTweets){
+        var tweetsArray = [];
+        for(let i = 0; i< newsfeedTweets.length;i++){
+          var tweetelement = newsfeedTweets[i];
+          var tweet = await getTweet(tweetelement._id,tweetelement.user)
+          tweetsArray.push({"tweet":tweet[0],"user":tweet[1]});
+        }
+        if (tweetsArray){
+          res.status(200).send(tweetsArray)
+        }else{
+          res.send({message:"tweets array error"})
+        }
+      }else{
+        res.send({message:"couldn't find tweets in database"})
+      }
+  
+  
     }
-    if (tweetsArray){
-      res.status(200).send(tweetsArray)
-    }else{
-      res.send({message:"tweets array error"})
-    }
-  }
-};
+  };
 
 // /**
 //  *
@@ -270,7 +280,7 @@ exports.favorite= async(req,res) =>{
             if(err){
               res.status(400).send({message: err});
             }
-            //insert tweet likes and return the count 
+            //insert tweet likes and return the count
             if(!tweetdata.favorites.includes(userId)){
 
               await Tweet.findByIdAndUpdate(tweetId,{$push:{favorites: userId}},{new: true}).exec(async (err,tweetfavorites)=>{
@@ -286,7 +296,7 @@ exports.favorite= async(req,res) =>{
             let nameListQuery=await Tweet.find({_id:tweetId}).populate('favorites').select('favorites -_id')
             let nameArray = nameListQuery[0].favorites.map(({ name }) => name)
             let nameArrayHandle= nameArray.slice(0,2)
-            numberOfUsersHandling=tweetfavorites.favorite_count>2  ?   String(userData.name)+ " and "+String(tweetfavorites.favorite_count-1)+ " others" : String(nameArrayHandle[1])+ " and"+String(nameArrayHandle[0])
+            numberOfUsersHandling=tweetfavorites.favorite_count>2  ?   String(userData.name)+ " and "+String(tweetfavorites.favorite_count-1)+ " others" : String(nameArrayHandle[1])+ " and "+String(nameArrayHandle[0])
 
 //                                                                                                                    //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -366,7 +376,7 @@ exports.retweet= async(req,res)=>{
       res.status(400).send({message: err});
     }
     if(!userData.retweets.includes(tweetId)){
-        tweet.findOne({_id: req.params.id}).exec(async (err,requiredTweet)=>{     
+        tweet.findOne({_id: req.params.id}).exec(async (err,requiredTweet)=>{
           if (err){
             res.status(400).send({message: err});
           }

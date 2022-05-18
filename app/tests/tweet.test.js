@@ -14,30 +14,30 @@ const { tweet } = require('../models');
 // to create users database
 // const user0=new User(
 //     {
-        
-//         _id: '62503267a848908b0b2102f3', 
-//         username : 'passwordTest', 
-//         email: 'bcq33914@jiooq.com', 
-//         password : '$2a$08$CyFJhhKeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C', 
+
+//         _id: '62503267a848908b0b2102f3',
+//         username : 'passwordTest',
+//         email: 'bcq33914@jiooq.com',
+//         password : '$2a$08$CyFJhhKeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C',
 //         followers : [
-    
-//         ], 
+
+//         ],
 //         following : [
-    
-//         ], 
-//         created_at : '2022-04-08T12:58:49.514+0000', 
-//         confirmed : true, 
+
+//         ],
+//         created_at : '2022-04-08T12:58:49.514+0000',
+//         confirmed : true,
 //         favorites : [
 //             '625d594a9b671cf4db621969',
 //             '625d594a9b671cf4db621900',
 //             '625d918e67dc9b72474001bc'
-//         ], 
+//         ],
 //         admin_block : {
-//             "blocked_by_admin" : false, 
-//         }, 
+//             "blocked_by_admin" : false,
+//         },
 //         retweets : [
 
-//         ], 
+//         ],
 //         relations : [
 //             '627ff1ad4a6395ce9d95de58'
 //         ]
@@ -66,22 +66,21 @@ const user1=new User(
         retweets:[
             '625d918e67dc9b72474001bc',
             '628036ed132f0fbc9e96b198'
-        ]//,
-        // relations:[
-        //     '627ff1ad4a6395ce9d95de58', 
-        // ]
+        ],
+         relations:[
+             '627ff1ad4a6395ce9d95de58',
+         ]
     })
 
     const user2=new User({
 
-        username : "admin2",
+        username : "adminn2",
+        name: 'samy',
         _id:"62503267a848908b0b2102f3",
-        email : "bcq34@jidffooq.com",
-        password : "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C",
-        followers : [],
+        email : "bcq34@jidffmmq.com",
+        password : "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C",
         followers_count : 150,
         dateOfBirth :("2022-04-15T05:21:20.200Z"),
-        following : [],
         admin_block : {
             "blocked_by_admin" : false
         },
@@ -93,10 +92,11 @@ const user1=new User(
             // '625d594a9b671cf4db621900'
         retweets:[
             '628036ed132f0fbc9e96b198'
-        ]//,
-        // relations:[
-        //     '627ff1ad4a6395ce9d95de5b', 
-        // ]
+        ],
+
+         relations:[
+             '627ff1ad4a6395ce9d95de5b',
+         ]
 
     })
 
@@ -174,22 +174,22 @@ const user1=new User(
     })
 
 const relations = [
-    { 
-        _id : '627ff1ad4a6395ce9d95de58', 
-        user_id : '62503267a848908b0b2102e3', 
-        username : 'admin2', 
-        following : true, 
-        follower : false, 
-        blocked : false, 
-        following_request_received : false, 
+    {
+        _id : '627ff1ad4a6395ce9d95de58',
+        user_id : '62503267a848908b0b2102e3',
+        username : 'adminn2',
+        following : true,
+        follower : false,
+        blocked : false,
+        following_request_received : false,
     },{
-        _id : '627ff1ad4a6395ce9d95de5b', 
-        user_id : '62503267a848908b0b2102f3', 
-        username : 'essam ahmed', 
-        following : false, 
-        follower : true, 
-        blocked : false, 
-        following_request_received : false, 
+        _id : '627ff1ad4a6395ce9d95de5b',
+        user_id : '62503267a848908b0b2102f3',
+        username : 'essam ahmed',
+        following : false,
+        follower : true,
+        blocked : false,
+        following_request_received : false,
     }
 ]
 
@@ -233,23 +233,23 @@ const tweetdata =[
         source:'mobile',
         mention:'@ali'
     },{
- 
-        _id : '628036ed132f0fbc9e96b198', 
-        created_at: '2022-05-14T23:10:37.941+0000', 
-        text: 'hope to be final 1', 
-        source: 'mobile', 
-        user: '62503267a848908b0b2102f3', 
+
+        _id : '628036ed132f0fbc9e96b198',
+        created_at: '2022-05-14T23:10:37.941+0000',
+        text: 'hope to be final 1',
+        source: 'mobile',
+        user: '62503267a848908b0b2102f3',
         favorites: [
             '62503267a848908b0b2102f3'
-        ], 
-        mention : "admin2", 
+        ],
+        mention : "adminn2",
         retweetUsers : [
             '62503267a848908b0b2102f3',
             '62503267a848908b0b2102e3'
-        ], 
-        hasImage : false, 
-        
-    },{   
+        ],
+        hasImage : false,
+
+    },{
         _id: '625d594a9b671cf4db621111',
         text: 'welcome to my 2 tweet',
         created_at: '2022-04-22T10:52:45.087Z',
@@ -258,7 +258,7 @@ const tweetdata =[
         user: '62503267a848908b0b2102e3',
         favorites: []
 }
-    
+
 
 ]
 
@@ -306,8 +306,8 @@ describe('update & creating a tweet',() =>{
 
     it('should save tweet in database', async()=>{
         const signinUser = {
-            data :"admin2",
-            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -317,6 +317,7 @@ describe('update & creating a tweet',() =>{
             text: 'welcome to my new tweet',
             source: 'mobile',
             mention: '@ali',
+              user:"62503267a848908b0b2102f3"
         });
         Tweet.findOneAndDelete({text: 'welcome to my new tweet'})
         .exec((err,post)=>{
@@ -328,8 +329,8 @@ describe('update & creating a tweet',() =>{
 
     it('should give 403 if tweet duplicated',async()=>{
         const signinUser = {
-            data :"admin2",
-            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -340,7 +341,8 @@ describe('update & creating a tweet',() =>{
             text: 'welcome to my 1 tweet',
             created_at: '2022-04-22T11:01:54.414Z',
             source: 'mobile',
-            mention: '@ali'
+            mention: '@ali',
+            user:"62503267a848908b0b2102f3"
         });
         expect(res.status).toBe(403);
         expect(res.body.message).toBe("tweet duplication")
@@ -348,8 +350,8 @@ describe('update & creating a tweet',() =>{
 
     it('should give 403 there is no text',async()=>{
         const signinUser = {
-            data :"admin2",
-            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -384,8 +386,8 @@ describe('return tweet exist in databse',()=>{
 describe('like a tweet test',()=>{
     it('should return 0 if not liked',async()=>{
         const signinUser = {
-            data :"admin2",
-            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -413,8 +415,8 @@ describe('like a tweet test',()=>{
 
     it('should 200 that tweet successfuly liked',async()=>{
         const signinUser = {
-            data :"admin2",
-            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -431,8 +433,8 @@ describe('like a tweet test',()=>{
 describe('unlike tweet test',()=>{
     it('should return status 200 if succeefuly unliked',async()=>{
         const signinUser = {
-            data :"admin2",
-            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -444,8 +446,8 @@ describe('unlike tweet test',()=>{
     });
     it('should return 0 if tweet already unliked',async()=>{
         const signinUser = {
-            data :"admin2",
-            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -475,8 +477,8 @@ describe('retweet a tweet test',()=>{
     });
     it('should return 0 if not retweeted',async()=>{
         const signinUser = {
-            data :"admin2",
-            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -501,8 +503,8 @@ describe('retweet a tweet test',()=>{
     });
     it('should 200 that tweet successfuly retweeted',async()=>{
         const signinUser = {
-            data :"admin2",
-            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -515,8 +517,8 @@ describe('retweet a tweet test',()=>{
     });
     it('should return 400 if wrong tweet id not found in database',async()=>{
         const signinUser = {
-            data :"admin2",
-            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -534,8 +536,8 @@ describe('retweet a tweet test',()=>{
 describe('retweet a tweet test',()=>{
     it('should return tweet already unretweeted',async()=>{
         const signinUser = {
-            data :"admin2",
-            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -576,8 +578,8 @@ describe('retweet a tweet test',()=>{
 describe('delete a tweet test',()=>{
     it('return 200 tweet deleted succesfully',async()=>{
         const signinUser = {
-            data :"admin2",
-            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -588,8 +590,8 @@ describe('delete a tweet test',()=>{
     });
     it('user cannot delete another user tweet',async()=>{
         const signinUser = {
-            data :"admin2",
-            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -597,11 +599,11 @@ describe('delete a tweet test',()=>{
         const tweetId = '625d594a9b671cf4db621111';
         const res = await request.post('/tweets/destroy/'+ tweetId).set("x-access-token",token)
         expect(res.body.message).toBe("can't delete another user tweet")
-    });   
+    });
      it('return 200 tweet deleted succesfully',async()=>{
         const signinUser = {
-            data :"admin2",
-            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
         }
         const response = await request.post('/auth/signin')
         .send(signinUser);
@@ -671,8 +673,8 @@ describe('favorite list of users  of a tweet test',()=>{
 //     });
     // it('tweet not found',async()=>{
     //     const signinUser = {
-    //         data :"admin2",
-    //         password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+    //         data :"adminn2",
+    //         password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
     //     }
     //     const response = await request.post('/auth/signin')
     //     .send(signinUser);
