@@ -3,27 +3,8 @@ const User = db.user;
 const { faker } = require('@faker-js/faker');
 const { Seeder } = require('mongoose-data-seed');
 
-const data =[]
-const data2=[{
-  _id: ("6284aa0eebade055f615dd12"),
-  user_id : ("63643d2e864200cb48ca49d7"),
-  "username": "hamada",
-  "name": "hamada85",
-  "following": true,
-  "follower": false,
-  "blocked": false,
-  "following_request_received": false,
-  "Notifications_enabled": true,
-  "mute": false,
-  "mute_until": null,
-  "no_retweets": false,
-  "want_retweets": true,
-  "all_replies": false,
-  "marked_spam": false,
-  "blocked_by": null,
-  "created_at": faker.date.recent(),
-}]
-const data1=
+
+const data=
 [
 
   {

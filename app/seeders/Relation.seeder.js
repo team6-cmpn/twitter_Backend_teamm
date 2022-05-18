@@ -5,7 +5,7 @@ const { Seeder } = require('mongoose-data-seed');
 
 
 
-const data2= [{
+const data= [{
   _id: ("6284aa0eebade055f615dd12"),
   user_id : ("63643d2e864200cb48ca49d7"),
   "username": "hamada",
@@ -326,7 +326,7 @@ class RelationsSeeder extends Seeder {
     async shouldRun() {
         return Relation.countDocuments()
         .exec()
-        //.then(count => count === 0);
+        .then(count => count === 0);
     }
 
     async run() {
