@@ -72,7 +72,8 @@ describe('signup with email or mobile phone Test', () => {
             .send({
             username: '@ZellTest',
             email: 'testingZell@gmail.com',
-            password: 'Ola123ola#'
+            password: 'Ola123ola#',
+            dateOfBirth: "2000-08-13T21:02:22.540+00:00"
             });
             // Ensures response contains name and email
             // expect(res.body.name).toBeTruthy();
@@ -164,6 +165,29 @@ describe('signup with email or mobile phone Test', () => {
             });
             expect(res.status).toBe(400);
             expect(res.body.message).toBe("Failed! phone number not valied!");
+
+    });
+    it('Should give 400 username not valid', async () => {
+        const res = await request.post('/auth/signup')
+            .send({
+            username: 'hamdy',
+            email: 'testing22@gmail.com',
+            password: 'Ola123ola#'
+            });
+            expect(res.status).toBe(400);
+            expect(res.body.message).toBe("Failed! Username must start with @ and has no spaces or commas!");
+
+    });
+    it('Should give 400 age under 13', async () => {
+        const res = await request.post('/auth/signup')
+            .send({
+            username: '@hamdy',
+            email: 'testing22@gmail.com',
+            password: 'Ola123ola#',
+            dateOfBirth: "2015-08-13T21:02:22.540+00:00"
+            });
+            expect(res.status).toBe(400);
+            expect(res.body.message).toBe("Failed! You are under 13 years old!");
 
     });
     it('Should give 400 weak password', async () => {
