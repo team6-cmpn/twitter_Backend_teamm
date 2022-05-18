@@ -103,19 +103,36 @@ checkValidPhoneNumber = (req, res, next) => {
   if(req.body.phoneNumber){
     var text = req.body.phoneNumber;
     if (text.length == 13 && text[0]=='+' && text[1]=='2'  && text[2] == '0' && text[3] == '1' && (text[4]== '0' || text[4]== '1' || text[4]== '2' || text[4]== '5') &&  
-      !isNaN(text.substring(1))   ){
-  
-      console.log("valied");
-      }else{
-        res.status(400).send({ message: "Failed! phone number not valied!" });
-        return;
-      }
+    !isNaN(text.substring(1))   ){
       
+      console.log("valied");
+    }else{
+      res.status(400).send({ message: "Failed! phone number not valied!" });
+      return;
     }
-    next();
     
+  }
+  next();
+  
 }
 
+checkAllowedAge = (req, res, next) => {
+  if(req.body.dateOfBirth){
+    var today = new Date();
+    var birthDate = new Date(req.body.dateOfBirth);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    console.log(age);
+  if (age < 13){
+    res.status(400).send({ message: "Failed! You are under 13 years old!" });
+    return;
+  }
+  }
+  next();
+};
 
 checkExistingGoogleId = (req, res, next) => {
   // check Username
@@ -142,6 +159,7 @@ const verifySignUp = {
   checkValidUsername,
   checkValidEmail,
   checkValidPhoneNumber,
+  checkAllowedAge,
   checkStrenghtOfPassword
 };
 module.exports = verifySignUp;
