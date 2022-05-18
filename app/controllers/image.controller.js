@@ -8,15 +8,16 @@ const Tweet = db.tweet;
 const {uploadPhotos} = require("../utils/image.js");
 
 // const upload = multer({
-//     dest: './upload/images'
+//     dest: './upload/images' 
 // });
+// 
 exports.uploadProfilePhoto=async(req,res)=>{
     //console.log(req.file)
-    uploadPhotos(req,res,1);
+    await uploadPhotos(req,res,1);
 };
 
 exports.uploadTweetPhotos = async(req,res)=>{
-    uploadPhotos(req,res,2)
+    await uploadPhotos(req,res,2)
 
 };
     // const storage = multer.diskStorage({

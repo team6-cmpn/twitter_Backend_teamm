@@ -12,12 +12,16 @@ exports.getUsersFromArray = async(list) =>
     {
         try {
             user = await  User.find({ _id :  list[i]  }  );
+            if (!user[0])
+            {
+                return "User Not found";
+            }
         } catch (error) {
-            return "user not found";
+            return "User Not found";
         }
         objectsList.push(user[0]);
     }
-    console.log(objectsList);
+    ////console.log(objectsList);
     return objectsList;
 }
 exports.getUsersRelationsList= async(id,data) =>
@@ -41,11 +45,11 @@ exports.getListRelationsIDs= async(id,data) =>
     }
     user=user[0] 
     if (user != null){
-        console.log(user.relations);
-        //console.log(user.relations[0]);
+        ////console.log(user.relations);
+        ////console.log(user.relations[0]);
         for(i=0;i<user.relations.length;i++){
             relation = await Relation.findOne({ _id :  user.relations[i]  });
-            console.log(relation._id);
+            ////console.log(relation._id);
             //followers who follow the user ID
             if (data =="followers" && relation.follower==true){
                 
@@ -63,14 +67,17 @@ exports.getListRelationsIDs= async(id,data) =>
                 dataList.push(relation.user_id);
             }  
         }
-        //console.log(dataList);
+        console.log(dataList);
+        if (dataList.length==0){
+            return "user not found";
+        }
         return dataList;
     }
 }
 
 exports.createNewRelation= async(targetUser)=>
 {
-    //console.log(targetUser);
+    //////console.log(targetUser);
     const relation = new Relation({
       user_id: targetUser._id,
       username: targetUser.username,

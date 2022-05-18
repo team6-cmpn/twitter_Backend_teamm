@@ -1,6 +1,4 @@
-
-const config = require("../config/auth.config");
-const sendEmail = require("../utils/email");
+const config = require("../config/pusher.config");
 const db = require("../models");
 const Tweet= db.tweet;
 const User = db.user;
@@ -58,12 +56,14 @@ exports.createBlock= async(req,res)=>{
   let objId= req.query.userid
   let duration=req.body.duration
 
+
+
 const pusher = new Pusher({
-appId : "1406245",
-key : "a02c7f30c561968a632d",
-secret : "5908937248eea3363b9e",
-cluster : "eu",
-useTLS: true,
+appId : config.appId,
+key : config.key,
+secret : config.secret,
+cluster : config.cluster,
+useTLS: config.useTLS,
     });
 
 
@@ -215,16 +215,18 @@ User.find({isAdmin:false}).sort({followers_count:-1}).limit(5).select("username 
 Tweet.countDocuments(),
 User.countDocuments({isAdmin:false}),
 
-User.aggregate([{$match: {isAdmin:false}},{'$project': {'month': {'$month': '$created_at'  },   'year': {    '$year': '$created_at'  }  }},{
-    '$group': {
-      '_id': {
-        'month': '$month',
-        'year': '$year'
-      },
-      'total': {
-        '$sum': 1
-      }}}]),
+User.aggregate([
+   {$match: {'isAdmin':false,'created_at':{ "$gte": new Date("2022-01-01T00:00:01.146Z"), "$lte": new Date("2022-12-31T23:59:59.146Z")}}},
+   {$group: {_id: { "$month": "$created_at" },count:{$sum: 1}}}
+]),
 
+
+
+
+
+
+
+///////////////////////////////////////////////////
 User.aggregate([{$match: {isAdmin:false}},{$group: {_id: {$year: "$created_at"},totalUsers: {$sum: 1}}}]),
 Tweet.find({}).sort({favorite_count:-1}).limit(5),
 Tweet.find({}).sort({retweet_count:-1}).limit(5),
@@ -251,15 +253,11 @@ User.aggregate([{$match: {isAdmin:false}},{"$project": {"age": {"$divide": [{"$s
 
 
 
-Tweet.aggregate([{'$project': {'month': {'$month': '$created_at'  },   'year': {    '$year': '$created_at'  }  }},{
-    '$group': {
-      '_id': {
-        'month': '$month',
-        'year': '$year'
-      },
-      'total': {
-        '$sum': 1
-      }}}]),
+Tweet.aggregate
+([
+{$match: {'created_at':{ "$gte": new Date("2022-01-01T00:00:01.146Z"), "$lte": new Date("2022-12-31T23:59:59.146Z")}}},
+{$group: {_id: { "$month": "$created_at" },count:{$sum: 1}}}
+]),
 
 
 

@@ -10,11 +10,35 @@ require("dotenv").config();
 exports.userBoard = (req, res) => {
   res.status(200).send({userid : req.userId});
 };
+//tested
+/**
+ * 
+ * @module User
+ */
 
+/**
+ * @global
+ * @typedef {object} reqParamUserShow
+ * @property {string} id the id of wanted user  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserShow
+ * @property {object}  user  user object represent the user with the spacific id
+ */
+/** 
+ * This function searches for user with the id in the request paramters and returns the user object
+ * 
+ * @param {reqParamsUserShow} req request sent from the front
+ * @param {responseBodyUserShow} res response sent to the front
+ * 
+ */
 exports.userShow =  async (req, res)  => {
   const users = await  User.findOne({ _id :  req.params.id  }  );
-  console.log(req.params.id)
-  console.log(users)
+  //console.log(req.params.id)
+  //console.log(users)
     if (users) {
       res.status(200).send({user: users});
       return;
@@ -22,11 +46,39 @@ exports.userShow =  async (req, res)  => {
      res.status(404).send({ message: "User Not found." });
   }
 
+
+  /**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserLookup
+ * @property {string} ids the id of wanted users comma seperated  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserLookup
+ * @property {object}  users  array of user objects represent the user with the ids
+ */
+/** 
+ * This function searches for users with the ids in the request paramters and returns the user objects in array
+ * 
+ * @param {reqParamsUserLookup} req request sent from the front
+ * @param {responseBodyUserLookup} res response sent to the front
+ * 
+ */
+
+  
 exports.usersLookup =  async (req, res) =>{
   //console.log(req.params.username);
   const userIDsArray= req.params.ids.split(",");
   const users= await getUsersFromArray(userIDsArray);
-  if (users.length==0 | users=="user not found"){
+  console.log(users)
+  if (users=="User Not found"){
     res.status(404).send({ message: "Users Not found." });
   }else{
     res.status(200).send({user: users});
@@ -37,74 +89,205 @@ exports.usersLookup =  async (req, res) =>{
 }
 
 
+ /**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserBlocksIDs
+ * @property {string} ids the id of user who wants to get the blockes list of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserBlocksIDs
+ * @property {object}  ids  array of user Ids represent the users who the user with spacific id is blocked
+ */
+/** 
+ * This function get the block list of the user with the id in the request paramters and returns the user Ids in array
+ * 
+ * @param {reqParamsUserBlockssIDs} req request sent from the front
+ * @param {responseBodyUserBlockssIDs} res response sent to the front
+ * 
+ */
+
 exports.userBlocksIDs =  async (req, res) =>{
   const blocks = await getListRelationsIDs(req.params.id, "blocked");
   if (blocks=="user not found")
   {
-    res.status(404).send(blocks);
+    res.status(404).send({blocks:blocks});
+    return;
   }
-  res.status(200).send(blocks);
+  res.status(200).send({blocks:blocks});
 }
+
+ /**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserFollowersIDs
+ * @property {string} ids the id of user who wants to get the followers list of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserFollowersIDs
+ * @property {object}  ids  array of user Ids represent the users who the user with spacific id are followers
+ */
+/** 
+ * This function get the followers list of the user with the id in the request paramters and returns the user Ids in array
+ * 
+ * @param {reqParamsUserFollowersIDsp} req request sent from the front
+ * @param {responseBodyUserFollowersIDs} res response sent to the front
+ * 
+ */
 
 exports.userFollowersIDs =  async (req, res) =>{
   const followers = await getListRelationsIDs(req.params.id, "followers");
   if (followers=="user not found")
   {
-    res.status(404).send(followers);
+    res.status(404).send({follower:followers});
+    return;
   }
-  res.status(200).send(followers);
+  res.status(200).send({follower:followers});
 }
+  /**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserFollowingIDs
+ * @property {string} ids the id of user who wants to get the following list of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserFollowingIDs
+ * @property {object}  ids  array of user Ids represent the users who the user with spacific id is following
+ */
+/** 
+ * This function get the following list of the user with the id in the request paramters and returns the user Ids in array
+ * 
+ * @param {reqParamsUserFollowingIDsp} req request sent from the front
+ * @param {responseBodyUserFollowingIDs} res response sent to the front
+ * 
+ */
 exports.userFollowingIDs =  async (req, res) =>{
   const following = await getListRelationsIDs(req.params.id, "following");
   if (following=="user not found")
   {
-    res.status(404).send(following);
+    res.status(404).send({following:following});
+    return;
   }
-  res.status(200).send(following);
+  res.status(200).send({following:following});
 }  
+
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserFollowingIDs
+ * @property {string} ids the id of user who wants to get the following list of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserFollowingIDs
+ * @property {object}  users  array of user objects represent the users who the user with spacific id is following
+ */
+/** 
+ * This function get the following list of the user with the id in the request paramters and returns the user objects in array
+ * 
+ * @param {reqParamsUserFollowingIDsp} req request sent from the front
+ * @param {responseBodyUserFollowingIDs} res response sent to the front
+ * 
+ */
 
 exports.userFollowingList =  async (req, res) =>{
   const following = await getUsersRelationsList(req.params.id, "following");
   if(following=="user not found"){
-    res.status(404).send(following);
+    res.status(404).send({following:following});
+    return;
   }
-  res.status(200).send(following);
+  res.status(200).send({following:following});
 }
 
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserFollowingList
+ * @property {string} id the id of user who wants to get the following list of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserFollowingList
+ * @property {object}  users  array of user objects represent the users who the user with spacific id is follower
+ */
+/** 
+ * This function get the followers list of the user with the id in the request paramters and returns the user objects in array
+ * 
+ * @param {reqParamsUserFollowingList} req request sent from the front
+ * @param {responseBodyUserFollowingList} res response sent to the front
+ * 
+ */
 
 
 exports.userFollowersList =  async (req, res) =>{
   const followers = await getUsersRelationsList(req.params.id, "followers");
   if(followers=="user not found"){
-    res.status(404).send(followers);
+    res.status(404).send({follower:followers});
+    return;
   }
-  res.status(200).send(followers);
+  res.status(200).send({follower:followers});
 }
 
 exports.userBlocksList =  async (req, res) =>{
   const blocks = await getUsersRelationsList(req.params.id, "blocked");
   if(blocks=="user not found"){
-    res.status(404).send(blocks);
+    res.status(404).send({blocks:blocks});
+    return;
   }
-  res.status(200).send(blocks);
+  res.status(200).send({blocks:blocks});
 }
 
 exports.userMutedIDs =  async (req, res) =>{
   const muted = await getListRelationsIDs(req.params.id, "muted");
   if(muted=="user not found"){
-    res.status(404).send(muted);
+    res.status(404).send({muted:muted});
+    return;
   }
-  res.status(200).send(muted);
+  res.status(200).send({muted:muted});
 }
 
 exports.userMutedList = async (req, res) =>{
   const muted = await getUsersRelationsList(req.params.id, "muted");
   if(muted=="user not found"){
-    res.status(404).send(muted);
+    res.status(404).send({muted:muted});
+    return;
   }
-  res.status(200).send(muted);
+  res.status(200).send({muted:muted});
 }
-
+///not used
 exports.friendshipsLookup =  async (req, res) =>{
     const users = [];
     const userParamtersArray= req.params.id.split(",");
@@ -125,17 +308,18 @@ exports.friendshipsLookup =  async (req, res) =>{
 
       }
     }
-    console.log(users);
+    
+    //console.log(users);
     res.status(200).send(users);
 }
 /// not used
 exports.friendshipsNo_retweets = async (req, res) =>{
   const no_retweetsUsers = [];
     const user = await  User.findOne({ _id :  req.userId }  );
-    console.log(user.relations[0]);
+    //console.log(user.relations[0]);
     for(i=0;i<user.relations.length;i++){
       const relation = await Relation.findOne({ _id :  user.relations[i]  });
-      console.log(relation);
+      //console.log(relation);
       if (relation.no_retweet==true){
         const no_retweetsUser = await User.findOne({ _id :  relation.user_id  });
         no_retweetsUsers.push(no_retweetsUser);
@@ -148,7 +332,7 @@ exports.friendshipsShow = async (req, res) =>{
   found = 0;
   relationObject = {};
   const user = await  User.findOne({ _id :  req.params.source_id  }  );
-  console.log(user);
+  //console.log(user);
   for(i=0;i<user.relations.length;i++){
     const relation = await Relation.findOne({ _id :  user.relations[i]  });
     if (relation!=null && relation.user_id==req.params.target_id){
@@ -178,14 +362,14 @@ exports.friendshipsShow = async (req, res) =>{
     res.status(200).send(relationObject);
   }
   else{
-    console.log("not found");
+    //console.log("not found");
     res.status(404).send("No relations");
   }
 }
 
 exports.userChangePhoneNumber = async (req, res) =>{
   await User.updateOne({ _id :  req.userId  }, { $set: { phone_number: req.body.phone_number } });
-  res.status(200).send("phone number changed");}
+  res.status(200).send({message:"phone number changed"});}
   
   exports.userChangeUsername = async (req, res) =>{
     newUsername=req.body.username.substring(1);
@@ -230,7 +414,7 @@ exports.userChangeEmail = async (req, res) =>{
     newEmail=req.body.email;
     if (await User.findOne({email:newEmail}))
     {
-      console.log(await User.find({email:newEmail}))
+      //console.log(await User.find({email:newEmail}))
       res.status(400).send({ message: "email already taken" });
 
     }
@@ -245,12 +429,12 @@ exports.userChangeEmail = async (req, res) =>{
   }// }
     // }
   }
-
+// tested
 exports.friendshipsCreate = async (req, res) =>{
   found=0; // 0 not found , 1 found 
   const user = await  User.findOne({ _id :  req.userId});
   const relations = user.relations;
-  console.log(user); 
+  //console.log(user); 
   if (relations)
   {
   for (i = 0; i < relations.length; i++) {
@@ -268,12 +452,12 @@ exports.friendshipsCreate = async (req, res) =>{
             await User.updateOne({ _id :  blockedUser._id  }, {$inc : {followers_count: 1 }});
           }
         }
-      res.status(200).send("following");
+      res.status(200).send({message:"following"});
        return;
     }
     else if (relation != null && (relation.user_id==req.params.id)&&(relation.following==true)){
       found=1;
-      res.status(403).send({message:"the user is already following the user"});
+      res.status(400).send({message:"the user is already following the user"});
       return;
     }
   }
@@ -284,7 +468,7 @@ exports.friendshipsCreate = async (req, res) =>{
     relation.following=true;
     relation.want_retweets=true;
     relation.Notifications_enabled=true;
-    console.log(relation);
+    //console.log(relation);
     await relation.save();
     await User.updateOne({ _id :  user._id  }, { $push: { relations: relation._id } });
     await User.updateOne({ _id :  user._id  }, {$inc : {followings_count: 1 }}); 
@@ -294,7 +478,7 @@ exports.friendshipsCreate = async (req, res) =>{
     await receiveRlation.save();
     await User.updateOne({ _id :  req.params.id  }, { $push: { relations: receiveRlation._id } });
     await User.updateOne({ _id :  req.params._id  }, {$inc : {followers_count: 1 }}); 
-    res.status(200).send(targetUser);
+    res.status(200).send(relation);
     return;
   }
 }
@@ -304,14 +488,14 @@ exports.friendshipsMute = async (req, res) =>{
   found=0; // 0 not found , 1 found 
   const user = await  User.findOne({ _id :  req.userId});
   const relations = user.relations;
-  console.log(user); 
+  //console.log(user); 
   if (relations)
   {
   for (i = 0; i < relations.length; i++) {
     const relation = await Relation.findOne({ _id :  relations[i]  });
-    if (relation != null &&(relation.user_id==req.params.id)&&(relation.muted==false)){
+    if (relation != null &&(relation.user_id==req.params.id)&&(relation.mute==false)){
       found=1;
-      await Relation.updateOne({ _id :  relation._id  }, { $set: { muted: true } });
+      await Relation.updateOne({ _id :  relation._id  }, { $set: { mute: true } });
       
       // blockedUser= await User.findOne({_id:req.params.id});
       //  targetRelation=blockedUser.relations
@@ -322,12 +506,12 @@ exports.friendshipsMute = async (req, res) =>{
       //       await User.updateOne({ _id :  blockedUser._id  }, {$inc : {followers_count: 1 }});
       //     }
       //   }
-      res.status(200).send("muted");
+      res.status(200).send({message:"muted"});
        return;
     }
     else if (relation != null && (relation.user_id==req.params.id)&&(relation.mute==true)){
       found=1;
-      res.status(403).send({message:"the user is already following the user"});
+      res.status(400).send({message:"the user is already muting the user"});
       return;
     }
   }
@@ -336,7 +520,7 @@ exports.friendshipsMute = async (req, res) =>{
     const targetUser= await User.findOne({ _id :  req.params.id });
     relation = await createNewRelation(targetUser);
     relation.mute=true;
-    console.log(relation);
+    //console.log(relation);
     await relation.save();
     await User.updateOne({ _id :  user._id  }, { $push: { relations: relation._id } }); 
     receiveRlation = await createNewRelation(user);
@@ -347,6 +531,43 @@ exports.friendshipsMute = async (req, res) =>{
   }
 }
 
+exports.friendshipsUnMute = async (req, res) =>{
+  found=0; // 0 not found , 1 found 
+  const user = await  User.findOne({ _id :  req.userId});
+  const relations = user.relations;
+  //console.log(user); 
+  if (relations)
+  {
+  for (i = 0; i < relations.length; i++) {
+    const relation = await Relation.findOne({ _id :  relations[i]  });
+    if (relation != null &&(relation.user_id==req.params.id)&&(relation.mute==true)){
+      found=1;
+      await Relation.updateOne({ _id :  relation._id  }, { $set: { mute: false } });
+      res.status(200).send({message:"un muted"});
+       return;
+    }
+    else if (relation != null && (relation.user_id==req.params.id)&&(relation.mute==false)){
+      found=1;
+      res.status(400).send({message:"the user is already not muting the user"});
+      return;
+    }
+  }
+}
+  if (found==0){
+    res.status(400).send({message:"there is no relation between the users"});
+    // const targetUser= await User.findOne({ _id :  req.params.id });
+    // relation = await createNewRelation(targetUser);
+    // relation.mute=true;
+    // console.log(relation);
+    // await relation.save();
+    // await User.updateOne({ _id :  user._id  }, { $push: { relations: relation._id } }); 
+    // receiveRlation = await createNewRelation(user);
+    // await receiveRlation.save();
+    // await User.updateOne({ _id :  req.params.id  }, { $push: { relations: receiveRlation._id } });
+    // res.status(200).send(targetUser);
+    // return;
+  }
+}
 
 
 exports.friendshipsDestroy = async (req, res) =>{
@@ -359,7 +580,7 @@ exports.friendshipsDestroy = async (req, res) =>{
   for (i = 0; i < relations.length; i++) {
     const relation = await Relation.findOne({ _id :  relations[i]  });
     if (relation != null && (relation.user_id==req.params.id)&&(relation.following==true)){
-      console.log("11111111")
+      //console.log("11111111")
       found=1;
       await Relation.updateOne({ _id :  relation._id  }, { $set: { following: false } });
       for (i=0;i<targetRelations.length;i++)
@@ -373,18 +594,18 @@ exports.friendshipsDestroy = async (req, res) =>{
     }
     else if (relation != null && (relation.user_id==req.params.id)&&(relation.following==false)){
       found=1;
-      console.log("11111111")
-      res.status(403).send("the user is not following the user");
+      //console.log("11111111")
+      res.status(403).send({message:"the user is not following the user"});
       return;
     }
   }
   if (found==0){
-    res.status(404).send("No relations");
+    res.status(404).send({message:"No relations"});
     return;
   }
 }
 else {
-  res.status(404).send("No user found")
+  res.status(404).send({message:"No user found"})
   return;
 }
 }
@@ -401,15 +622,93 @@ exports.friendshipsUpdate = async (req, res) =>{
       found=1;
       state=relation.following;
       await Relation.updateOne({ _id :  relation._id  }, { $set: { following: !state} });
-      res.status(200).send("freindship updated");
+      res.status(200).send({message:"freindship updated"});
       return;
     }
   }
   if (found==0){
-    res.status(404).send("No relations");
+    res.status(404).send({message:"No relations"});
     return;
   }
 }
+
+
+
+exports.userUnBlocking = async(req,res)=>
+{
+  found=0; // 0 not found , 1 found 
+  const user = await  User.findOne({ _id :  req.userId});
+  const relations = user.relations; 
+  if (relations)
+  {
+  for (i = 0; i < relations.length; i++) {
+    relation = await Relation.findOne({ _id :  relations[i]  });
+    if (relation != null &&(relation.user_id==req.params.id)&&(relation.blocked==true)){
+      found=1;
+      
+      await Relation.updateOne({ _id :  relation._id  }, { $set: { blocked: false } });
+       blockedUser= await User.findOne({_id:req.params.id});
+       targetRelation=blockedUser.relations
+        for (i=0;i<targetRelation.length;i++)
+        {
+          if (targetRelation[i].user_id == user._id){
+            await Relation.updateOne({ _id :  targetRelation[i]._id  }, { $set: { blocked_by: false } });
+
+          }
+        }
+      res.status(200).send({message:"un blocked"});  
+       return;
+    }
+    else if (relation != null && (relation.user_id==req.params.id)&&(relation.blocked==false)){
+      found=1;
+      res.status(400).send({message:"the user is already not blocking the user"});
+      return;
+    } 
+  } 
+} 
+  if (found==0){
+    res.status(400).send("there is no relation between the users");
+    // const targetUser= await User.findOne({ _id :  req.params.id });
+    // relation = await createNewRelation(targetUser);
+    // relation.blocked=true;
+    // await relation.save();
+    // await User.updateOne({ _id :  user._id  }, { $push: { relations: relation._id } });
+    // receiveRlation = await createNewRelation(user);
+    // receiveRlation.blocked_by=true;
+    // await receiveRlation.save();
+    // await User.updateOne({ _id :  req.params.id  }, { $push: { relations: receiveRlation._id } });
+    // res.status(200).send(targetUser);
+    return;
+  }
+}
+
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserBlocking
+ * @property {string} id the id of user who wants to block him  
+ * 
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserBlocking
+ * @property {object}  user  user object who is blocked
+ * @property {text} message saying the statues of the target user
+ */
+/** 
+ * This function get the followers list of the user with the id in the request paramters and returns the user objects in array
+ * 
+ * @param {reqParamsUserBlocking} req request sent from the front
+ * @param {responseBodyUserBlocking} res response sent to the front
+ * 
+ */
+
+
 
 exports.userBlocking = async(req,res)=>
 {
@@ -433,12 +732,12 @@ exports.userBlocking = async(req,res)=>
             await setRelationtoBlock(targetRelation[i]._id,"blocked_by");
           }
         }
-      res.status(200).send("blocked");  
+      res.status(200).send({message:"blocked"});  
        return;
     }
     else if (relation != null && (relation.user_id==req.params.id)&&(relation.blocked==true)){
       found=1;
-      res.status(403).send("the user is already blocking the user");
+      res.status(400).send({message:"the user is already blocking the user"});
       return;
     } 
   } 
@@ -461,12 +760,12 @@ exports.userUpdateProfile = async (req, res) =>{
   const user = await  User.findOne({ _id :  req.userId});
   if (user != null){
     await User.updateOne({ _id :  user._id  }, { $set: { name: req.body.name ,description:req.body.description} });
-    console.log(user)
-    res.status(200).send("profile updated");
+    //console.log(user)
+    res.status(200).send({message:"profile updated"});
     return;
   }
   else{
-    res.status(404).send("No user found");
+    res.status(404).send({message:"No user found"});
     return;
   }
 }
@@ -486,7 +785,7 @@ exports.userMediaList = async (req, res) =>{
     res.status(200).send(tweets);
   }
   else{
-    res.status(404).send("No user found");
+    res.status(404).send({message:"No user found"});
     return;
   }
 }
@@ -502,7 +801,7 @@ exports.userTweetsList = async (req, res) =>{
     return;
   }
   else{
-    res.status(404).send("No user found");
+    res.status(404).send({message:"No user found"});
     return;
   }
 }
@@ -520,7 +819,7 @@ exports.userLikedTweetsList = async(req, res) =>{
     return;
   }
   else{
-    res.status(404).send("No user found");
+    res.status(404).send({message:"No user found"});
     return;
   }
 } 
