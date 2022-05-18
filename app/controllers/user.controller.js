@@ -1,7 +1,7 @@
 const db = require("../models");
 const { findOne } = require("../models/user.model");
 const sendEmail = require("../utils/email");
-const {getListRelationsIDs,getUsersFromArray,getUsersRelationsList,createNewRelation,setRelationtoBlock} = require("../utils/user.js")
+const {getTweetsFromUser,getListRelationsIDs,getUsersFromArray,getUsersRelationsList,createNewRelation,setRelationtoBlock} = require("../utils/user.js")
 
 const User = db.user;
 const Relation=db.relations;
@@ -372,7 +372,7 @@ exports.userChangePhoneNumber = async (req, res) =>{
   res.status(200).send({message:"phone number changed"});}
   
   exports.userChangeUsername = async (req, res) =>{
-    newUsername=req.body.username.substring(1);
+    newUsername=req.body.username;
     if (await User.findOne({username:newUsername}))
     {
       res.status(400).send({ message: "Username already taken" });
@@ -774,7 +774,7 @@ exports.userMediaList = async (req, res) =>{
   const user = await  User.findOne({ _id :  req.params.id});
   if (user != null){
     tweets=[]
-    const media = await Tweet.find({user_id:user._id});
+    const media = await Tweet.getTweetsFromUser(user._id);
     for(i=0;i<media.length;i++)
     {
       if (media.hasImage==true)
@@ -782,10 +782,10 @@ exports.userMediaList = async (req, res) =>{
         tweets.push(media[i]);
       }
     }
-    res.status(200).send(tweets);
+    res.status(200).send({tweets:tweets});
   }
   else{
-    res.status(404).send({message:"No user found"});
+    res.status(404).send({tweets:"No user found"});
     return;
   }
 }
@@ -793,15 +793,15 @@ exports.userMediaList = async (req, res) =>{
 
 exports.userTweetsList = async (req, res) =>{
 
-  const authUser = await  User.findOne({ _id :  req.params.id }  );
+  const authUser = await  User.findOne({ _id :  req.params.id });
+  //console.log(authUser)
   if (authUser != null){
-    const tweets = [];
-    const tweet = await Tweet.find({ user: authUser._id   });
-    res.status(200).send(tweet);
+    const tweet = await getTweetsFromUser( req.params.id );
+    res.status(200).send({tweets:tweet});
     return;
   }
   else{
-    res.status(404).send({message:"No user found"});
+    res.status(404).send({tweets:"No user found"});
     return;
   }
 }
@@ -810,16 +810,16 @@ exports.userLikedTweetsList = async(req, res) =>{
   const authUser = await  User.findOne({ _id :  req.params.id  }  );
   tweets=[]
   if (authUser != null){
-    const tweetsIds =  authUser.likes5;
+    const tweetsIds =  authUser.likes;
     for(i=0;i<tweetsIds.length;i++){
       tweet=await Tweet.findOne({ _id :  tweetsIds[i]  });
       tweets.push(tweet);
     }
-    res.status(200).send(tweets);
+    res.status(200).send({tweets:tweets});
     return;
   }
   else{
-    res.status(404).send({message:"No user found"});
+    res.status(404).send({tweets:"No user found"});
     return;
   }
 } 
