@@ -264,27 +264,30 @@ exports.userFollowersList =  async (req, res) =>{
 exports.userBlocksList =  async (req, res) =>{
   const blocks = await getUsersRelationsList(req.params.id, "blocked");
   if(blocks=="user not found"){
-    res.status(404).send(blocks);
+    res.status(404).send({blocks:blocks});
+    return;
   }
-  res.status(200).send(blocks);
+  res.status(200).send({blocks:blocks});
 }
 
 exports.userMutedIDs =  async (req, res) =>{
   const muted = await getListRelationsIDs(req.params.id, "muted");
   if(muted=="user not found"){
-    res.status(404).send(muted);
+    res.status(404).send({muted:muted});
+    return;
   }
-  res.status(200).send(muted);
+  res.status(200).send({muted:muted});
 }
 
 exports.userMutedList = async (req, res) =>{
   const muted = await getUsersRelationsList(req.params.id, "muted");
   if(muted=="user not found"){
-    res.status(404).send(muted);
+    res.status(404).send({muted:muted});
+    return;
   }
-  res.status(200).send(muted);
+  res.status(200).send({muted:muted});
 }
-
+///not used
 exports.friendshipsLookup =  async (req, res) =>{
     const users = [];
     const userParamtersArray= req.params.id.split(",");
@@ -366,7 +369,7 @@ exports.friendshipsShow = async (req, res) =>{
 
 exports.userChangePhoneNumber = async (req, res) =>{
   await User.updateOne({ _id :  req.userId  }, { $set: { phone_number: req.body.phone_number } });
-  res.status(200).send("phone number changed");}
+  res.status(200).send({message:"phone number changed"});}
   
   exports.userChangeUsername = async (req, res) =>{
     newUsername=req.body.username.substring(1);
@@ -503,7 +506,7 @@ exports.friendshipsMute = async (req, res) =>{
       //       await User.updateOne({ _id :  blockedUser._id  }, {$inc : {followers_count: 1 }});
       //     }
       //   }
-      res.status(200).send("muted");
+      res.status(200).send({message:"muted"});
        return;
     }
     else if (relation != null && (relation.user_id==req.params.id)&&(relation.mute==true)){
@@ -540,7 +543,7 @@ exports.friendshipsUnMute = async (req, res) =>{
     if (relation != null &&(relation.user_id==req.params.id)&&(relation.mute==true)){
       found=1;
       await Relation.updateOne({ _id :  relation._id  }, { $set: { mute: false } });
-      res.status(200).send("un muted");
+      res.status(200).send({message:"un muted"});
        return;
     }
     else if (relation != null && (relation.user_id==req.params.id)&&(relation.mute==false)){
@@ -592,17 +595,17 @@ exports.friendshipsDestroy = async (req, res) =>{
     else if (relation != null && (relation.user_id==req.params.id)&&(relation.following==false)){
       found=1;
       //console.log("11111111")
-      res.status(403).send("the user is not following the user");
+      res.status(403).send({message:"the user is not following the user"});
       return;
     }
   }
   if (found==0){
-    res.status(404).send("No relations");
+    res.status(404).send({message:"No relations"});
     return;
   }
 }
 else {
-  res.status(404).send("No user found")
+  res.status(404).send({message:"No user found"})
   return;
 }
 }
@@ -619,12 +622,12 @@ exports.friendshipsUpdate = async (req, res) =>{
       found=1;
       state=relation.following;
       await Relation.updateOne({ _id :  relation._id  }, { $set: { following: !state} });
-      res.status(200).send("freindship updated");
+      res.status(200).send({message:"freindship updated"});
       return;
     }
   }
   if (found==0){
-    res.status(404).send("No relations");
+    res.status(404).send({message:"No relations"});
     return;
   }
 }
@@ -653,12 +656,12 @@ exports.userUnBlocking = async(req,res)=>
 
           }
         }
-      res.status(200).send("un blocked");  
+      res.status(200).send({message:"un blocked"});  
        return;
     }
     else if (relation != null && (relation.user_id==req.params.id)&&(relation.blocked==false)){
       found=1;
-      res.status(400).send("the user is already not blocking the user");
+      res.status(400).send({message:"the user is already not blocking the user"});
       return;
     } 
   } 
@@ -758,11 +761,11 @@ exports.userUpdateProfile = async (req, res) =>{
   if (user != null){
     await User.updateOne({ _id :  user._id  }, { $set: { name: req.body.name ,description:req.body.description} });
     //console.log(user)
-    res.status(200).send("profile updated");
+    res.status(200).send({message:"profile updated"});
     return;
   }
   else{
-    res.status(404).send("No user found");
+    res.status(404).send({message:"No user found"});
     return;
   }
 }
@@ -782,7 +785,7 @@ exports.userMediaList = async (req, res) =>{
     res.status(200).send(tweets);
   }
   else{
-    res.status(404).send("No user found");
+    res.status(404).send({message:"No user found"});
     return;
   }
 }
@@ -798,7 +801,7 @@ exports.userTweetsList = async (req, res) =>{
     return;
   }
   else{
-    res.status(404).send("No user found");
+    res.status(404).send({message:"No user found"});
     return;
   }
 }
@@ -816,7 +819,7 @@ exports.userLikedTweetsList = async(req, res) =>{
     return;
   }
   else{
-    res.status(404).send("No user found");
+    res.status(404).send({message:"No user found"});
     return;
   }
 } 
