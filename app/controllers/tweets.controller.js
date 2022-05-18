@@ -196,68 +196,67 @@ exports.show=  async(req,res)=>{
   }
    ////https://stackoverflow.com/questions/67680295/node-js-mongoose-findone-id-req-params-id-doesnt-work
   //// https://stackoverflow.com/questions/20044743/twitter-api-get-tweet-id
-
   exports.lookup= async(req,res)=>{
     //to convert string to numbers
     page = parseInt(req.params.page);
     tweetsCount = parseInt(req.params.tweetsCount);
-   
+    var tweetsArrayFollowings = [];
+    var tweetsArrayRandom = [];
+    
     //get users list followed by authenticated user 
     var usersIdList = await getListRelationsIDs(req.userId,"following")
-  
-    //find tweets array of those users and sort them to the most recent tweets
-    if (usersIdList.length != 0){
-      var followingsTweets = await Tweet.find({user:{$in: usersIdList}}) //////////
-      .sort({created_at:-1})
-      .skip(tweetsCount*(page-1))
-      .limit(tweetsCount)
-      if(followingsTweets){
-        var tweetsArray = [];
-  
-        for(let i = 0; i< followingsTweets.length;i++){
-          var tweetelement = followingsTweets[i];
-          var tweet = await getTweet(tweetelement._id,tweetelement.user)
-          tweetsArray.push({"tweet":tweet[0],"user":tweet[1]});
-        }
-        if (tweetsArray){
-          res.status(200).send(tweetsArray)
-        }else{
-          res.send({message:"tweets array error"})
-        }
-      }else{
-        res.send({message:"couldn't find tweets in database"})
-      }
-  
-  
-    }
+
     if(!usersIdList){
-      res.status(404).send({message:"following list error"})
+      res.status(500).send({message:"following list error"})
     }
-    // if user is not following any one
-    if(usersIdList.length == 0){
-      var currentDate = new Date()
-      var lastWeekDate = currentDate.setDate(currentDate.getDate()-7)
-      var newsfeedTweets = await Tweet.aggregate([{$match:{created_at:{$gte: new Date(lastWeekDate),$lte: new Date()}}}]).sort({created_at:-1}).skip(tweetsCount*(page-1)).limit(tweetsCount)
-  
-      if(newsfeedTweets){
-        var tweetsArray = [];
-        for(let i = 0; i< newsfeedTweets.length;i++){
-          var tweetelement = newsfeedTweets[i];
-          var tweet = await getTweet(tweetelement._id,tweetelement.user)
-          tweetsArray.push({"tweet":tweet[0],"user":tweet[1]});
-        }
-        if (tweetsArray){
-          res.status(200).send(tweetsArray)
+
+    //find tweets array of those users and sort them to the most recent tweets
+    if (usersIdList != "user not found" ){
+      var count = await Tweet.countDocuments({ user:{$in: usersIdList} });
+
+      if (count > tweetsCount*(page-1) ){
+        var followingsTweets = await Tweet.find({user:{$in: usersIdList}}) //////////
+        .sort({created_at:-1})
+        .skip(tweetsCount*(page-1))
+        .limit(tweetsCount)
+
+        if(followingsTweets){
+    
+          for(let i = 0; i< followingsTweets.length;i++){
+            var tweetelement = followingsTweets[i];
+            var tweet = await getTweet(tweetelement._id,tweetelement.user)
+            tweetsArrayFollowings.push({"tweet":tweet[0],"user":tweet[1]});
+          }
+         
         }else{
-          res.send({message:"tweets array error"})
-        }
-      }else{
-        res.send({message:"couldn't find tweets in database"})
+          res.send({message:"couldn't find tweets in database"})
+        }  
       }
-  
-  
     }
-  };
+    //var currentDate = new Date()
+    //var lastWeekDate = currentDate.setDate(currentDate.getDate()-7)
+    //var newsfeedTweets = await Tweet.aggregate([{$match:{created_at:{$gte: new Date(lastWeekDate),$lte: new Date()}}}]).sort({created_at:-1}).skip(tweetsCount*(page-1)).limit(tweetsCount)
+
+    var skipvalue = 0;
+    if ((tweetsCount*(page-1)-count) >0){ skipvalue = tweetsCount*(page-1)-count}
+    var newsfeedTweets = await Tweet.aggregate().sort({created_at:-1}).skip(skipvalue).limit(tweetsCount-tweetsArrayFollowings.length)
+
+    if(newsfeedTweets){
+      for(let i = 0; i< newsfeedTweets.length;i++){
+        var tweetelement = newsfeedTweets[i];
+        var tweet = await getTweet(tweetelement._id,tweetelement.user)
+        tweetsArrayRandom.push({"tweet":tweet[0],"user":tweet[1]});
+      }
+    }else{
+      res.status(404).send({message:"couldn't find tweets in database"})
+    }
+    
+    if (tweetsArrayRandom && tweetsArrayFollowings){
+      res.status(200).send(tweetsArrayFollowings.concat(tweetsArrayRandom))
+    }else{
+      res.send({message:"tweets array error"})
+    }
+};
 
 // /**
 //  *
