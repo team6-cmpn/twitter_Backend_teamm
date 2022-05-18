@@ -18,6 +18,29 @@ verifyToken = (req, res, next) => {
       return res.sendStatus(401).send({ message: "Unauthorized!" });
     }
     req.userId = decoded.id;
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
+    User.findOne({_id: req.userId}).exec(async (err,user)=>{
+     if (err) {
+       res.status(500).send({ message: err });
+     }
+
+  if (user){
+    if ( user.admin_block.blocked_by_admin){
+      current=  new Date().getTime()
+      blockCreationDate= user.admin_block.block_createdAt
+      var Difference_In_Time = current - blockCreationDate;  // diffrience in milliseconds
+      var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);  // number of milliseconds per day
+
+      if(Difference_In_Days> user.admin_block.block_duration){
+        blocktimes=user.admin_block.blockNumTimes
+         await User.findByIdAndUpdate( req.userId,{ admin_block:{ blocked_by_admin:false, blockNumTimes: blocktimes  }},{ returnDocument: 'after' }).exec((err,user)=>{
+          if (err){
+            res.status(500).send({ message: err });
+            return;
+  }})}}}})
+  
+/////////////////////////////////////////////////////////////////////////////////////////////////////
     next();
   });
 };
@@ -95,7 +118,7 @@ if (!user){
 })}
 ////////////////////////////////////////////
 
-
+//////////////////////////////////////////
 checkAdminBlockCreate = (req, res, next) => {
 
   User.findOne({_id: req.query.userid}).exec(async (err,user)=>{
