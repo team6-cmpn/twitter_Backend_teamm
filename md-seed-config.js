@@ -1,6 +1,9 @@
 require("dotenv").config();
 const User = require("./app/seeders/User.seeder");
+<<<<<<< HEAD
 const Relation = require("./app/seeders/Relation.seeder");
+=======
+>>>>>>> 906fd009ed55ec491c96647bf6b369a5643ceecd
 const Tweet = require("./app/seeders/Tweet.seeder");
 const db = require("./app/models");
 const mongoose = require('mongoose');
@@ -13,7 +16,11 @@ const mongoURL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${proc
 
 
 
+<<<<<<< HEAD
 module.exports.seedersList = { User,Tweet,Relation };
+=======
+module.exports.seedersList = { User, Tweet };
+>>>>>>> 906fd009ed55ec491c96647bf6b369a5643ceecd
 
 
 

@@ -54,8 +54,11 @@ const Tweetsdata=
     ], 
     //mention : "admin2", 
     retweetUsers : [
+<<<<<<< HEAD
         "627bc927592c6d120dcc126b",
         "62829a10d7a2423a544f527d"
+=======
+>>>>>>> 906fd009ed55ec491c96647bf6b369a5643ceecd
     ], 
     hasImage : false, 
   },
@@ -319,7 +322,11 @@ const Tweetsdata=
     _id : "5282689f3072026523ba8c11", 
     created_at : "2022-05-20T15:04:11.540+0000", 
     text : "welcome to my first tweet FATHY", 
+<<<<<<< HEAD
     user : "62829a10d7a2423a544f527d", 
+=======
+    user : "627aec325464c5222def401b", 
+>>>>>>> 906fd009ed55ec491c96647bf6b369a5643ceecd
     favorites : [
         "627f964d055a48cb594004c5",
     ], 
@@ -333,7 +340,11 @@ const Tweetsdata=
     _id : "5282689f3072026523ba8c12", 
     created_at : "2022-05-21T15:04:11.540+0000", 
     text : "welcome to my second tweet FATHY", 
+<<<<<<< HEAD
     user : "62829a10d7a2423a544f527d", 
+=======
+    user : "627aec325464c5222def401b", 
+>>>>>>> 906fd009ed55ec491c96647bf6b369a5643ceecd
     favorites : [
         "63668d2e858900cb48ca48d7",
     ], 
@@ -347,7 +358,11 @@ const Tweetsdata=
     _id : "5282689f3072026523ba8c13", 
     created_at : "2022-05-22T15:04:11.540+0000", 
     text : "welcome to my third tweet FATHY", 
+<<<<<<< HEAD
     user : "62829a10d7a2423a544f527d", 
+=======
+    user : "627aec325464c5222def401b", 
+>>>>>>> 906fd009ed55ec491c96647bf6b369a5643ceecd
     favorites : [
     ], 
     //mention : "admin2", 
@@ -359,7 +374,11 @@ const Tweetsdata=
     _id : "5282689f3072026523ba8c14", 
     created_at : "2022-05-20T15:04:11.540+0000", 
     text : "welcome to my fourth tweet FATHY", 
+<<<<<<< HEAD
     user : "62829a10d7a2423a544f527d", 
+=======
+    user : "627aec325464c5222def401b", 
+>>>>>>> 906fd009ed55ec491c96647bf6b369a5643ceecd
     favorites : [
     ], 
     //mention : "admin2", 
@@ -450,7 +469,11 @@ const Tweetsdata=
 ]
 
 
+<<<<<<< HEAD
 //module.exports.connect = async () =>
+=======
+module.exports.connect = async () =>
+>>>>>>> 906fd009ed55ec491c96647bf6b369a5643ceecd
 
 class TweetsSeeder extends Seeder {
     async shouldRun() {

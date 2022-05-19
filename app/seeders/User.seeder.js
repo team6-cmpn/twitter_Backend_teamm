@@ -146,6 +146,7 @@ const data=
         },
         isAdmin : false,
         confirmed : true,
+<<<<<<< HEAD
         relations : [ 
           "6285e4a887c630a36bbe8473", 
           "6685e4a887c630a36bbe8473", 
@@ -158,6 +159,8 @@ const data=
           "62829a10d7a2423a544f527d"],
         
 
+=======
+>>>>>>> 906fd009ed55ec491c96647bf6b369a5643ceecd
     },
     {
       _id : "627adec1ceb4dc5e91fe221c",
@@ -186,11 +189,14 @@ const data=
       },
       isAdmin : false,
       confirmed : true,
+<<<<<<< HEAD
       relations : [ 
         "5285e4a887c630a36bbe8473", 
         "6585e4a887c630a36bbe8473"
       ]
 
+=======
+>>>>>>> 906fd009ed55ec491c96647bf6b369a5643ceecd
     },
     {
       _id : "627bc927592c6d120dcc126b",
@@ -219,12 +225,15 @@ const data=
       },
       isAdmin : false,
       confirmed : true,
+<<<<<<< HEAD
       relations : [ 
         "0285e4a887c630a36bbe8473", 
         "8285e4a887c630a36bbe8473" , 
         "6185e4a887c630a36bbe8473" ,
       ]
 
+=======
+>>>>>>> 906fd009ed55ec491c96647bf6b369a5643ceecd
     },
     {
       _id : "627f964d055a48cb594004c5",
@@ -249,11 +258,14 @@ const data=
       },
       isAdmin : false,
       confirmed : true,
+<<<<<<< HEAD
       relations : [ 
         "9285e4a887c630a36bbe8473" , 
         "6225e4a887c630a36bbe8473"
       ]
 
+=======
+>>>>>>> 906fd009ed55ec491c96647bf6b369a5643ceecd
     },
     {
       _id : "62829a10d7a2423a544f527d",
@@ -282,11 +294,14 @@ const data=
       },
       isAdmin : false,
       confirmed : true,
+<<<<<<< HEAD
       relations : [ 
         "1285e4a887c630a36bbe8473" , 
         "6785e4a887c630a36bbe8473"
       ]
 
+=======
+>>>>>>> 906fd009ed55ec491c96647bf6b369a5643ceecd
     },
 
     
