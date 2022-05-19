@@ -13,7 +13,7 @@ const mongoURL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${proc
 
 
 
-module.exports.seedersList = { User,Tweet };
+module.exports.seedersList = { User,Tweet,Relation };
 
 
 
