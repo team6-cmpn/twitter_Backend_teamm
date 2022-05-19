@@ -5,322 +5,263 @@ const { Seeder } = require('mongoose-data-seed');
 
 
 
-const data= [{
-  _id: ("6284aa0eebade055f615dd12"),
-  user_id : ("63643d2e864200cb48ca49d7"),
-  "username": "hamada",
-  "name": "hamada85",
-  "following": true,
-  "follower": false,
-  "blocked": false,
-  "following_request_received": false,
-  "Notifications_enabled": true,
-  "mute": false,
-  "mute_until": null,
-  "no_retweets": false,
-  "want_retweets": true,
-  "all_replies": false,
-  "marked_spam": false,
-  "blocked_by": null,
-  "created_at": faker.date.recent(),
-}]
-
-const data1=
-[{
-    _id: ("6284aa0eebade055f615dd12"),
-    user_id : ("63643d2e864200cb48ca49d7"),
-    "username": "hamada",
-    "name": "hamada85",
-    "following": true,
-    "follower": false,
-    "blocked": false,
-    "following_request_received": false,
-    "Notifications_enabled": true,
-    "mute": false,
-    "mute_until": null,
-    "no_retweets": false,
-    "want_retweets": true,
-    "all_replies": false,
-    "marked_spam": false,
-    "blocked_by": null,
-    "created_at": {
-      "$date": {
-        "$numberLong": "1652861454846"
-      }
-    },
-  },{
-
-    "_id": {
-      "$oid": "6284aa0eebade055f615dd08"
-    },
-    "user_id": {
-      "$oid": "63643d2e864200cb48ca49d7"
-    },
-    "username": "hamada",
-    "name": "hamada85",
-    "following": true,
-    "follower": false,
-    "blocked": false,
-    "following_request_received": false,
-    "Notifications_enabled": true,
-    "mute": false,
-    "mute_until": null,
-    "no_retweets": false,
-    "want_retweets": true,
-    "all_replies": false,
-    "marked_spam": false,
-    "blocked_by": null,
-    "created_at": {
-      "$date": {
-        "$numberLong": "1652861454846"
-      }
-    },
-    "__v": 0
-  },{
-    "_id": {
-      "$oid": "6284aa0eebade055f615dd0c"
-    },
-    "user_id": {
-      "$oid": "99968d2e858900ca21ca48d7"
-    },
-    "username": "menna",
-    "name": "menna1234",
-    "following": false,
-    "follower": true,
-    "blocked": false,
-    "following_request_received": false,
-    "Notifications_enabled": false,
-    "mute": false,
-    "mute_until": null,
-    "no_retweets": false,
-    "want_retweets": true,
-    "all_replies": false,
-    "marked_spam": false,
-    "blocked_by": null,
-    "created_at": {
-      "$date": {
-        "$numberLong": "1652861454892"
-      }
-    },
-    "__v": 0
-  },{
-    "_id": {
-      "$oid": "6284aaf6ebade055f615dd13"
-    },
-    "user_id": {
-      "$oid": "63668d2e858900cb48ca48d7"
-    },
-    "username": "sameh",
-    "name": "sam1234",
-    "following": true,
-    "follower": false,
-    "blocked": false,
-    "following_request_received": false,
-    "Notifications_enabled": true,
-    "mute": false,
-    "mute_until": null,
-    "no_retweets": false,
-    "want_retweets": true,
-    "all_replies": false,
-    "marked_spam": false,
-    "blocked_by": null,
-    "created_at": {
-      "$date": {
-        "$numberLong": "1652861686553"
-      }
-    },
-    "__v": 0
-  },{
-    "_id": {
-      "$oid": "6284aaf6ebade055f615dd17"
-    },
-    "user_id": {
-      "$oid": "99968d2e858900ca21ca48d7"
-    },
-    "username": "menna",
-    "name": "menna1234",
-    "following": false,
-    "follower": true,
-    "blocked": false,
-    "following_request_received": false,
-    "Notifications_enabled": false,
-    "mute": false,
-    "mute_until": null,
-    "no_retweets": false,
-    "want_retweets": true,
-    "all_replies": false,
-    "marked_spam": false,
-    "blocked_by": null,
-    "created_at": {
-      "$date": {
-        "$numberLong": "1652861686623"
-      }
-    },
-    "__v": 0
-  },{
-    "_id": {
-      "$oid": "6284ab10ebade055f615dd22"
-    },
-    "user_id": {
-      "$oid": "63668d2e864200cb48ca48d7"
-    },
-    "username": "olaaa",
-    "name": "ola1234",
-    "following": true,
-    "follower": false,
-    "blocked": false,
-    "following_request_received": false,
-    "Notifications_enabled": true,
-    "mute": false,
-    "mute_until": null,
-    "no_retweets": false,
-    "want_retweets": true,
-    "all_replies": false,
-    "marked_spam": false,
-    "blocked_by": null,
-    "created_at": {
-      "$date": {
-        "$numberLong": "1652861712003"
-      }
-    },
-    "__v": 0
-  },{
-    "_id": {
-      "$oid": "6284ab10ebade055f615dd26"
-    },
-    "user_id": {
-      "$oid": "99968d2e858900ca21ca48d7"
-    },
-    "username": "menna",
-    "name": "menna1234",
-    "following": true,
-    "follower": true,
-    "blocked": false,
-    "following_request_received": false,
-    "Notifications_enabled": false,
-    "mute": false,
-    "mute_until": null,
-    "no_retweets": false,
-    "want_retweets": true,
-    "all_replies": false,
-    "marked_spam": false,
-    "blocked_by": null,
-    "created_at": {
-      "$date": {
-        "$numberLong": "1652861712016"
-      }
-    },
-    "__v": 0
-  },{
-    "_id": {
-      "$oid": "6284ab3debade055f615dd2e"
-    },
-    "user_id": {
-      "$oid": "63668d2e858900cb48ca48d7"
-    },
-    "username": "sameh",
-    "name": "sam1234",
-    "following": true,
-    "follower": false,
-    "blocked": false,
-    "following_request_received": false,
-    "Notifications_enabled": true,
-    "mute": false,
-    "mute_until": null,
-    "no_retweets": false,
-    "want_retweets": true,
-    "all_replies": false,
-    "marked_spam": false,
-    "blocked_by": null,
-    "created_at": {
-      "$date": {
-        "$numberLong": "1652861757812"
-      }
-    },
-    "__v": 0
-  },{
-    "_id": {
-      "$oid": "6284ab3debade055f615dd32"
-    },
-    "user_id": {
-      "$oid": "63668d2e864200cb48ca48d7"
-    },
-    "username": "olaaa",
-    "name": "ola1234",
-    "following": false,
-    "follower": true,
-    "blocked": false,
-    "following_request_received": false,
-    "Notifications_enabled": false,
-    "mute": false,
-    "mute_until": null,
-    "no_retweets": false,
-    "want_retweets": true,
-    "all_replies": false,
-    "marked_spam": false,
-    "blocked_by": null,
-    "created_at": {
-      "$date": {
-        "$numberLong": "1652861757833"
-      }
-    },
-    "__v": 0
-  },{
-    "_id": {
-      "$oid": "6284ab56ebade055f615dd3a"
-    },
-    "user_id": {
-      "$oid": "63643d2e864200cb48ca49d7"
-    },
-    "username": "hamada",
-    "name": "hamada85",
-    "following": true,
-    "follower": false,
-    "blocked": false,
-    "following_request_received": false,
-    "Notifications_enabled": true,
-    "mute": false,
-    "mute_until": null,
-    "no_retweets": false,
-    "want_retweets": true,
-    "all_replies": false,
-    "marked_spam": false,
-    "blocked_by": null,
-    "created_at": {
-      "$date": {
-        "$numberLong": "1652861782027"
-      }
-    },
-    "__v": 0
-  },{
-    "_id": {
-      "$oid": "6284ab56ebade055f615dd3e"
-    },
-    "user_id": {
-      "$oid": "63668d2e864200cb48ca48d7"
-    },
-    "username": "olaaa",
-    "name": "ola1234",
-    "following": false,
-    "follower": true,
-    "blocked": false,
-    "following_request_received": false,
-    "Notifications_enabled": false,
-    "mute": false,
-    "mute_until": null,
-    "no_retweets": false,
-    "want_retweets": true,
-    "all_replies": false,
-    "marked_spam": false,
-    "blocked_by": null,
-    "created_at": {
-      "$date": {
-        "$numberLong": "1652861782046"
-      }
-    },
-    "__v": 0
-  }]
-
+const data= [
+  /// target ola
+  {
+  _id : "6285e4a887c630a36bbe8473",
+  user_id : "63668d2e864200cb48ca48d7",
+  username : "@olaaa",
+  name : "ola1234",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : false,
+  follower : true,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+  following_request_received : false,
+  mute : false,
+  mute_until : null,
+  want_retweets : true,
+  all_replies : false,
+  marked_spam : false,
+  blocked_by: null,
+},
+{
+  _id : "0285e4a887c630a36bbe8473",
+  user_id : "63668d2e864200cb48ca48d7",
+  username : "@olaaa",
+  name : "ola1234",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : true,
+  follower : true,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+{
+  _id : "1285e4a887c630a36bbe8473",
+  user_id : "63668d2e864200cb48ca48d7",
+  username : "@olaaa",
+  name : "ola1234",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : true,
+  follower : false,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+{
+  _id : "2285e4a887c630a36bbe8473",
+  user_id : "63668d2e864200cb48ca48d7",
+  username : "@olaaa",
+  name : "ola1234",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : true,
+  follower : false,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+/// target hamada
+{
+  _id : "3285e4a887c630a36bbe8473",
+  user_id : "63643d2e864200cb48ca49d7",
+  username : "@hamada",
+  name : "hamada85",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : false,
+  follower : true,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+{
+  _id : "4285e4a887c630a36bbe8473",
+  user_id : "63643d2e864200cb48ca49d7",
+  username : "@hamada",
+  name : "hamada85",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : true,
+  follower : true,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+/// target sameh
+{
+  _id : "5285e4a887c630a36bbe8473",
+  user_id : "63668d2e858900cb48ca48d7",
+  username : "@sameh",
+  name : "sam1234",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : false,
+  follower : true,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+{
+  _id : "7285e4a887c630a36bbe8473",
+  user_id : "63668d2e858900cb48ca48d7",
+  username : "@sameh",
+  name : "sam1234",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : true,
+  follower : true,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+/// target menna 
+{
+  _id : "8285e4a887c630a36bbe8473",
+  user_id : "99968d2e858900ca21ca48d7",
+  username : "@menna",
+  name : "menna1234",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : false,
+  follower : true,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+{
+  _id : "9285e4a887c630a36bbe8473",
+  user_id : "99968d2e858900ca21ca48d7",
+  username : "@menna",
+  name : "menna1234",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : false,
+  follower : true,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+{
+  _id : "9085e4a887c630a36bbe8473",
+  user_id : "99968d2e858900ca21ca48d7",
+  username : "@menna",
+  name : "menna1234",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : true,
+  follower : false,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+/// target mahmoud
+{
+  _id : "6185e4a887c630a36bbe8473",
+  user_id : "627adec1ceb4dc5e91fe221c",
+  username : "@mahmo1234",
+  name : "mahmoud",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : true,
+  follower : true,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+{
+  _id : "6385e4a887c630a36bbe8473",
+  user_id : "627adec1ceb4dc5e91fe221c",
+  username : "@mahmo1234",
+  name : "mahmoud",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : true,
+  follower : false,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+/// target farah
+{
+  _id : "6485e4a887c630a36bbe8473",
+  user_id : "627bc927592c6d120dcc126b",
+  username : "@farah",
+  name : "Farah Ossama",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : true,
+  follower : true,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+{
+  _id : "6585e4a887c630a36bbe8473",
+  user_id : "627bc927592c6d120dcc126b",
+  username : "@farah",
+  name : "Farah Ossama",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : true,
+  follower : true,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+{
+  _id : "6685e4a887c630a36bbe8473",
+  user_id : "627bc927592c6d120dcc126b",
+  username : "@farah",
+  name : "Farah Ossama",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : true,
+  follower : false,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+/// target farida
+{
+  _id : "6785e4a887c630a36bbe8473",
+  user_id : "627f964d055a48cb594004c5",
+  username : "@farida",
+  name : "Farida",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : true,
+  follower : true,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+{
+  _id : "6885e4a887c630a36bbe8473",
+  user_id : "627f964d055a48cb594004c5",
+  username : "@farida",
+  name : "Farida",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : true,
+  follower : false,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+/// target fathy
+{
+  _id : "6205e4a887c630a36bbe8473",
+  user_id : "62829a10d7a2423a544f527d",
+  username : "@fathyJr20",
+  name : "Fathy",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : false,
+  follower : true,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+{
+  _id : "6225e4a887c630a36bbe8473",
+  user_id : "62829a10d7a2423a544f527d",
+  username : "@fathyJr20",
+  name : "Fathy",
+  created_at : "2022-05-19T06:33:12.657Z",
+  following : true,
+  follower : true,
+  blocked : false,
+  Notifications_enabled : true,
+  no_retweets : false,
+},
+]
 
 class RelationsSeeder extends Seeder {
     async shouldRun() {
