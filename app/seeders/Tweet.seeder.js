@@ -12,7 +12,7 @@ const mongoURL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${proc
 
 
 
-module.exports.seedersList = { User, Tweet };
+module.exports.seedersList = { User,Tweet };
 
 
 
@@ -26,4 +26,4 @@ await mongoose.connect('mongodb://localhost:27017/Twitter_db', {
   });
 
 
-//module.exports.dropdb = async () => mongoose.connection.db.dropDatabase();
+module.exports.dropdb = async () => mongoose.connection.db.dropDatabase();
