@@ -9,7 +9,8 @@
     "start-gendoc": "node swagger.js",
     "test:watch": "jest --watch",
     "jsdoc": "jsdoc -c jsdoc.json",
-    "start": "node server.js"
+    "start": "node server.js",
+    "seed" : "env-cmd -f ./app/config/dev.env md-seed run"
   },
   "jest": {
     "testEnvironment": "node",
