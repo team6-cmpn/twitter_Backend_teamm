@@ -793,15 +793,19 @@ exports.userMediaList = async (req, res) =>{
 
 exports.userTweetsList = async (req, res) =>{
 
-  const authUser = await  User.findOne({ _id :  req.params.id });
-  //console.log(authUser)
+  var authUser = await  User.findOne({ _id :  req.params.id }  );
   if (authUser != null){
-    const tweet = await getTweetsFromUser( req.params.id );
-    res.status(200).send({tweets:tweet});
-    return;
+    const tweets = [];
+    const tweet = await Tweet.find({ user: authUser._id   });
+    if(!tweet){
+      res.send({message:"tweets database err"})
+    }
+    if(tweet){
+      res.status(200).send(tweet);
+    }
   }
   else{
-    res.status(404).send({tweets:"No user found"});
+    res.status(404).send("No user found");
     return;
   }
 }
