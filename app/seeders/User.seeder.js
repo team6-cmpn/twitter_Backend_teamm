@@ -12,9 +12,17 @@ const data=
       username : "@hamada",
       name : "hamada85",
       email : "baawxlo34@vxjidzfsaq.com",
-      password : "$aa2azfbg$08$kefayeAs1aIEkXae5FOueVrLc5.jtDh36Ogk2M0H3SR3JmXXe1C",
+      password : "$2a$08$kBW2wS9uCc0g5NPVnAR7hupup6pUqYxvM7IJEb8KFRQKmV3Jmtyii",
       followers_count : 150,
       following : [],
+      favorites : [
+        "4282689f3072026523ba8c16",
+        "6282689f3072026523ba8c12",
+      ],
+      retweets : [
+        "4282689f3072026523ba8c16",
+        "6282689f3072026523ba8c12",
+      ],
       admin_block : {
           blocked_by_admin : false,
           blockNumTimes : 0
@@ -30,9 +38,21 @@ const data=
         username : "@olaaa",
         name : "ola1234",
         email : "bwawxso34@vxjidzfopq.com",
-        password : "$aa2azfbg$08$kefmeeNs1bIEkXae5FOueVrLc5.jtDh36Ogk2N0H3SR3JmXXe1C",
+        password : "$2a$08$kBW2wS9uCc0g5NPVnAR7hupup6pUqYxvM7IJEb8KFRQKmV3Jmtyii",
         followers_count : 150,
         following : [],
+        favorites : [
+          "2282689f3072026523ba8c11",
+          "4282689f3072026523ba8c11",
+          "4282689f3072026523ba8c12",
+          "6282689f3072026523ba8c11",
+        ],
+        retweets : [
+          "2282689f3072026523ba8c11",
+          "4282689f3072026523ba8c11",
+          "4282689f3072026523ba8c12",
+          "6282689f3072026523ba8c11",
+        ],
         admin_block : {
             blocked_by_admin : false,
             blockNumTimes : 0
@@ -47,9 +67,21 @@ const data=
         username : "@sameh",
         name : "sam1234",
         email : "bwauzso34@vxjidzfopq.com",
-        password : "$aa2sqfbg$08$kefmeeNs1bIEkXae5FOueVrLc5.jtDh36Ogk2N0H3SR3JmXXe1C",
+        password : "$2a$08$kBW2wS9uCc0g5NPVnAR7hupup6pUqYxvM7IJEb8KFRQKmV3Jmtyii",
         followers_count : 150,
         following : [],
+        favorites : [
+          "1282689f3072026523ba8c14",
+          "2282689f3072026523ba8c11",
+          "3282689f3072026523ba8c13",
+          "5282689f3072026523ba8c12",
+        ],
+        retweets : [
+          "1282689f3072026523ba8c14",
+          "2282689f3072026523ba8c11",
+          "3282689f3072026523ba8c13",
+          "5282689f3072026523ba8c12",
+        ],
         admin_block : {
             blocked_by_admin : true,
             block_duration : 1000,
@@ -67,9 +99,19 @@ const data=
         username : "@menna",
         name : "menna1234",
         email : "bwauaso34@vxjizzfopq.com",
-        password : "$ae7sqfbg$08$kefmeeNs1bSEkXae5FOueVrLc5.jtDh36Ogk2N0H3SR3JmXXe1C",
+        password : "$2a$08$kBW2wS9uCc0g5NPVnAR7hupup6pUqYxvM7IJEb8KFRQKmV3Jmtyii",
         followers_count : 150,
-
+        favorites : [
+          "1282689f3072026523ba8c11",
+          "1282689f3072026523ba8c12",
+          "3282689f3072026523ba8c11",
+          "4282689f3072026523ba8c11",
+        ],
+        retweets : [
+          "1282689f3072026523ba8c11",
+          "1282689f3072026523ba8c12",
+          "3282689f3072026523ba8c11",
+        ],
         following : [],
         admin_block : {
             blocked_by_admin : true,
@@ -79,7 +121,117 @@ const data=
         },
         isAdmin : false,
         confirmed : true,
-    }
+    },
+    {
+      _id : "627adec1ceb4dc5e91fe221c",
+      username : "@mahmo1234",
+      name : "mahmoud",
+      email : "mahmoud.ahmed44447@yahoo.com",
+      password : "$2a$08$kBW2wS9uCc0g5NPVnAR7hupup6pUqYxvM7IJEb8KFRQKmV3Jmtyii",
+      followers : [],
+      following : [],
+      favorites :[
+        "1282689f3072026523ba8c11",
+        "1282689f3072026523ba8c12",
+        "2282689f3072026523ba8c11",
+        "4282689f3072026523ba8c14",
+      ],
+      retweets :[
+        "1282689f3072026523ba8c11",
+        "1282689f3072026523ba8c12",
+        "2282689f3072026523ba8c11",
+        "4282689f3072026523ba8c14",
+      ],
+      followers_count : 150,
+      admin_block : {
+          blocked_by_admin : false,
+          blockNumTimes : 0,
+      },
+      isAdmin : false,
+      confirmed : true,
+    },
+    {
+      _id : "627bc927592c6d120dcc126b",
+      username : "@farah",
+      name : "Farah Ossama",
+      email : "farahossama.123@gmail.com",
+      password : "$2a$08$kBW2wS9uCc0g5NPVnAR7hupup6pUqYxvM7IJEb8KFRQKmV3Jmtyii",
+      followers : [],
+      following : [],
+      favorites :[
+        "1282689f3072026523ba8c11",
+        "1282689f3072026523ba8c13",
+        "2282689f3072026523ba8c11",
+        "3282689f3072026523ba8c11",
+      ],
+      retweets :[
+        "1282689f3072026523ba8c11",
+        "1282689f3072026523ba8c13",
+        "2282689f3072026523ba8c11",
+        "3282689f3072026523ba8c11",
+      ],
+      followers_count : 50,
+      admin_block : {
+          blocked_by_admin : false,
+          blockNumTimes : 0,
+      },
+      isAdmin : false,
+      confirmed : true,
+    },
+    {
+      _id : "627f964d055a48cb594004c5",
+      username : "@farida",
+      name : "Farida",
+      email : "khadigaossama.123@gmail.com",
+      password : "$2a$08$kBW2wS9uCc0g5NPVnAR7hupup6pUqYxvM7IJEb8KFRQKmV3Jmtyii",
+      followers : [],
+      following : [],
+      favorites :[
+        "2282689f3072026523ba8c11",
+        "5282689f3072026523ba8c11",
+      ],
+      retweets :[
+        "2282689f3072026523ba8c11",
+        "5282689f3072026523ba8c11",
+      ],
+      followers_count : 50,
+      admin_block : {
+          blocked_by_admin : false,
+          blockNumTimes : 0,
+      },
+      isAdmin : false,
+      confirmed : true,
+    },
+    {
+      _id : "62829a10d7a2423a544f527d",
+      username : "@fathyJr20",
+      name : "Fathy",
+      email : "jwt03076@zcrcd.com",
+      password : "$2a$08$kBW2wS9uCc0g5NPVnAR7hupup6pUqYxvM7IJEb8KFRQKmV3Jmtyii",
+      followers : [],
+      following : [],
+      favorites :[
+        "1282689f3072026523ba8c11",
+        "1282689f3072026523ba8c13",
+        "2282689f3072026523ba8c11",
+        "3282689f3072026523ba8c11",
+      ],
+      retweets :[
+        "1282689f3072026523ba8c11",
+        "1282689f3072026523ba8c13",
+        "2282689f3072026523ba8c11",
+        "3282689f3072026523ba8c11",
+      ],
+      followers_count : 50,
+      admin_block : {
+          blocked_by_admin : false,
+          blockNumTimes : 0,
+      },
+      isAdmin : false,
+      confirmed : true,
+    },
+
+    
 ]
 
 
@@ -87,7 +239,7 @@ class UsersSeeder extends Seeder {
   async shouldRun() {
     return User.countDocuments()
       .exec()
-      //.then(count => count === 0);
+      .then(count => count === 0);
   }
 
   async run() {

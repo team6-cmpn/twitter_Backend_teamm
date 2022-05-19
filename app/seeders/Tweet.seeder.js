@@ -1,6 +1,5 @@
 require("dotenv").config();
 const User = require("./app/seeders/User.seeder");
-const Relation = require("./app/seeders/Relation.seeder");
 const Tweet = require("./app/seeders/Tweet.seeder");
 const db = require("./app/models");
 const mongoose = require('mongoose');
@@ -27,4 +26,4 @@ await mongoose.connect('mongodb://localhost:27017/Twitter_db', {
   });
 
 
-//module.exports.dropdb = async () => mongoose.connection.db.dropDatabase();
+module.exports.dropdb = async () => mongoose.connection.db.dropDatabase();

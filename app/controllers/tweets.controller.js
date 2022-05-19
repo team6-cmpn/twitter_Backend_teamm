@@ -1,4 +1,3 @@
-
 require("dotenv").config();
 const config = require("../config/pusher.config");
 const db = require("../models");
