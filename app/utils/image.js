@@ -30,8 +30,11 @@ exports.uploadPhotos = async(req, res,count) => {
         storage: storage
     }
     );
+    
     if (count==1)
     {
+        if(req.file)
+        {
         upload.single('image')(req, res, (err) => {
             if (err) {
                 res.status(409).send(
@@ -41,7 +44,7 @@ exports.uploadPhotos = async(req, res,count) => {
                     // message: 'Error Occured!',
                     // error: err
             } else {
-                User.updateOne({_id:req.userId},{profile_photo:req.file.path});
+                User.updateOne({_id:req.userId},{profile_image_url:req.file.path});
                 res.status(200).send(
                     req.file
                     // status: true,
@@ -54,6 +57,11 @@ exports.uploadPhotos = async(req, res,count) => {
         );
     }
     else{
+        res.status(404).send({message:"not found"})
+    }
+    }
+    else{
+        if(req.files){
     upload.array('image')(req, res, (err) => {
         if (err) {
             res.status(409).send(
@@ -73,8 +81,11 @@ exports.uploadPhotos = async(req, res,count) => {
     }
     );
     }
+    else{
+        res.status(404).send({message:"not found"})
+    }
 }
-
+};
 // const upload = multer({
 //     dest: './upload/images'
 // });
