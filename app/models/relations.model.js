@@ -29,33 +29,33 @@ const relationsSchema = new Schema({
     connections:{
         type: String,
     },
-    following_request_received:{
-        type: Boolean,
-    }, 
-    following_request_send:{
-        type: Boolean,
-    },
-    Notifications_enabled:{
-        type: Boolean,
-    },
+    // following_request_received:{
+    //     type: Boolean,
+    // }, 
+    // following_request_send:{
+    //     type: Boolean,
+    // },
+    // Notifications_enabled:{
+    //     type: Boolean,
+    // },
     mute:{
         type: Boolean,
     },
-    mute_until:{
-        type: Date,
-    },
-    no_retweets:{
-        type: Boolean
-    },
-    want_retweets:{
-        type: Boolean,
-    },
-    all_replies:{
-        type: Boolean,
-    },
-    marked_spam:{
-        type: Boolean,
-    },
+    // mute_until:{
+    //     type: Date,
+    // },
+    // no_retweets:{
+    //     type: Boolean
+    // },
+    // want_retweets:{
+    //     type: Boolean,
+    // },
+    // all_replies:{
+    //     type: Boolean,
+    // },
+    // marked_spam:{
+    //     type: Boolean,
+    // },
     blocked_by:{ // user_id is blocked by user_id
         type: Boolean,
     },
