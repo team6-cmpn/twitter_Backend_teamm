@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const { relations } = require("../models");
 const db = require("../models");
+ObjectId = require('mongodb').ObjectId;
 const User = db.user;
 const tweet = db.tweet;
 const Relation = db.relations;
@@ -19,7 +20,7 @@ require("dotenv").config();
 exports.uploadPhotos = async(req, res,count) => {
     const storage = multer.diskStorage({
         destination: (req, file, cb) => {
-            cb(null, './upload/images');
+            cb(null, './upload');
         },
         filename: (req, file, cb) => {
             cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
@@ -30,23 +31,20 @@ exports.uploadPhotos = async(req, res,count) => {
         storage: storage
     }
     );
-    
     if (count==1)
     {
-        if(req.file)
-        {
-        upload.single('image')(req, res, (err) => {
+        upload.single('image')(req, res,async (err) =>{
             if (err) {
-                res.status(409).send(
+                res.status(409).send( 
                     err
                     );
                     // status: false,
                     // message: 'Error Occured!',
                     // error: err
-            } else {
-                User.updateOne({_id:req.userId},{profile_image_url:req.file.path});
+            } else {  
+                aaa=await User.updateOne({_id:ObjectId(req.userId)},{profile_image_url:req.file.path});           
                 res.status(200).send(
-                    req.file
+                    {url:"http://www.twi-jay.me:8080/upload/" + req.file.filename}
                     // status: true,
                     // message: 'File Uploaded Successfully!',
                     // file: req.file
@@ -57,11 +55,6 @@ exports.uploadPhotos = async(req, res,count) => {
         );
     }
     else{
-        res.status(404).send({message:"not found"})
-    }
-    }
-    else{
-        if(req.files){
     upload.array('image')(req, res, (err) => {
         if (err) {
             res.status(409).send(
@@ -71,8 +64,19 @@ exports.uploadPhotos = async(req, res,count) => {
                 // error: err
             );
         } else {
+            urls=[]
+            for (i=0;i<req.files.length;i++)
+            {
+                console.log(i)
+                urls.push("http://www.twi-jay.me:8080/upload/" + req.files[i].filename)
+            }
+            if (urls.length==0)
+            {
+                urls = " ";
+            }
             res.status(200).send(
-                req.files
+                {url:urls}
+               // req.files
                 // status: true,
                 // message: 'File Uploaded Successfully!',
                 // file: req.files
@@ -81,11 +85,8 @@ exports.uploadPhotos = async(req, res,count) => {
     }
     );
     }
-    else{
-        res.status(404).send({message:"not found"})
-    }
 }
-};
+
 // const upload = multer({
 //     dest: './upload/images'
 // });
