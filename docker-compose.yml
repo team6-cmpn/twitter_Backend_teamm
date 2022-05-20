@@ -28,8 +28,8 @@ services:
       - mongo-data:/data/db
     environment:
       # provide your credentials here
-      - MONGO_INITDB_ROOT_USERNAME= cufe_hem_admin
-      - MONGO_INITDB_ROOT_PASSWORD= drtamer_basha
+      - MONGO_INITDB_ROOT_USERNAME= hem
+      - MONGO_INITDB_ROOT_PASSWORD= drtamerbasha
   cadvisor:
     image: google/cadvisor:latest
     container_name: cadvisor
