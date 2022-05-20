@@ -35,7 +35,7 @@ exports.uploadPhotos = async(req, res,count) => {
     {
         if(req.file)
         {
-        upload.single('image')(req, res, (err) => {
+        upload.single('image')(req, res, async (err) => {
             if (err) {
                 res.status(409).send(
                     err
@@ -44,7 +44,7 @@ exports.uploadPhotos = async(req, res,count) => {
                     // message: 'Error Occured!',
                     // error: err
             } else {
-                User.updateOne({_id:req.userId},{profile_image_url:req.file.path});
+                await User.updateOne({_id:req.userId},{profile_image_url:req.file.path});
                 res.status(200).send(
                     req.file
                     // status: true,
