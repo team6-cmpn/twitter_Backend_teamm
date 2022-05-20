@@ -34,8 +34,6 @@ exports.uploadPhotos = async(req, res,count) => {
     
     if (count==1)
     {
-        if(req.file)
-        {
         upload.single('image')(req, res, async (err) => {
             if (err) {
                 res.status(409).send(
@@ -58,11 +56,7 @@ exports.uploadPhotos = async(req, res,count) => {
         );
     }
     else{
-        res.status(404).send({message:"not found"})
-    }
-    }
-    else{
-        if(req.files){
+  //      if(req.files){
     upload.array('image')(req, res, (err) => {
         if (err) {
             res.status(409).send(
@@ -82,10 +76,10 @@ exports.uploadPhotos = async(req, res,count) => {
     }
     );
     }
-    else{
-        res.status(404).send({message:"not found"})
-    }
-}
+    //else{
+      //  res.status(404).send({message:"not found"})
+    //}//
+//}
 };
 // const upload = multer({
 //     dest: './upload/images'
