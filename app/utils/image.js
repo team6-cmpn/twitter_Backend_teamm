@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const { relations } = require("../models");
 const db = require("../models");
+ObjectId = require('mongodb').ObjectId;
 const User = db.user;
 const tweet = db.tweet;
 const Relation = db.relations;
@@ -44,7 +45,7 @@ exports.uploadPhotos = async(req, res,count) => {
                     // message: 'Error Occured!',
                     // error: err
             } else {
-                await User.updateOne({_id:req.userId},{profile_image_url:req.file.path});
+                await User.updateOne({_id:ObjectId(req.userId)},{profile_image_url:req.file.path});
                 res.status(200).send(
                     req.file
                     // status: true,
