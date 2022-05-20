@@ -77,7 +77,7 @@ exports.update=  async(req,res)=>{
 
 if(req.body.text)
 {
-  Tweet.findOne({text:req.body.text}).exec(async (err,tweetText)=>{
+  Tweet.findOne({text:req.body.text,user:req.userId}).exec(async (err,tweetText)=>{
     if(err){
       res.status(403).send({ message: err });
     }
@@ -187,7 +187,17 @@ exports.show=  async(req,res)=>{
   //get required tweet object(contain tweet and the user created it)
     requiredTweet = await getTweet(tweetId,tweet.user);
     if(requiredTweet){
-      res.status(200).send({"tweet":requiredTweet[0],"user":requiredTweet[1]})
+      if(requiredTweet[0].favorites.includes(req.userId)){
+        var isLiked = true;
+      }else{
+        var isLiked = false;
+      }
+      if(requiredTweet[0].retweetUsers.includes(req.userId)){
+        var isRetweetd = true;
+      }else{
+        var isRetweetd = false;
+      }
+      res.status(200).send({"isLiked":isLiked,"isRetweeted":isRetweetd,"tweet":requiredTweet[0],"user":requiredTweet[1]})
     }else{
       res.status(400).send({message:"couldn't find tweetobject"})
     }

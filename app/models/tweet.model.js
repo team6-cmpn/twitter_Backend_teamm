@@ -52,9 +52,11 @@ const tweetSchema = new Schema({
     },
     favorited: Boolean,
     hasImage: Boolean,
-    imageUrl: {
+    imageUrl: [
+        {
         type: String
-    },
+        }
+    ],
     retweeted: Boolean,
     favorites:[
         {
