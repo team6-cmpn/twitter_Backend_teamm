@@ -26,6 +26,10 @@ services:
       - mern-app
     volumes:
       - mongo-data:/data/db
+    environment:
+      # provide your credentials here
+      - MONGO_INITDB_ROOT_USERNAME= cufe_hem_admin
+      - MONGO_INITDB_ROOT_PASSWORD= drtamer_basha
   cadvisor:
     image: google/cadvisor:latest
     container_name: cadvisor
