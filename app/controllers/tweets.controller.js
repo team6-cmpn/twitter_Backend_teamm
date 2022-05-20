@@ -78,7 +78,7 @@ exports.update=  async(req,res)=>{
 
 if(req.body.text)
 {
-  Tweet.findOne({text:req.body.text}).exec(async (err,tweetText)=>{
+  Tweet.findOne({text:req.body.text,user:req.userId}).exec(async (err,tweetText)=>{
     if(err){
       res.status(403).send({ message: err });
     }
@@ -178,22 +178,32 @@ if(req.body.text)
  */
 
 exports.show=  async(req,res)=>{
-  //var userId = req.userId;
-  var tweetId = req.params.id;
-  var tweet = await Tweet.findById(tweetId);
-  if(!tweet){
-    res.status(404).send({message:"tweet not found"})
-  }
-  else{
-  //get required tweet object(contain tweet and the user created it)
-    requiredTweet = await getTweet(tweetId,tweet.user);
-    if(requiredTweet){
-      res.status(200).send({"tweet":requiredTweet[0],"user":requiredTweet[1]})
+//var userId = req.userId;
+var tweetId = req.params.id;
+var tweet = await Tweet.findById(tweetId);
+if(!tweet){
+  res.status(404).send({message:"tweet not found"})
+}
+else{
+//get required tweet object(contain tweet and the user created it)
+  requiredTweet = await getTweet(tweetId,tweet.user);
+  if(requiredTweet){
+    if(requiredTweet[0].favorites.includes(req.userId)){
+      var isLiked = true;
     }else{
-      res.status(400).send({message:"couldn't find tweetobject"})
+      var isLiked = false;
     }
+    if(requiredTweet[0].retweetUsers.includes(req.userId)){
+      var isRetweetd = true;
+    }else{
+      var isRetweetd = false;
+    }
+    res.status(200).send({"isLiked":isLiked,"isRetweeted":isRetweetd,"tweet":requiredTweet[0],"user":requiredTweet[1]})
+  }else{
+    res.status(400).send({message:"couldn't find tweetobject"})
   }
-  }
+}
+}
    ////https://stackoverflow.com/questions/67680295/node-js-mongoose-findone-id-req-params-id-doesnt-work
   //// https://stackoverflow.com/questions/20044743/twitter-api-get-tweet-id
   exports.lookup= async(req,res)=>{
