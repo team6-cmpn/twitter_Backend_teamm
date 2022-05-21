@@ -27,11 +27,7 @@ services:
     volumes:
       - mongo-data:/data/db
       - ./init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-    # environment:
-    #   # provide your credentials here
-    #   - MONGO_INITDB_DATABASE=Twitter_db
-    #   - MONGO_INITDB_ROOT_USERNAME=hem
-    #   - MONGO_INITDB_ROOT_PASSWORD=drtamerbasha
+    command: [--auth]
   cadvisor:
     image: google/cadvisor:latest
     container_name: cadvisor
