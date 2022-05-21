@@ -28,9 +28,9 @@ if (process.env.DB_NAME == "Twitter_db"){
   db.mongoose
   .connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, {
     useNewUrlParser: true,
-    authSource: "admin",
-    user: "hem",
-    pass: "drtamerbasha",
+    // authSource: "admin",
+    // user: "hem",
+    // pass: "drtamerbasha",
     //useCreateIndex: true,
     //useFindAndModify: false,
     useUnifiedTopology: true,
