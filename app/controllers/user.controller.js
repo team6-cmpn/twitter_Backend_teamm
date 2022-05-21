@@ -2,7 +2,7 @@ const db = require("../models");
 const { findOne } = require("../models/user.model");
 const sendEmail = require("../utils/email");
 const {getTweetsFromUser,getListRelationsIDs,getUsersFromArray,getUsersRelationsList,createNewRelation,setRelationtoBlock} = require("../utils/user.js")
-
+ObjectId = require('mongodb').ObjectId;
 const User = db.user;
 const Relation=db.relations;
 const Tweet = db.tweet;
@@ -774,7 +774,7 @@ exports.userMediaList = async (req, res) =>{
   const user = await  User.findOne({ _id :  req.params.id});
   if (user != null){
     tweets=[]
-    const media = await Tweet.getTweetsFromUser(user._id);
+    const media = await Tweet.find({ user: user._id   });
     for(i=0;i<media.length;i++)
     {
       if (media.hasImage==true)
