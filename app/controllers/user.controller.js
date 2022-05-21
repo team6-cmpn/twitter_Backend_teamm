@@ -814,7 +814,7 @@ exports.userLikedTweetsList = async(req, res) =>{
   const authUser = await  User.findOne({ _id :  req.params.id  }  );
   tweets=[]
   if (authUser != null){
-    const tweetsIds =  authUser.likes;
+    const tweetsIds =  authUser.favorites;
     for(i=0;i<tweetsIds.length;i++){
       tweet=await Tweet.findOne({ _id :  tweetsIds[i]  });
       tweets.push(tweet);
