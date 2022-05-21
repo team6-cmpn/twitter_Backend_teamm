@@ -529,4 +529,4 @@ exports.favoriteList= async(req,res)=>{
     if(!requiredTweet){
       res.status(404).send({message:"tweet not found in database"})
     }
-};
+};s
