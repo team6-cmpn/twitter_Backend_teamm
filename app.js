@@ -18,8 +18,8 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
+app.use(express.urlencoded({ extended: false }));
+app.use("/upload", express.static("upload"));
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 if (process.env.DB_NAME == "Twitter_db"){
