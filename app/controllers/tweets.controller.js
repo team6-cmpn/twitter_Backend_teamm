@@ -64,7 +64,7 @@ const pusher = new Pusher({
  * @param {responsetweetbody} res
  */
 
-exports.update=  async(req,res)=>{
+ exports.update=  async(req,res)=>{
   // to create tweet
   const tweet = new Tweet({
   created_at: new Date(),
@@ -91,6 +91,16 @@ if(req.body.text)
       }else{
         tweet.hasImage = false;
       }
+      //check if there is mention and return mentioned user id
+      if(req.body.mention){
+        var mentioneduser = await User.findOne({username:req.body.mention})
+          if(!mentioneduser){
+            res.send({message:"mentioned user not found"})
+          }
+          if(mentioneduser){
+            tweet.mentionedUser = mentioneduser._id;
+          }
+        }
       //get user object to show it
       User.findById(req.userId).exec(async (err,userData)=>{
         if(err){
@@ -100,23 +110,11 @@ if(req.body.text)
           tweet.user = userData;
         }
       })
-      //check if there is mention and return mentioned user id
-      if(req.body.mention){
-        User.findOne({username:req.body.mention}).exec(async (err,mentioneduser)=>{
-          if(err){
-            res.send({message:err})
-          }
-          if(mentioneduser){
-            tweet.mentionedUser = mentioneduser._id;
-          }
-        })
-      }
+
       //save tweet in database
       tweet.save()
       .then(newtweet => {
         User.findById(req.userId, async function (err, activeUser) {
-
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -211,6 +209,7 @@ exports.show=  async(req,res)=>{
     tweetsCount = parseInt(req.params.tweetsCount);
     var tweetsArrayFollowings = [];
     var tweetsArrayRandom = [];
+    var count = 0;
     
     //get users list followed by authenticated user 
     var usersIdList = await getListRelationsIDs(req.userId,"following")
@@ -221,7 +220,7 @@ exports.show=  async(req,res)=>{
 
     //find tweets array of those users and sort them to the most recent tweets
     if (usersIdList != "user not found" ){
-      var count = await Tweet.countDocuments({ user:{$in: usersIdList} });
+      count = await Tweet.countDocuments({ user:{$in: usersIdList} });
 
       if (count > tweetsCount*(page-1) ){
         var followingsTweets = await Tweet.find({user:{$in: usersIdList}}) //////////
@@ -245,21 +244,26 @@ exports.show=  async(req,res)=>{
     //var currentDate = new Date()
     //var lastWeekDate = currentDate.setDate(currentDate.getDate()-7)
     //var newsfeedTweets = await Tweet.aggregate([{$match:{created_at:{$gte: new Date(lastWeekDate),$lte: new Date()}}}]).sort({created_at:-1}).skip(tweetsCount*(page-1)).limit(tweetsCount)
+    if (tweetsArrayFollowings.length < tweetsCount){
+      var skipvalue = 0;
+      if ((tweetsCount*(page-1)-count) > 0){ skipvalue = tweetsCount*(page-1)-count}
+      //console.log(skipvalue , count)
+      var newsfeedTweets = await Tweet.aggregate().sort({created_at:-1}).skip(skipvalue).limit(tweetsCount-tweetsArrayFollowings.length)
 
-    var skipvalue = 0;
-    if ((tweetsCount*(page-1)-count) >0){ skipvalue = tweetsCount*(page-1)-count}
-    var newsfeedTweets = await Tweet.aggregate().sort({created_at:-1}).skip(skipvalue).limit(tweetsCount-tweetsArrayFollowings.length)
-
-    if(newsfeedTweets){
-      for(let i = 0; i< newsfeedTweets.length;i++){
-        var tweetelement = newsfeedTweets[i];
-        var tweet = await getTweet(tweetelement._id,tweetelement.user)
-        tweetsArrayRandom.push({"tweet":tweet[0],"user":tweet[1]});
+      if(newsfeedTweets){
+        for(let i = 0; i< newsfeedTweets.length;i++){
+          var tweetelement = newsfeedTweets[i];
+          var tweet = await getTweet(tweetelement._id,tweetelement.user)
+          tweetsArrayRandom.push({"tweet":tweet[0],"user":tweet[1]});
+        }
+        tweetsArrayRandom = tweetsArrayRandom.filter(
+          function(item) { 
+          return ! tweetsArrayFollowings.find((item2) => item2._id == item._id); // Returns true for items not found in b.
+      });
+      }else{
+        res.status(404).send({message:"couldn't find tweets in database"})
       }
-    }else{
-      res.status(404).send({message:"couldn't find tweets in database"})
     }
-    
     if (tweetsArrayRandom && tweetsArrayFollowings){
       res.status(200).send(tweetsArrayFollowings.concat(tweetsArrayRandom))
     }else{
