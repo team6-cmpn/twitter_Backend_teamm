@@ -26,11 +26,11 @@ if (process.env.DB_NAME == "Twitter_db"){
 //console.log(process.env.DB_NAME)
   //conect the database
   db.mongoose
-  .connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, {
+  .connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}?authMechanism=SCRAM-SHA-1`, {
     useNewUrlParser: true,
-    // authSource: "Twitter_db",
-    // user: "hem",
-    // pass: "drtamerbasha",
+    authSource: "admin",
+    user: "hem",
+    pass: "drtamerbasha",
     //useCreateIndex: true,
     //useFindAndModify: false,
     useUnifiedTopology: true,
