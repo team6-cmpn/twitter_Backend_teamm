@@ -70,10 +70,10 @@ exports.uploadPhotos = async(req, res,count) => {
                 console.log(i)
                 urls.push("http://www.twi-jay.me:8080/upload/" + req.files[i].filename)
             }
-            if (urls.length==0)
-            {
-                urls = " ";
-            }
+            //if (urls.length==0)
+            //{
+              //  urls = " ";
+            //}
             res.status(200).send(
                 {url:urls}
                // req.files
