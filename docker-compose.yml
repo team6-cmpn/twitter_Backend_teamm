@@ -30,8 +30,8 @@ services:
     environment:
       # provide your credentials here
       - MONGO_INITDB_DATABASE=Twitter_db
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_ROOT_USERNAME=hem
+      - MONGO_INITDB_ROOT_PASSWORD=drtamerbasha
   cadvisor:
     image: google/cadvisor:latest
     container_name: cadvisor
