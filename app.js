@@ -26,8 +26,9 @@ if (process.env.DB_NAME == "Twitter_db"){
 //console.log(process.env.DB_NAME)
   //conect the database
   db.mongoose
-  .connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, {
+  .connect(`mongodb://hem:drtamerbasha@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}/?authMechanism=DEFAULT&authSource=admin`, {
     useNewUrlParser: true,
+    //mongodb://hem:drtamerbasha@twi-jay.me:27017/?authMechanism=DEFAULT&authSource=admin
     //useCreateIndex: true,
     //useFindAndModify: false,
     useUnifiedTopology: true,
