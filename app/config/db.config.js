@@ -1,5 +1,5 @@
 module.exports = {
     HOST: "mongo",
-    PORT: 27017,
+    PORT: 15555,
     DB: "Twitter_db"
   };

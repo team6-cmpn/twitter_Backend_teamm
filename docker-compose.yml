@@ -21,7 +21,7 @@ services:
   mongo:
     image: mongo:focal
     ports:
-      - "27017:27017"
+      - "15555:27017"
     networks:
       - mern-app
     volumes:
