@@ -19,7 +19,7 @@ module.exports.seedersList = { User,Tweet,Relation };
 
 module.exports.connect = async () =>
 
-await mongoose.connect('mongodb://localhost:15555/Twitter_db', {
+await mongoose.connect(mongoURL, {
     useNewUrlParser: true,
   //  useCreateIndex: true,
 //  useFindAndModify: false,
