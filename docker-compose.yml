@@ -18,10 +18,11 @@ services:
       - mongo
     volumes:
       - ./upload/images:/server/upload/images:rw
-  mongo:
+  mongo_new:
     image: mongo:focal
+    command: mongod --port 15555
     ports:
-      - "15555:27017"
+      - "15555:15555"
     networks:
       - mern-app
     volumes:
