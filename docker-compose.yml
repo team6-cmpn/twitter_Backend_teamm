@@ -18,7 +18,7 @@ services:
       - mongo_new
     volumes:
       - ./upload/images:/server/upload/images:rw
-  mongo_new:
+  mongo:
     image: mongo:focal
     command: mongod --port 15555
     ports:
