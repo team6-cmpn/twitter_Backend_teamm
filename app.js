@@ -31,8 +31,8 @@ if (process.env.DB_NAME == "Twitter_db"){
     // authSource: "admin",
     // user: "hem",
     // pass: "drtamerbasha",
-    useCreateIndex: true,
-    useFindAndModify: true,
+    // useCreateIndex: true,
+    // useFindAndModify: true,
     useUnifiedTopology: true,
   })
   .then(() => {
