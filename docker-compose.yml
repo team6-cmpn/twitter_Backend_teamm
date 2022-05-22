@@ -15,7 +15,7 @@ services:
     networks:
       - mern-app
     depends_on:
-      - mongo_new
+      - mongo
     volumes:
       - ./upload/images:/server/upload/images:rw
   mongo:
