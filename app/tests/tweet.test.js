@@ -370,14 +370,28 @@ describe('update & creating a tweet',() =>{
 /////////////////////////////////////////show a tweet test//////////////
 describe('return tweet exist in databse',()=>{
     it('should return 200 and required tweet object',async()=>{
+        const signinUser = {
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+        }
+        const response = await request.post('/auth/signin')
+        .send(signinUser);
+        token=response.body.accessToken
         const tweetId = '625d594a9b671cf4db621969';
-        const res = await request.get('/tweets/show/'+ tweetId)
+        const res = await request.get('/tweets/show/'+ tweetId).set("x-access-token",token)
         expect(res.body).toBeTruthy()
         //console.log(res.body);
     });
     it('should return tweet not found if passed wrong id not found in database',async()=>{
+        const signinUser = {
+            data :"adminn2",
+            password: "$2a$08$defCyeNs1aIemXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+        }
+        const response = await request.post('/auth/signin')
+        .send(signinUser);
+        token=response.body.accessToken
         const tweetId = '625d594a9b671cf4db621960';
-        const res = await request.get('/tweets/show/'+ tweetId)
+        const res = await request.get('/tweets/show/'+ tweetId).set("x-access-token",token)
         expect(res.body.message).toBe("tweet not found")
     });
 });
