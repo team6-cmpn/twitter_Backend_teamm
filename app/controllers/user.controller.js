@@ -774,15 +774,16 @@ exports.userMediaList = async (req, res) =>{
   const user = await  User.findOne({ _id :  req.params.id});
   if (user != null){
     tweets=[]
-    const media = await Tweet.find({ user: user._id   });
-    for(i=0;i<media.length;i++)
-    {
-      if (media.hasImage==true)
-      {
-        tweets.push(media[i]);
-      }
-    }
-    res.status(200).send({tweets:tweets});
+    const media = await Tweet.find({ user: user._id ,hasImage:true   });
+    console.log(media)
+    // for(i=0;i<media.length;i++)
+    // {
+    //   if (media.hasImage==true)
+    //   {
+    //     tweets.push(media[i]);
+    //   }
+    // }
+    res.status(200).send({tweets:media});
   }
   else{
     res.status(404).send({tweets:"No user found"});
