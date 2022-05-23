@@ -94,9 +94,6 @@ if(req.body.text)
       //check if there is mention and return mentioned user id
       if(req.body.mention){
         var mentioneduser = await User.findOne({username:req.body.mention})
-          if(!mentioneduser){
-            tweet.mentionedUser = null;
-          }
           if(mentioneduser){
             tweet.mentionedUser = mentioneduser._id;
           }
