@@ -291,7 +291,7 @@ let beginOfDay= currentDate2.setHours(0,0,0,0)
 
  Promise.all([
 
-User.find({isAdmin:false}).sort({followers_count:-1}).limit(5).select("username followers_count -_id "),
+User.find({isAdmin:false}).sort({followers_count:-1}).limit(5),
 Tweet.countDocuments(),
 User.countDocuments({isAdmin:false}),
 
