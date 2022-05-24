@@ -41,7 +41,9 @@ const Tweetsdata=
         "99968d2e858900ca21ca48d7",
         "627adec1ceb4dc5e91fe221c",
     ], 
-    hasImage : false, 
+    hasImage : true,
+    imageUrl:["http://www.twi-jay.me:8080/upload/image-1653424420233.jpg",
+    "http://www.twi-jay.me:8080/upload/image-1653424420243.jpg"] 
   },
   {
     _id : "1282689f3072026523ba8c13", 
@@ -85,7 +87,7 @@ const Tweetsdata=
     retweetUsers : [
     ], 
     hasImage : true,
-    imageUrl :"image", 
+    imageUrl :["http://www.twi-jay.me:8080/upload/image-1653424420375.jpg"], 
   },
   {
     _id : "1282689f3072026523ba8c16", 
@@ -217,7 +219,7 @@ const Tweetsdata=
     retweetUsers : [
     ], 
     hasImage : true,
-    imageUrl: "image",
+    imageUrl: ["http://www.twi-jay.me:8080/upload/image-1653424420399.jpg"],
   },
   /////////////////// tweets created by farah osama //////////////
   {
