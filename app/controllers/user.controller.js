@@ -261,6 +261,31 @@ exports.userFollowersList =  async (req, res) =>{
   res.status(200).send({follower:followers});
 }
 
+ /**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserBlocksIDs
+ * @property {string} id the id of user who wants to get the blocks list of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserblocksList
+ * @property {object}  users  array of user Ids represent the users who the user with spacific id are blocked
+ */
+/** 
+ * This function get the blocks list of the user with the id in the request paramters and returns the user Objects in array
+ * 
+ * @param {reqParamUserBlocksIDs} req request sent from the front
+ * @param {responseBodyUserblocksList} res response sent to the front
+ * 
+ */
+
 exports.userBlocksList =  async (req, res) =>{
   const blocks = await getUsersRelationsList(req.params.id, "blocked");
   if(blocks=="user not found"){
@@ -270,6 +295,32 @@ exports.userBlocksList =  async (req, res) =>{
   res.status(200).send({blocks:blocks});
 }
 
+
+ /**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserMutedIDs
+ * @property {string} id the id of user who wants to get the blocks list of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserMutedIDs
+ * @property {object}  ids  array of user Ids represent the users who the user with spacific id are muted
+ */
+/** 
+ * This function get the mutes list of the user with the id in the request paramters and returns the user Ids in array
+ * 
+ * @param {reqParamUserMutedIDs} req request sent from the front
+ * @param {responseBodyUserMutedIDs} res response sent to the front
+ * 
+ */
+
 exports.userMutedIDs =  async (req, res) =>{
   const muted = await getListRelationsIDs(req.params.id, "muted");
   if(muted=="user not found"){
@@ -278,7 +329,30 @@ exports.userMutedIDs =  async (req, res) =>{
   }
   res.status(200).send({muted:muted});
 }
+/**
+ * 
+ * @module User
+ */
 
+/**
+ * @global
+ * @typedef {object} reqParamUserMutedList
+ * @property {string} id the id of user who wants to get the blocks list of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserMutedList
+ * @property {object}  users  array of user objects represent the users who the user with spacific id are muted
+ */
+/** 
+ * This function get the mutes list of the user with the id in the request paramters and returns the user objects in array
+ * 
+ * @param {reqParamUserMutedList} req request sent from the front
+ * @param {responseBodyUserMutedList} res response sent to the front
+ * 
+ */
 exports.userMutedList = async (req, res) =>{
   const muted = await getUsersRelationsList(req.params.id, "muted");
   if(muted=="user not found"){
@@ -288,89 +362,139 @@ exports.userMutedList = async (req, res) =>{
   res.status(200).send({muted:muted});
 }
 ///not used
-exports.friendshipsLookup =  async (req, res) =>{
-    const users = [];
-    const userParamtersArray= req.params.id.split(",");
-    const user= await User.findOne({ _id :  req.userId  });
-    const relations = user.relations;
-    for (let i = 0; i < relations.length; i++) {
-      const relation = await Relation.findOne({ _id :  relations[i]  });
-      for (let j = 0; j < userParamtersArray.length; j++) {
-        if (relation.user_id==userParamtersArray[j]){
-          const relationObject=
-          {"name": relation.name,
-          "username": relation.username,
-          "id": relation.user_id,
-          "connections": relation.connections,
-        };
-        users.push(relationObject);
-        }
+// exports.friendshipsLookup =  async (req, res) =>{
+//     const users = [];
+//     const userParamtersArray= req.params.id.split(",");
+//     const user= await User.findOne({ _id :  req.userId  });
+//     const relations = user.relations;
+//     for (let i = 0; i < relations.length; i++) {
+//       const relation = await Relation.findOne({ _id :  relations[i]  });
+//       for (let j = 0; j < userParamtersArray.length; j++) {
+//         if (relation.user_id==userParamtersArray[j]){
+//           const relationObject=
+//           {"name": relation.name,
+//           "username": relation.username,
+//           "id": relation.user_id,
+//           "connections": relation.connections,
+//         };
+//         users.push(relationObject);
+//         }
 
-      }
-    }
+//       }
+//     }
     
-    //console.log(users);
-    res.status(200).send(users);
-}
-/// not used
-exports.friendshipsNo_retweets = async (req, res) =>{
-  const no_retweetsUsers = [];
-    const user = await  User.findOne({ _id :  req.userId }  );
-    //console.log(user.relations[0]);
-    for(i=0;i<user.relations.length;i++){
-      const relation = await Relation.findOne({ _id :  user.relations[i]  });
-      //console.log(relation);
-      if (relation.no_retweet==true){
-        const no_retweetsUser = await User.findOne({ _id :  relation.user_id  });
-        no_retweetsUsers.push(no_retweetsUser);
-      }
-    }
-    res.status(200).send(no_retweetsUsers);
-  }
+//     //console.log(users);
+//     res.status(200).send(users);
+// }
+// /// not used
+// exports.friendshipsNo_retweets = async (req, res) =>{
+//   const no_retweetsUsers = [];
+//     const user = await  User.findOne({ _id :  req.userId }  );
+//     //console.log(user.relations[0]);
+//     for(i=0;i<user.relations.length;i++){
+//       const relation = await Relation.findOne({ _id :  user.relations[i]  });
+//       //console.log(relation);
+//       if (relation.no_retweet==true){
+//         const no_retweetsUser = await User.findOne({ _id :  relation.user_id  });
+//         no_retweetsUsers.push(no_retweetsUser);
+//       }
+//     }
+//     res.status(200).send(no_retweetsUsers);
+//   }
 
-exports.friendshipsShow = async (req, res) =>{
-  found = 0;
-  relationObject = {};
-  const user = await  User.findOne({ _id :  req.params.source_id  }  );
-  //console.log(user);
-  for(i=0;i<user.relations.length;i++){
-    const relation = await Relation.findOne({ _id :  user.relations[i]  });
-    if (relation!=null && relation.user_id==req.params.target_id){
-      found=1;
-      relationObject ={
-        "source_username": user.username,
-        "source_id": user.id,
-        "target_id": relation.user_id,
-        "target_username": relation.username,
-        "following": relation.following,
-        "followed_by": relation.follower,
-        "blocked": relation.blocked,
-        "mute": relation.mute,
-        "mute_until": relation.mute_until,
-        "want_retweets": relation.want_retweets,
-        "no_retweet": relation.no_retweets,
-        "all_replies": relation.all_replies,
-        "marked_spam": relation.marked_spam,
-        "blocked_by": relation.blocked_by,
-        "following_request_sent": relation.following_request_sent,
-        "following_request_received": relation.following_request_received,
-        "Notifications_enabled": relation.Notifications_enabled,
-      }
-    }
-  }
-  if (found==1){
-    res.status(200).send(relationObject);
-  }
-  else{
-    //console.log("not found");
-    res.status(404).send("No relations");
-  }
-}
+// exports.friendshipsShow = async (req, res) =>{
+//   found = 0;
+//   relationObject = {};
+//   const user = await  User.findOne({ _id :  req.params.source_id  }  );
+//   //console.log(user);
+//   for(i=0;i<user.relations.length;i++){
+//     const relation = await Relation.findOne({ _id :  user.relations[i]  });
+//     if (relation!=null && relation.user_id==req.params.target_id){
+//       found=1;
+//       relationObject ={
+//         "source_username": user.username,
+//         "source_id": user.id,
+//         "target_id": relation.user_id,
+//         "target_username": relation.username,
+//         "following": relation.following,
+//         "followed_by": relation.follower,
+//         "blocked": relation.blocked,
+//         "mute": relation.mute,
+//         "mute_until": relation.mute_until,
+//         "want_retweets": relation.want_retweets,
+//         "no_retweet": relation.no_retweets,
+//         "all_replies": relation.all_replies,
+//         "marked_spam": relation.marked_spam,
+//         "blocked_by": relation.blocked_by,
+//         "following_request_sent": relation.following_request_sent,
+//         "following_request_received": relation.following_request_received,
+//         "Notifications_enabled": relation.Notifications_enabled,
+//       }
+//     }
+//   }
+//   if (found==1){
+//     res.status(200).send(relationObject);
+//   }
+//   else{
+//     //console.log("not found");
+//     res.status(404).send("No relations");
+//   }
+// }
+
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserChangePhoneNumber
+ * @property {string} id the id of user who wants to change phone number  of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserChangePhoneNumber
+
+ */
+/** 
+ * This function change the phone number of the user with the id in the request paramters
+ * 
+ * @param {reqParamUserChangePhoneNumber} req request sent from the front
+ * @param {responseBodyUserChangePhoneNumber} res response sent to the front
+ * 
+ */
 
 exports.userChangePhoneNumber = async (req, res) =>{
-  await User.updateOne({ _id :  req.userId  }, { $set: { phone_number: req.body.phone_number } });
+  await User.updateOne({ _id :  req.userId  }, { $set: { phoneNumber: req.body.phone_number } });
   res.status(200).send({message:"phone number changed"});}
   
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserChangeUsername
+ * @property {string} id the id of user who wants to change username  of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserChangeUsername
+
+ */
+/** 
+ * This function change the username of the user with the id in the request paramters
+ * 
+ * @param {reqParamUserChangeUsername} req request sent from the front
+ * @param {responseBodyUserChangeUsername} res response sent to the front
+ * 
+ */
+
   exports.userChangeUsername = async (req, res) =>{
     newUsername=req.body.username;
     if (await User.findOne({username:newUsername}))
@@ -400,17 +524,32 @@ exports.userChangePhoneNumber = async (req, res) =>{
     	
  // }
   
+/**
+ * 
+ * @module User
+ */
 
+/**
+ * @global
+ * @typedef {object} reqParamUserChangeEmail
+ * @property {string} id the id of user who wants to change Email  of him  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserChangeEmail
+
+ */
+/** 
+ * This function change the Email of the user with the id in the request paramters
+ * 
+ * @param {reqParamUserChangeEmail} req request sent from the front
+ * @param {responseBodyUserChangeEmail} res response sent to the front
+ * 
+ */
 
 exports.userChangeEmail = async (req, res) =>{
-  // if(req.body.email){
-  //   const checkEmail = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
-  //   const isValid = checkEmail.test(String(req.body.email).toLowerCase());
-  //   if (!isValid){
-  //     res.status(400).send({ message: "Failed! Email not valied!" });
-  //     return;
-  //   }
-  //   else{
     newEmail=req.body.email;
     if (await User.findOne({email:newEmail}))
     {
@@ -430,6 +569,31 @@ exports.userChangeEmail = async (req, res) =>{
     // }
   }
 // tested
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserfriendshipsCreate
+ * @property {string} id the id of user who the authenticated user wants to follow  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserfriendshipsCreate
+ * @property {object} user the user who the authenticated user wants to follow
+
+ */
+/** 
+ * This function create a new relation between the authenticated user and the user with the id in the request paramters
+ * 
+ * @param {reqParamUserfriendshipsCreate} req request sent from the front
+ * @param {responseBodyUserfriendshipsCreate} res response sent to the front
+ * 
+ */
 exports.friendshipsCreate = async (req, res) =>{
   found=0; // 0 not found , 1 found 
   const user = await  User.findOne({ _id :  req.userId});
@@ -483,6 +647,31 @@ exports.friendshipsCreate = async (req, res) =>{
   }
 }
 
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserfriendshipsMute
+ * @property {string} id the id of user who the authenticated user wants to mute  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserfriendshipsMute
+ * @property {object} user the user who the authenticated user wants to mute
+
+ */
+/** 
+ * This function mute the user with the id in the request paramters
+ * 
+ * @param {reqParamUserfriendshipsMute} req request sent from the front
+ * @param {responseBodyUserfriendshipsMute} res response sent to the front
+ * 
+ */
 
 exports.friendshipsMute = async (req, res) =>{
   found=0; // 0 not found , 1 found 
@@ -531,6 +720,32 @@ exports.friendshipsMute = async (req, res) =>{
   }
 }
 
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserfriendshipsUnMute
+ * @property {string} id the id of user who the authenticated user wants to unmute  
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserfriendshipsUnMute
+ * @property {object} user the user who the authenticated user wants to unmute
+
+ */
+/** 
+ * This function unmute the user with the id in the request paramters
+ * 
+ * @param {reqParamUserfriendshipsUnMute} req request sent from the front
+ * @param {responseBodyUserfriendshipsUnMute} res response sent to the front
+ * 
+ */
+
 exports.friendshipsUnMute = async (req, res) =>{
   found=0; // 0 not found , 1 found 
   const user = await  User.findOne({ _id :  req.userId});
@@ -569,6 +784,31 @@ exports.friendshipsUnMute = async (req, res) =>{
   }
 }
 
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserfriendshipsDestroy
+ * @property {string} id the id of user who the authenticated user wants to unfollow 
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserfriendshipsDestroy
+ * @property {object} user the user who the authenticated user wants to unfollow
+
+ */
+/** 
+ * This function unfollow the user with the id in the request paramters
+ * 
+ * @param {reqParamUserfriendshipsDestroy} req request sent from the front
+ * @param {responseBodyUserfriendshipsDestroy} res response sent to the front
+ * 
+ */
 
 exports.friendshipsDestroy = async (req, res) =>{
   found=0; // 0 not found , 1 found
@@ -774,15 +1014,16 @@ exports.userMediaList = async (req, res) =>{
   const user = await  User.findOne({ _id :  req.params.id});
   if (user != null){
     tweets=[]
-    const media = await Tweet.find({ user: user._id   });
-    for(i=0;i<media.length;i++)
-    {
-      if (media.hasImage==true)
-      {
-        tweets.push(media[i]);
-      }
-    }
-    res.status(200).send({tweets:tweets});
+    const media = await Tweet.find({ user: user._id ,hasImage:true   });
+    console.log(media)
+    // for(i=0;i<media.length;i++)
+    // {
+    //   if (media.hasImage==true)
+    //   {
+    //     tweets.push(media[i]);
+    //   }
+    // }
+    res.status(200).send({tweets:media});
   }
   else{
     res.status(404).send({tweets:"No user found"});

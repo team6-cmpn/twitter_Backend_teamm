@@ -200,6 +200,7 @@ const data=
       password : "$2a$08$kBW2wS9uCc0g5NPVnAR7hupup6pUqYxvM7IJEb8KFRQKmV3Jmtyii",
       followers : [],
       following : [],
+      profile_image_url:"http://www.twi-jay.me:8080/upload/image-1653425275467.jpg",
       favorites :[
         "1282689f3072026523ba8c11",
         "1282689f3072026523ba8c13",
@@ -234,6 +235,7 @@ const data=
       password : "$2a$08$kBW2wS9uCc0g5NPVnAR7hupup6pUqYxvM7IJEb8KFRQKmV3Jmtyii",
       followers : [],
       following : [],
+      profile_image_url:"http://www.twi-jay.me:8080/upload/image-1653425275343.jpg",
       favorites :[
         "2282689f3072026523ba8c11",
         "5282689f3072026523ba8c11",
@@ -263,6 +265,7 @@ const data=
       password : "$2a$08$kBW2wS9uCc0g5NPVnAR7hupup6pUqYxvM7IJEb8KFRQKmV3Jmtyii",
       followers : [],
       following : [],
+      profile_image_url:"http://www.twi-jay.me:8080/upload/image-1653425275321.jpg",
       favorites :[
         "1282689f3072026523ba8c11",
         "1282689f3072026523ba8c13",

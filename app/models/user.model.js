@@ -88,7 +88,10 @@ const userSchema = new Schema({
   favourites_count: Number ,
   tweets_count: Number,
   profile_banner_url:String,
-  profile_image_url: String,
+  profile_image_url: {
+    type:String,
+    default:"http://www.twi-jay.me:8080/upload/image-1653425589837.jpg"
+  },
   //default_profile: String,
   //default_profile_image:  Boolean,
   retweets:[
