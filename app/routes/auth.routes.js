@@ -14,7 +14,7 @@ module.exports = function(app) {
 
   app.post("/auth/signup", [verifySignUp.checkExistingUsernameOrEmail,verifySignUp.checkValidUsername,verifySignUp.checkValidEmail, verifySignUp.checkStrenghtOfPassword, verifySignUp.checkValidPhoneNumber, verifySignUp.checkAllowedAge], controller.signup);
   app.post("/auth/signin", controller.signin);
-  app.post("/auth/resendEmail" ,controller.resendEmail);
+  app.post("/auth/kkkk" ,controller.resendEmail);
   app.post("/auth/resendSMS" ,controller.resendSMS);
   app.post("/auth/confirmation" ,controller.confirmEmail);
   //app.get("/auth/confirmation/:emailtoken" ,controller.confirmEmail);
