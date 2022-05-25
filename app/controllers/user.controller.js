@@ -850,7 +850,7 @@ else {
 }
 }
 
-
+//not used
 
 exports.friendshipsUpdate = async (req, res) =>{
   found=0; // 0 not found , 1 found
@@ -873,7 +873,31 @@ exports.friendshipsUpdate = async (req, res) =>{
 }
 
 
+/**
+ * 
+ * @module User
+ */
 
+/**
+ * @global
+ * @typedef {object} reqParamUserUnblocking
+ * @property {string} id the id of user who the authenticated user wants to unblock
+
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserUnblocking
+ * @property {object} user the user who the authenticated user wants to unblock
+
+ */
+/** 
+ * This function unblock the user with the id in the request paramters
+ * 
+ * @param {reqParamUserUnblocking} req request sent from the front
+ * @param {responseBodyUserUnblocking} res response sent to the front
+ * 
+ */
 exports.userUnBlocking = async(req,res)=>
 {
   found=0; // 0 not found , 1 found 
@@ -996,6 +1020,31 @@ exports.userBlocking = async(req,res)=>
     return;
   }
 }
+
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserUpdateProfile
+ *   
+ * 
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserUpdateProfile
+ * @property {text} message saying the statues auth user
+ */
+/** 
+ * This function update the profile of the authenticated user
+ * 
+ * @param {reqParamsUserUpdateProfile} req request sent from the front
+ * @param {responseBodyUserUpdateProfile} res response sent to the front
+ * 
+ */
 exports.userUpdateProfile = async (req, res) =>{
   const user = await  User.findOne({ _id :  req.userId});
   if (user != null){
@@ -1009,7 +1058,31 @@ exports.userUpdateProfile = async (req, res) =>{
     return;
   }
 }
-///// used after omnya 
+///// used after omnya
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserMediaList
+ * @property {string} id the id of user who wants to get media list him
+ * 
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserMediaList
+ * @property {object} tweet the tweets with media
+ */
+/** 
+ * This function get the list of tweets with media of user with passed id
+ * 
+ * @param {reqParamsUserMediaList} req request sent from the front
+ * @param {responseBodyUserMediaList} res response sent to the front
+ * 
+ */ 
 exports.userMediaList = async (req, res) =>{
   const user = await  User.findOne({ _id :  req.params.id});
   if (user != null){
@@ -1031,6 +1104,30 @@ exports.userMediaList = async (req, res) =>{
   }
 }
 
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserTweetsList
+ * @property {string} id the id of user who wants to get tweets list him
+ * 
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserMediaList
+ * @property {object} tweet the tweets 
+ */
+/** 
+ * This function get the list of tweets  of user with passed id
+ * 
+ * @param {reqParamsUserTweetsList} req request sent from the front
+ * @param {responseBodyUserTweetsList} res response sent to the front
+ * 
+ */ 
 
 exports.userTweetsList = async (req, res) =>{
 
@@ -1050,6 +1147,31 @@ exports.userTweetsList = async (req, res) =>{
     return;
   }
 }
+
+/**
+ * 
+ * @module User
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamUserLikedTweetsList
+ * @property {string} id the id of user who wants to get liked tweets list of him
+ * 
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyUserLikedTweetsList
+ * @property {object} tweet the tweets 
+ */
+/** 
+ * This function get the list of liked tweets  of user with passed id
+ * 
+ * @param {reqParamsUserLikedTweetsList} req request sent from the front
+ * @param {responseBodyUserLikedTweetsList} res response sent to the front
+ * 
+ */ 
 
 exports.userLikedTweetsList = async(req, res) =>{
   const authUser = await  User.findOne({ _id :  req.params.id  }  );
