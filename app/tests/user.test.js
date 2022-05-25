@@ -4,11 +4,13 @@ const Relation = require('../models/relations.model');
 const app = require("../../app");
 const supertest = require('supertest');
 const request = supertest(app);
+const path = require('path');
 var jwt  = require("jsonwebtoken");
 const mongoose = require('mongoose');
 const { createNewRelation} = require('../utils/user.js');
 const { relations } = require('../models');
 ObjectId = require('mongodb').ObjectId;
+
 
 const relation1=new Relation({
     _id: ObjectId("62782caf69927ef7b0aaeeda"),
@@ -1110,5 +1112,47 @@ describe('test unblock user',()=>
         const res = await request.post('/friendships/unblock/'+userObject._id).set("x-access-token",token);
         expect(res.status).toBe(400);
         expect(res.body.message).toBe("the user is already not blocking the user");
+    })
+})
+
+
+describe('test upload profile picture',()=>
+{
+    it('testing upload profile picture',async()=>{
+        const signinUser = {
+            data :"admin2",
+            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+        }
+        const response = await request.post('/auth/signin')
+        .send(signinUser);
+        token=response.body.accessToken;
+        console.log(__dirname)
+        console.log(path.join(__dirname,'/download.jpg'))
+        const res = await request.post('/image/profile/upload').set("x-access-token",token).attach('image',path.join(__dirname,'/download.jpg'));
+        expect(res.status).toBe(200);
+        expect(res.body.url[1]).toBe("t");
+    })
+    // it('test upload tweet images',async()=>{
+       
+    //     const res = await request.post('/image/tweet/upload').attach('image',[path.join(__dirname,'/download.jpg')]);
+
+    //     expect(res.status).toBe(200);
+    //     expect(res.body.url.length).toBe(1);
+    // })
+})
+
+describe('test upload tweet image',()=>
+{
+    it('testing upload tweet image',async()=>{
+        const signinUser = {
+            data :"admin2",
+            password: "$2a$08$defCyeNs1aIEmXae6FOueVrLc5.jtDh36Ogk2N0H3GR3JmXXe1C"
+        }
+        const response = await request.post('/auth/signin')
+        .send(signinUser);
+        token=response.body.accessToken;
+        const res = await request.post('/image/tweet/upload').attach('image',path.join(__dirname,'/download.jpg'));
+        expect(res.status).toBe(200);
+        expect(res.body.url.length).toBe(1);
     })
 })

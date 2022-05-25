@@ -11,10 +11,60 @@ const {uploadPhotos} = require("../utils/image.js");
 //     dest: './upload/images' 
 // });
 // 
+
+/**
+ * 
+ * @module Image
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamuploadProfilePhoto
+ * @property {file} image the image to upload
+ * 
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyuploadProfilePhoto
+ * @property {text} url the url of the image 
+ */
+/** 
+ * this function uploads the profile image of the user
+ * 
+ * @param {reqParamsuploadProfilePhoto} req request sent from the front
+ * @param {responseBodyuploadProfilePhoto} res response sent to the front
+ * 
+ */ 
 exports.uploadProfilePhoto=async(req,res)=>{
     //console.log(req.file)
     await uploadPhotos(req,res,1);
 };
+
+/**
+ * 
+ * @module Image
+ */
+
+/**
+ * @global
+ * @typedef {object} reqParamuploadTweetPhoto
+ * @property {file} image the image to upload
+ * 
+ */
+/**
+ *
+ * @global
+ * @typedef {object}  responseBodyuploadTweetPhoto
+ * @property {text} url array of the url of the image 
+ */
+/** 
+ * this function uploads images of the tweet
+ * 
+ * @param {reqParamsuploadTweetPhoto} req request sent from the front
+ * @param {responseBodyuploadTweetPhoto} res response sent to the front
+ * 
+ */
 
 exports.uploadTweetPhotos = async(req,res)=>{
     await uploadPhotos(req,res,2)
